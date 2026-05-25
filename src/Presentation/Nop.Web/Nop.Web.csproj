@@ -63,6 +63,219 @@
     <Content Update="**\*.config;**\*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\AdminHeaderLinks\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\BlogRssHeaderLink\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CategoryNavigation\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CheckoutProgress\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CompatibleWithFilterLevelValues\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CrossSellProducts\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CurrencySelector\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\CustomerNavigation\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\EuCookieLaw\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\ExternalMethods\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\Favicon\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\FilterLevelValueSearch\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\FlyoutShoppingCart\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\FooterMenu\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\FooterMenu\_FooterItem.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\Footer\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HeaderLinks\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HomepageBestSellers\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HomepageCategories\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HomepageNews\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HomepagePolls\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\HomepageProducts\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\LanguageSelector\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\Logo\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\MainMenu\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\MainMenu\_MenuItem.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\MainMenu\_MenuItem.Grid.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\MainMenu\_MenuItem.List.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\ManufacturerNavigation\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\NewsletterBox\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\NewsRssHeaderLink\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\OrderSummary\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\OrderTotals\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\PollBlock\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\PopularProductTags\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\PrivateMessagesInbox\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\PrivateMessagesSentItems\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\ProductsAlsoPurchased\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\RecentlyViewedProductsBlock\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\RelatedProducts\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\SearchBox\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\SelectedCheckoutAttributes\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\ShoppingCartEstimateShipping\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\SocialButtons\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\StoreThemeSelector\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\TaxTypeSelector\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\TopicBlock\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\VendorNavigation\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\Components\Widget\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_AddressAttributes.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_AddWishlistModal.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_CheckoutAttributes.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_ColumnsOne.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_ColumnsTwo.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_CreateOrUpdateAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_DiscountBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_EstimateShippingPopUp.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Header.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_JavaScriptDisabledWarning.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_MoveToWishlistModal.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Notifications.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_OrderCustomValues.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_OrderReviewData.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Poll.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Print.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_ProductBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_ProductReviewHelpfulness.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Root.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\Shared\_Root.Head.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Themes\TTBOLTTheme\Views\_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
   <!-- This target execute after "Build" target.
     We use it to clean up folder with plugins from unnecessary and obsolete libraries. -->
   <Target Name="NopTarget" AfterTargets="Build">

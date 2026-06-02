@@ -25,9 +25,9 @@
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
     <div class="header-lower">
      
-        <div role="search" class="search-box store-search-box">
+        @* <div role="search" class="search-box store-search-box">
             @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
-        </div>
+        </div> *@
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
 </header>

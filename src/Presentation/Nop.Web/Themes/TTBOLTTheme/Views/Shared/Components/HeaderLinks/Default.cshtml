@@ -31,6 +31,15 @@
                 </a>
             </li>
         }
+        <li>
+            <a>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <div role="search" class="search-box store-search-box">
+                    @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+                </div>
+            </a>
+
+        </li>
         @if (Model.WishlistEnabled)
         {
 
@@ -45,7 +54,7 @@
         @if (Model.ShoppingCartEnabled)
         {
             <li id="topcartlink">
-                <a href="@Url.RouteUrl(NopRouteNames.General.CART)" >
+                <a href="@Url.RouteUrl(NopRouteNames.General.CART)">
                     @* <span class="cart-label">@T(NopRouteNames.General.CART)</span> *@
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>

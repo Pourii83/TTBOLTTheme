@@ -45,8 +45,9 @@
         @if (Model.ShoppingCartEnabled)
         {
             <li id="topcartlink">
-                <a href="@Url.RouteUrl(NopRouteNames.General.CART)" class="ico-cart">
-                    <span class="cart-label">@T(NopRouteNames.General.CART)</span>
+                <a href="@Url.RouteUrl(NopRouteNames.General.CART)" >
+                    @* <span class="cart-label">@T(NopRouteNames.General.CART)</span> *@
+                    <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
                 </a>
             </li>

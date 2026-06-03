@@ -126,33 +126,47 @@
 {
     <script asp-location="Footer">
         $(function () {
-        var searchWrapper = $('.header-search-wrapper');
-        var searchToggle = searchWrapper.find('.header-search-toggle');
-        var searchInput = searchWrapper.find('.search-box-text');
+            var searchWrapper = $('.header-search-wrapper');
+            var searchToggle = searchWrapper.find('.header-search-toggle');
+            var searchInput = searchWrapper.find('.search-box-text');
+            var searchClose = searchWrapper.find('.header-search-close');
 
-        searchToggle.on('click', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+            function setSearchOpenState(isOpen) {
+                searchWrapper.toggleClass('header-search-wrapper--open', isOpen);
+                searchToggle.attr('aria-expanded', isOpen);
 
-        var isOpen = searchWrapper.toggleClass('header-search-wrapper--open').hasClass('header-search-wrapper--open');
-        searchToggle.attr('aria-expanded', isOpen);
+                if (isOpen) {
+                    searchInput.trigger('focus');
+                }
+            }
 
-        if (isOpen) {
-        searchInput.trigger('focus');
-        }
-        });
+            searchToggle.on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                setSearchOpenState(!searchWrapper.hasClass('header-search-wrapper--open'));
+            });
 
-        $(document).on('click', function (event) {
-        if (!$(event.target).closest('.header-search-wrapper, .ui-autocomplete').length) {
-        searchWrapper.removeClass('header-search-wrapper--open');
-        searchToggle.attr('aria-expanded', 'false');
-        }
-        });
+            searchClose.on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                setSearchOpenState(false);
+            });
 
-        searchWrapper.find('form').on('submit', function () {
-        searchWrapper.removeClass('header-search-wrapper--open');
-        searchToggle.attr('aria-expanded', 'false');
-        });
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('.header-search-wrapper, .ui-autocomplete').length) {
+                    setSearchOpenState(false);
+                }
+            });
+
+            $(document).on('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    setSearchOpenState(false);
+                }
+            });
+
+            searchWrapper.find('form').on('submit', function () {
+                setSearchOpenState(false);
+            });
         });
     </script>
 }

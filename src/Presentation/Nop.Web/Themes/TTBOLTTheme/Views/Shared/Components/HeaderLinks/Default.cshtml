@@ -33,9 +33,11 @@
         }
         <li>
             <a>
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <div role="search" class="search-box store-search-box">
-                    @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+                <div class="header-search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass header-search-toggle" aria-hidden="true" aria-label="@T("Search.SearchBox.Text.Label")" aria-expanded="false"></i>
+                    <div role="search" class="search-box store-search-box header-search-box">
+                        @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+                    </div>
                 </div>
             </a>
 

@@ -10,115 +10,149 @@
     @if (Model.ShowSearchBox)
     {
         <input type="text" class="search-box-text" id="@searchBoxId" autocomplete="off" name="@termFormName" placeholder="@T("Search.SearchBox.Tooltip")" aria-label="@T("Search.SearchBox.Text.Label")" />
-        @if(Model.ShowSearchBoxCategories)
+        @if (Model.ShowSearchBoxCategories)
         {
             <select asp-for="SearchCategoryId" name="@categoryFormName" asp-items="Model.AvailableCategories" class="search-box-category"></select>
             <script asp-location="Footer">
-                $(function () {
-                    $('#@Html.IdFor(m => m.SearchCategoryId)').on('change', function () {
-                        $('#@searchBoxId').focus();
+                    $(function () {
+                        $('#@Html.IdFor(m => m.SearchCategoryId)').on('change', function () {
+                            $('#@searchBoxId').focus();
+                        });
                     });
-                });
             </script>
         }
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.SearchBoxBeforeSearchButton, additionalData = Model })
         <button type="submit" class="button-1 search-box-button">@T("Search.Button")</button>
 
         <script asp-location="Footer">
-            $("#small-search-box-form").on("submit", function (event) {
+                $("#small-search-box-form").on("submit", function (event) {
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                @if(Model.SearchTermMinimumLength > 0)
-                {
-                    <text>
-                    if ($("#@searchBoxId").val() == "") {
-                        alert('@Html.Raw(JavaScriptEncoder.Default.Encode(T("Search.EnterSearchTerms").Text))');
-                        $("#@searchBoxId").focus();
-                        return;
+                    @if (Model.SearchTermMinimumLength > 0)
+                    {
+                            <text>
+                                if ($("#@searchBoxId").val() == "") {
+                                    alert('@Html.Raw(JavaScriptEncoder.Default.Encode(T("Search.EnterSearchTerms").Text))');
+                                    $("#@searchBoxId").focus();
+                                    return;
+                                }
+                            </text>
                     }
-                    </text>
-                }
 
-                var form = document.getElementById('small-search-box-form');
-                var formData = new FormData(form);
+                    var form = document.getElementById('small-search-box-form');
+                    var formData = new FormData(form);
 
-                @if(Model.ShowSearchBoxCategories)
-                {
-                    <text>
-                    var selectedCategory = formData.get('@categoryFormName');
-                    if (selectedCategory && selectedCategory != '0') {
-                        formData.append('advs', true);
-                        formData.append('isc', true);
+                    @if (Model.ShowSearchBoxCategories)
+                    {
+                            <text>
+                                var selectedCategory = formData.get('@categoryFormName');
+                                if (selectedCategory && selectedCategory != '0') {
+                                    formData.append('advs', true);
+                                    formData.append('isc', true);
+                                }
+                            </text>
                     }
-                    </text>
-                }
 
-                window.location.href = `@Url.RouteUrl(NopRouteNames.General.SEARCH)?${new URLSearchParams(formData).toString()}`;
-            });
+                    window.location.href = `@Url.RouteUrl(NopRouteNames.General.SEARCH)?${new URLSearchParams(formData).toString()}`;
+                });
         </script>
 
         @if (Model.AutoCompleteEnabled)
         {
             <script asp-location="Footer">
-                $(function() {
-                    var cache = new Map();
-                    var showLinkToResultSearch;
-                    var searchText;
+                    $(function() {
+                        var cache = new Map();
+                        var showLinkToResultSearch;
+                        var searchText;
 
-                    $('#@searchBoxId').autocomplete({
-                        delay: 500,
-                        minLength: @Model.SearchTermMinimumLength,
-                        source: function (request, response) {
-                            var term = request.term && request.term.trim().toLowerCase();
-                            var categoryElement = $('#@Html.IdFor(m => m.SearchCategoryId)');
-                            var categoryId = categoryElement.length == 0 ? 0 : categoryElement.val()
+                        $('#@searchBoxId').autocomplete({
+                            delay: 500,
+                            minLength: @Model.SearchTermMinimumLength,
+                            source: function (request, response) {
+                                var term = request.term && request.term.trim().toLowerCase();
+                                var categoryElement = $('#@Html.IdFor(m => m.SearchCategoryId)');
+                                var categoryId = categoryElement.length == 0 ? 0 : categoryElement.val()
 
-                            var query = { term, categoryId };
-                            var cacheKey = JSON.stringify(query);
+                                var query = { term, categoryId };
+                                var cacheKey = JSON.stringify(query);
 
-                            if (cache.has(cacheKey)) {
-                                response(cache.get(cacheKey));
-                                return;
+                                if (cache.has(cacheKey)) {
+                                    response(cache.get(cacheKey));
+                                    return;
+                                }
+
+                                $.getJSON('@(Url.RouteUrl(NopRouteNames.Ajax.PRODUCT_SEARCH_AUTOCOMPLETE))', query, function (data, status, xhr) {
+                                    cache.set(cacheKey, data);
+                                    response(data);
+                                });
+                            },
+                            appendTo: '.search-box',
+                            select: function(event, ui) {
+                                $("#@searchBoxId").val(ui.item.label);
+                                setLocation(ui.item.producturl);
+                                return false;
+                            },
+                            //append link to the end of list
+                            open: function(event, ui) {
+                                //display link to search page
+                                if (showLinkToResultSearch) {
+                                    searchText = document.getElementById("@searchBoxId").value;
+                                    $(".ui-autocomplete").append("<li class=\"ui-menu-item\" role=\"presentation\"><a href=\"/search?q=" + searchText + "\">@T("Search.SearchBox.SearchPageLink")</a></li>");
+                                }
                             }
-
-                            $.getJSON('@(Url.RouteUrl(NopRouteNames.Ajax.PRODUCT_SEARCH_AUTOCOMPLETE))', query, function (data, status, xhr) {
-                                cache.set(cacheKey, data);
-                                response(data);
-                            });
-                        },
-                        appendTo: '.search-box',
-                        select: function(event, ui) {
-                            $("#@searchBoxId").val(ui.item.label);
-                            setLocation(ui.item.producturl);
-                            return false;
-                        },
-                        //append link to the end of list
-                        open: function(event, ui) {
-                            //display link to search page
-                            if (showLinkToResultSearch) {
-                                searchText = document.getElementById("@searchBoxId").value;
-                                $(".ui-autocomplete").append("<li class=\"ui-menu-item\" role=\"presentation\"><a href=\"/search?q=" + searchText + "\">@T("Search.SearchBox.SearchPageLink")</a></li>");
-                            }
-                        }
-                    })
-                    .focus(function () {
-                        $(this).autocomplete('search', $(this).val());
-                    })
-                    .data("ui-autocomplete")._renderItem = function(ul, item) {
-                        var t = item.label;
-                        showLinkToResultSearch = item.showlinktoresultsearch;
-                        //html encode
-                        t = htmlEncode(t);
-                        imageWidth = '@(Model.AutoCompleteSearchThumbPictureSize)';
-                        return $("<li></li>")
-                            .data("item.autocomplete", item)
-                                .append("<a>@(Model.ShowProductImagesInSearchAutoComplete ? Html.Raw("<img src='\" + item.productpictureurl + \"' width='\" + imageWidth + \"'>") : null)<span>" + t + "</span></a>")
-                            .appendTo(ul);
-                    };
-                });
+                        })
+                        .focus(function () {
+                            $(this).autocomplete('search', $(this).val());
+                        })
+                        .data("ui-autocomplete")._renderItem = function(ul, item) {
+                            var t = item.label;
+                            showLinkToResultSearch = item.showlinktoresultsearch;
+                            //html encode
+                            t = htmlEncode(t);
+                            imageWidth = '@(Model.AutoCompleteSearchThumbPictureSize)';
+                            return $("<li></li>")
+                                .data("item.autocomplete", item)
+                                    .append("<a>@(Model.ShowProductImagesInSearchAutoComplete ? Html.Raw("<img src='\" + item.productpictureurl + \"' width='\" + imageWidth + \"'>") : null)<span>" + t + "</span></a>")
+                                .appendTo(ul);
+                        };
+                    });
             </script>
         }
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.SearchBox, additionalData = Model })
     }
 </form>
+@if (Model.ShowSearchBox)
+{
+    <script asp-location="Footer">
+        $(function () {
+        var searchWrapper = $('.header-search-wrapper');
+        var searchToggle = searchWrapper.find('.header-search-toggle');
+        var searchInput = searchWrapper.find('.search-box-text');
+
+        searchToggle.on('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var isOpen = searchWrapper.toggleClass('header-search-wrapper--open').hasClass('header-search-wrapper--open');
+        searchToggle.attr('aria-expanded', isOpen);
+
+        if (isOpen) {
+        searchInput.trigger('focus');
+        }
+        });
+
+        $(document).on('click', function (event) {
+        if (!$(event.target).closest('.header-search-wrapper, .ui-autocomplete').length) {
+        searchWrapper.removeClass('header-search-wrapper--open');
+        searchToggle.attr('aria-expanded', 'false');
+        }
+        });
+
+        searchWrapper.find('form').on('submit', function () {
+        searchWrapper.removeClass('header-search-wrapper--open');
+        searchToggle.attr('aria-expanded', 'false');
+        });
+        });
+    </script>
+}

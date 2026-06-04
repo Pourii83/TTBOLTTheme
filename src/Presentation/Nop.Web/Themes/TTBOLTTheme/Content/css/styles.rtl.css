@@ -2184,15 +2184,19 @@ label, label + * {
       padding-top: 65%;
     }
 
-.home-page-category-grid .item-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+.home-page-category-swiper {
+  overflow: hidden;
+  padding: 0 4px 18px;
+}
+
+.home-page-category-swiper .swiper-wrapper {
+  align-items: stretch;
 }
 
 .home-page-category-grid .item-box {
   float: none;
   width: auto;
+  height: auto;
   margin: 0;
   overflow: hidden;
   border-radius: var(--radius-minor);
@@ -2264,19 +2268,6 @@ label, label + * {
   .home-page-category-grid .item-box:focus-within .picture a img {
     opacity: 1;
     transform: translateY(-10px) scale(1.04);
-  }
-}
-
-@media all and (min-width: 481px) {
-  .home-page-category-grid .item-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media all and (min-width: 1001px) {
-  .home-page-category-grid .item-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
   }
 }
 

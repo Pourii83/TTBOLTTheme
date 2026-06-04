@@ -13,6 +13,7 @@
     //add main CSS file
     NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
     NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/Icons/FontAwsome/css/all.min.css");
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/libs/Swiper/swiper-bundle.min.css");
 
     //add swiper css file
     if (catalogSettings.DisplayAllPicturesOnCatalogPages)

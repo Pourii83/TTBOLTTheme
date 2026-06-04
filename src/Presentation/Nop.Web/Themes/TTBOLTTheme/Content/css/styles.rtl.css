@@ -7,14 +7,6 @@
   font-display: swap;
 }
 
-:root {
-  --accent-blue-color: #4ab2f1;
-  --accent-blue-active-color: #248ece;
-  --gray-color: #6B6B6B;
-  --dark-gray-color: #444;
-  --error-red-color: #d51f28;
-  --success-green-color: #207d4c;
-}
 /*My Defenitions*/
 :root {
   /*Background*/
@@ -60,6 +52,9 @@
   /*Shadows*/
   --shadow-minor: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   --shadow-normal: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+  --shadow-top-minor: rgba(0, 0, 0, 0.1) 0px -4px 6px -1px, rgba(0, 0, 0, 0.06) 0px -2px 4px -1px;
+  --shadow-top-normal: rgba(60, 64, 67, 0.3) 0px -1px 2px 0px, rgba(60, 64, 67, 0.15) 0px -1px 3px 1px;
   /*Font Sizes*/
   --fs-1: 2em;
   --fs-2: 1.75em;
@@ -73,6 +68,7 @@
   margin: 0;
   padding: 0;
   text-decoration: none;
+  outline:0 !important;
 }
 
   *, *:before, *:after {
@@ -145,6 +141,11 @@ body {
   color: var(--text-secondary-100);
 }
 
+body.mobile-menu-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary-100);
 }
@@ -198,7 +199,7 @@ select {
   textarea:focus,
   select:focus {
     border-color: #ccc;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     position: relative;
     z-index: 1;
   }
@@ -329,7 +330,13 @@ label, label + * {
 }
 
 .flyout-cart {
-  display: none;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) translateX(-24px);
+  transition: opacity .3s ease, transform .3s ease, visibility .3s ease;
+  box-shadow: var(--shadow-normal);
 }
 
 
@@ -347,13 +354,13 @@ label, label + * {
     margin: 0 0 15px;
     padding: 0 10px;
     font-size: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .fieldset .warnings {
     text-align: center;
     margin-block-end: 30px;
-    color: var(--error-red-color);
+    color: var(--danger-color-100);
   }
 
 .form-fields {
@@ -383,7 +390,7 @@ label, label + * {
     margin: 0 0 10px;
     text-align: center;
     font-size: 14px; /*reset zeroing*/
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .inputs input[type="text"],
@@ -435,7 +442,7 @@ label, label + * {
   vertical-align: top;
   font-size: 20px;
   font-weight: normal;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 .message-error,
@@ -445,7 +452,7 @@ label, label + * {
   display: block;
   text-align: center;
   font-size: 13px;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
   margin-top: 5px;
   white-space: normal;
 }
@@ -455,7 +462,7 @@ label, label + * {
   display: block;
   text-align: center;
   font-size: 13px;
-  color: var(--success-green-color);
+  color: var(--sucess-color-100);
 }
 
 .captcha-box {
@@ -539,7 +546,7 @@ label, label + * {
   border-color: transparent #ddd #ddd;
   background-color: #fff;
   padding: 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .forum-table td {
@@ -551,7 +558,7 @@ label, label + * {
 .data-table a,
 .forum-table a {
   font-weight: normal;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .cart a:hover,
@@ -581,7 +588,7 @@ label, label + * {
 .data-table .product a,
 .data-table .info a {
   font-weight: bold;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .cart .product a:hover,
@@ -590,7 +597,7 @@ label, label + * {
   .data-table .product a:focus,
   .data-table .info a:hover,
   .data-table .info a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
     text-decoration: none;
   }
 
@@ -600,7 +607,7 @@ label, label + * {
 
   .cart .product .edit-item a {
     font-weight: normal;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .cart .product .edit-item a:hover,
@@ -655,17 +662,17 @@ label, label + * {
 .cart td.subtotal,
 .data-table td.total {
   white-space: nowrap;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .cart td.subtotal .discount, .cart td.subtotal .discount-additional-info {
     font-style: italic;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 .data-table em a {
   font-weight: bold;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .data-table div.download {
@@ -693,7 +700,7 @@ label, label + * {
 }
 
 .bar-notification.error {
-  background-color: var(--error-red-color);
+  background-color: var(--danger-color-100);
 }
 
 .bar-notification.warning {
@@ -745,12 +752,12 @@ label, label + * {
   }
 
 .noscript {
-  border-bottom: 1px solid var(--dark-gray-color);
+  border-bottom: 1px solid var(--text-secondary-100);
   background-color: #ff9;
   padding: 30px 15px;
   text-align: center;
   line-height: 22px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .ajax-loading-block-window {
@@ -809,7 +816,7 @@ label, label + * {
   .ui-dialog-titlebar > span {
     float: right;
     font-size: 18px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     /*override jQuery UI styles, do not delete doubled properties*/
     float: right !important;
     margin: 0 !important;
@@ -848,7 +855,7 @@ label, label + * {
   /*override jQuery UI styles, do not delete doubled properties*/
   background-color: #fff !important;
   padding: 15px 15px 20px 15px !important;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
   .ui-dialog-content .page {
@@ -877,7 +884,7 @@ label, label + * {
 
     .ui-dialog-content .back-in-stock-subscription-page .button-1 {
       border: none;
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
       padding: 10px 15px;
       font-size: 15px;
       color: #fff;
@@ -886,7 +893,7 @@ label, label + * {
 
       .ui-dialog-content .back-in-stock-subscription-page .button-1:hover,
       .ui-dialog-content .back-in-stock-subscription-page .button-1:focus {
-        background-color: var(--accent-blue-active-color);
+        background-color: var(--accent-color-100);
       }
 
 .eu-cookie-bar-notification {
@@ -913,7 +920,7 @@ label, label + * {
     min-width: 60px;
     margin: 5px 0 10px;
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 8px 12px;
     font-size: 14px;
     color: #fff;
@@ -921,12 +928,12 @@ label, label + * {
 
     .eu-cookie-bar-notification button:hover,
     .eu-cookie-bar-notification button:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
   .eu-cookie-bar-notification a {
     display: block;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .eu-cookie-bar-notification a:hover,
@@ -940,7 +947,7 @@ label, label + * {
 
 
 .admin-header-links {
-  background-color: var(--dark-gray-color);
+  background-color: var(--text-secondary-100);
   text-align: center;
   color: #eee;
 }
@@ -958,13 +965,13 @@ label, label + * {
   }
 
     .admin-header-links .impersonate a {
-      background-color: var(--dark-gray-color);
+      background-color: var(--text-secondary-100);
       padding: 0 15px;
     }
 
       .admin-header-links .impersonate a:hover,
       .admin-header-links .impersonate a:focus {
-        background-color: var(--gray-color);
+        background-color: var(--text-muted-100);
       }
 
 .header {
@@ -1005,6 +1012,12 @@ label, label + * {
 
   .header-selectors-wrapper select {
     width: 100%;
+    border-radius:var(--radius-minor)
+  }
+
+  .header-selectors-wrapper select.selector-open {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
 .language-list {
@@ -1062,7 +1075,7 @@ label, label + * {
 
     .header-links a:hover,
     .header-links a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
 #topcartlink {
@@ -1177,7 +1190,7 @@ label, label + * {
     background: none !important;
     padding: 15px !important;
     line-height: normal !important;
-    color: var(--gray-color) !important;
+    color: var(--text-muted-100) !important;
   }
 
     .ui-autocomplete a:hover,
@@ -1217,7 +1230,7 @@ label, label + * {
 
 .footer-block .title {
   margin: 0 0 1px;
-  background: var(--accent-blue-color) url('../images/toggle-white.png') left center no-repeat;
+  background: var(--accent-color-50) url('../images/toggle-white.png') left center no-repeat;
   padding: 10px 15px;
   font-size: 20px;
   color: #fff;
@@ -1236,7 +1249,7 @@ label, label + * {
   .follow-us .title {
     margin: 0 0 10px;
     background: none;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     cursor: auto;
   }
 
@@ -1300,7 +1313,7 @@ label, label + * {
   float: right;
   height: 36px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 0 15px;
   text-align: center;
   color: #fff;
@@ -1309,7 +1322,7 @@ label, label + * {
 
   .newsletter-subscribe-button:hover,
   .newsletter-subscribe-button:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .newsletter-email .options {
@@ -1342,7 +1355,7 @@ label, label + * {
 .footer-tax-shipping a {
   display: inline-block;
   font-weight: bold;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .footer-tax-shipping a:hover,
@@ -1358,7 +1371,7 @@ label, label + * {
   .footer-powered-by a {
     display: inline-block;
     font-weight: bold;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .footer-powered-by a:hover,
@@ -1394,7 +1407,7 @@ label, label + * {
 .menu__toggle {
   display: block;
   width: 100%;
-  background: var(--accent-blue-color) url(../images/menu-icon.png) left center no-repeat;
+  background: var(--accent-color-50) url(../images/menu-icon.png) left center no-repeat;
   padding: 15px;
   font-weight: bold;
   color: #fff;
@@ -1406,7 +1419,7 @@ label, label + * {
   width: 100%;
   display: inline-block;
   margin-block: 1px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   background-color: #fff;
   border-right: none;
 }
@@ -1424,7 +1437,7 @@ label, label + * {
   border: none;
   background-color: transparent;
   line-height: 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   -webkit-appearance: none;
   width: 100%;
   justify-content: space-between;
@@ -1543,7 +1556,7 @@ label, label + * {
 .footer-menu__toggle {
   display: block;
   width: 100%;
-  background: var(--accent-blue-color) url('../images/toggle-white.png') left center no-repeat;
+  background: var(--accent-color-50) url('../images/toggle-white.png') left center no-repeat;
   padding: 10px 15px;
   font-size: 20px;
   color: #fff;
@@ -1577,7 +1590,7 @@ label, label + * {
     background: #f6f6f6 url('../images/toggle-gray.png') left 14px no-repeat;
     padding: 12px 10px 12px 30px;
     font-size: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     cursor: pointer;
   }
 
@@ -1596,7 +1609,7 @@ label, label + * {
     position: relative;
     padding: 5px 0;
     font-size: 16px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     -webkit-transition: all 0.1s ease;
     transition: all 0.1s ease;
   }
@@ -1612,12 +1625,12 @@ label, label + * {
     }
 
   .block .list .active > a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
   .block .list a:hover,
   .block .list a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
   .block a.product-picture {
@@ -1648,7 +1661,7 @@ label, label + * {
       display: inline-block;
       padding: 10px 15px;
       font-size: 16px;
-      color: var(--accent-blue-color);
+      color: var(--accent-color-50);
     }
 
       .block .view-all a:hover,
@@ -1677,14 +1690,14 @@ label, label + * {
       .product-tags-all-page li a {
         float: right;
         line-height: 30px;
-        color: var(--dark-gray-color);
+        color: var(--text-secondary-100);
       }
 
         .block .tags li a:hover,
         .block .tags li a:focus,
         .product-tags-all-page li a:hover,
         .product-tags-all-page li a:focus {
-          color: var(--accent-blue-active-color);
+          color: var(--accent-color-100);
         }
 
 .poll strong {
@@ -1694,7 +1707,7 @@ label, label + * {
   padding: 10px 15px;
   font-size: 15px;
   font-weight: normal;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   text-transform: uppercase;
 }
 
@@ -1703,7 +1716,7 @@ label, label + * {
   margin: 10px 0 15px;
   overflow: hidden;
   font-size: 15px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .poll-options li,
@@ -1745,7 +1758,7 @@ label, label + * {
   margin: 10px 0 0;
   font-weight: bold;
   font-style: italic;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .home-page-polls {
@@ -1754,7 +1767,7 @@ label, label + * {
 
   .home-page-polls .title {
     border-bottom: 1px solid #ddd;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     font-size: 30px;
     font-weight: normal;
     margin: 0 0 30px;
@@ -1801,7 +1814,7 @@ label, label + * {
   }
 
   .breadcrumb a:hover {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .category-description,
@@ -1817,7 +1830,7 @@ label, label + * {
 
   .contact-vendor .button-2 {
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 15px;
     font-size: 14px;
     color: #fff;
@@ -1826,7 +1839,7 @@ label, label + * {
 
     .contact-vendor .button-2:hover,
     .contact-vendor .button-2:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 .product-selectors {
@@ -1875,12 +1888,12 @@ label, label + * {
   background-color: #f6f6f6;
   padding: 10px;
   font-size: 17px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .product-filter .filter-content {
   padding: 10px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .product-filter .group {
@@ -2006,7 +2019,7 @@ label, label + * {
     font-size: 17px;
     line-height: 1.2;
     font-weight: normal;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .item-box .product-title a {
@@ -2014,7 +2027,7 @@ label, label + * {
     }
 
       .item-box .product-title a:hover {
-        color: var(--accent-blue-active-color);
+        color: var(--accent-color-100);
       }
 
   .item-box .sku {
@@ -2076,11 +2089,11 @@ label, label + * {
 .item-box .actual-price {
   margin: 0 0 0 5px;
   font-size: 16px;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
 .item-box .tax-shipping-info a {
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .item-box .tax-shipping-info a:hover,
@@ -2102,7 +2115,7 @@ label, label + * {
 
 .item-box .product-box-add-to-cart-button {
   width: 60%;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   text-align: center;
   font-size: 15px;
   color: #fff;
@@ -2111,7 +2124,7 @@ label, label + * {
 
   .item-box .product-box-add-to-cart-button:hover,
   .item-box .product-box-add-to-cart-button:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .item-box .add-to-compare-list-button,
@@ -2195,7 +2208,7 @@ label, label + * {
     padding: 0 0 15px;
     font-size: 28px;
     font-weight: normal;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .manufacturer-grid .title {
@@ -2206,7 +2219,7 @@ label, label + * {
 
   .manufacturer-grid .title a:hover,
   .manufacturer-grid .title a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .manufacturer-grid .picture {
@@ -2221,7 +2234,7 @@ label, label + * {
 
   .vendor-grid .title a:hover,
   .vendor-grid .title a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .vendor-grid .picture {
@@ -2258,7 +2271,7 @@ label, label + * {
 
     .pager li span {
       border-color: transparent;
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
       color: #fff;
     }
 
@@ -2403,13 +2416,13 @@ label, label + * {
   .overview .short-description {
     margin: 0 0 25px;
     line-height: 22px;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 .product-no-reviews,
 .product-reviews-overview {
   margin: 0 0 25px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .product-no-reviews a {
@@ -2454,7 +2467,7 @@ label, label + * {
   .review-item-info .review-product-name a,
   .vendor-page .block a {
     display: inline-block;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
     cursor: pointer;
   }
 
@@ -2486,7 +2499,7 @@ label, label + * {
 
   .product-review-links a:hover,
   .product-review-links a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .overview .label,
@@ -2496,12 +2509,12 @@ label, label + * {
 
 .overview .value,
 .variant-overview .value {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .overview .value a,
   .variant-overview .value a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .overview .value a:hover,
@@ -2532,7 +2545,7 @@ label, label + * {
   padding: 12px 40px 12px 15px;
   text-align: right;
   font-size: 14px; /*reset zeroing*/
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
   .overview .button-2:hover,
@@ -2607,7 +2620,7 @@ label, label + * {
   background: url('../images/shipping.png') right center no-repeat;
   padding: 2px 28px 2px 0;
   font-weight: bold;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .overview .free-shipping.invisible,
@@ -2624,7 +2637,7 @@ label, label + * {
 .variant-overview .min-qty-notification {
   margin: 10px 0;
   font-style: italic;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .overview .download-sample,
@@ -2662,12 +2675,12 @@ label, label + * {
 .variant-overview .product-price {
   font-size: 20px;
   font-weight: bold;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .overview .tax-shipping-info a,
 .variant-overview .tax-shipping-info a {
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .overview .tax-shipping-info a:hover,
@@ -2686,7 +2699,7 @@ label, label + * {
     display: block;
     margin: 0 0 5px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .customer-entered-price .price-input input {
@@ -2696,7 +2709,7 @@ label, label + * {
 
   .customer-entered-price .price-range {
     margin: 5px 0 0;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 .tier-prices {
@@ -2710,7 +2723,7 @@ label, label + * {
   .tier-prices table td {
     border: 1px solid #ddd;
     padding: 10px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .tier-prices .field-header {
@@ -2720,7 +2733,7 @@ label, label + * {
   .tier-prices .item-price {
     background-color: #f9f9f9;
     font-size: 16px;
-    color: var(--error-red-color);
+    color: var(--danger-color-100);
   }
 
 .overview .add-to-cart {
@@ -2750,7 +2763,7 @@ label, label + * {
   padding: 0 12px;
   text-align: center;
   font-size: 15px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .overview .qty-dropdown,
@@ -2758,14 +2771,14 @@ label, label + * {
   height: 43px;
   padding: 0 12px;
   font-size: 15px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .overview .add-to-cart-button,
 .variant-overview .add-to-cart-button {
   height: 43px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 0 24px;
   font-size: 15px;
   color: #fff;
@@ -2776,7 +2789,7 @@ label, label + * {
   .overview .add-to-cart-button:focus,
   .variant-overview .add-to-cart-button:hover,
   .variant-overview .add-to-cart-button:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .product-share-button {
@@ -2796,7 +2809,7 @@ label, label + * {
   .product-collateral .title {
     margin: 0 0 10px;
     font-size: 18px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .product-variant-line {
@@ -2828,7 +2841,7 @@ label, label + * {
     padding: 10px 0;
     font-size: 16px;
     font-weight: bold;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
   .variant-overview .variant-description {
@@ -2890,7 +2903,7 @@ label, label + * {
       border: 0;
       padding-top: 20px;
       font-size: 16px;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
 .product-tags-list {
@@ -2913,7 +2926,7 @@ label, label + * {
 
     .product-tags-list a:hover,
     .product-tags-list a:focus {
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
 .attributes {
@@ -2931,7 +2944,7 @@ label, label + * {
     margin: 0 0 5px;
     white-space: nowrap;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .attributes dd,
@@ -2956,7 +2969,7 @@ label, label + * {
   .attributes .datepicker {
     width: 280px;
     text-align: center;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .attributes .qty-box input {
@@ -3024,13 +3037,13 @@ label, label + * {
   border-radius: 0;
   padding: 0;
   font: normal 14px Arial, Helvetica, sans-serif;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
 .ui-datepicker-header {
   position: relative;
   height: 32px;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   color: #fff;
   /*override jQuery UI styles, do not delete doubled properties*/
   border: none;
@@ -3105,7 +3118,7 @@ label, label + * {
       display: block;
       min-height: 32px;
       line-height: 32px;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
     .ui-datepicker-calendar td a {
@@ -3114,15 +3127,15 @@ label, label + * {
       background: none !important;
       padding: 0;
       text-align: center;
-      color: var(--dark-gray-color) !important;
+      color: var(--text-secondary-100) !important;
     }
 
   .ui-datepicker-calendar .ui-state-active {
-    outline: 2px solid var(--accent-blue-color);
+    outline: 2px solid var(--accent-color-50);
     font-weight: bold;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
     /*override jQuery UI styles, do not delete doubled properties*/
-    color: var(--accent-blue-color) !important;
+    color: var(--accent-color-50) !important;
   }
 
 .attribute-squares {
@@ -3153,12 +3166,12 @@ label, label + * {
     display: inline-block !important;
     width: 32px !important;
     height: 32px !important;
-    border: 1px solid var(--dark-gray-color) !important;
+    border: 1px solid var(--text-secondary-100) !important;
     cursor: pointer;
   }
 
   .attribute-squares .selected-value .attribute-square-container {
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
   }
 
   .attribute-squares li input {
@@ -3249,7 +3262,7 @@ label, label + * {
     display: block;
     margin: 0 auto 5px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .giftcard input,
@@ -3269,7 +3282,7 @@ label, label + * {
 
 .product-reviews h1 a {
   display: inline-block;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .product-reviews h1 a:before,
@@ -3280,7 +3293,7 @@ label, label + * {
 .product-reviews .title {
   margin: 0 0 20px;
   font-size: 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .write-review {
@@ -3295,7 +3308,7 @@ label, label + * {
   position: initial;
   display: inline-block;
   border-bottom: 1px dotted black;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .tooltip .tooltiptext {
@@ -3334,11 +3347,11 @@ label, label + * {
     display: block;
     margin: 0 0 5px;
     font-size: 14px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .write-review .review-rating div.first {
-    color: var(--error-red-color);
+    color: var(--danger-color-100);
   }
 
   .write-review .review-rating div.rating-options {
@@ -3350,7 +3363,7 @@ label, label + * {
     }
 
   .write-review .review-rating div.last {
-    color: var(--success-green-color);
+    color: var(--sucess-color-100);
   }
 
 .write-review .captcha-box {
@@ -3359,7 +3372,7 @@ label, label + * {
 
 .write-review .button-1 {
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 25px;
   text-align: center;
   font-size: 15px;
@@ -3369,7 +3382,7 @@ label, label + * {
 
   .write-review .button-1:hover,
   .write-review .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .product-reviews .result,
@@ -3395,7 +3408,7 @@ label, label + * {
   .product-review-item .review-title {
     line-height: 20px;
     font-size: 15px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .product-review-item .product-review-box {
@@ -3409,7 +3422,7 @@ label, label + * {
   .product-review-item .review-text {
     margin: 0 0 15px;
     line-height: 22px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .product-review-item .avatar {
@@ -3447,7 +3460,7 @@ label, label + * {
     .product-review-helpfulness .vote {
       display: inline-block;
       padding: 0 5px;
-      color: var(--accent-blue-color);
+      color: var(--accent-color-50);
       cursor: pointer;
     }
 
@@ -3523,7 +3536,7 @@ label, label + * {
 
   .wishlist-content .update-wishlist-button,
   .wishlist-content .wishlist-add-to-cart-button {
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     text-transform: uppercase;
   }
 
@@ -3531,7 +3544,7 @@ label, label + * {
     .wishlist-content .update-wishlist-button:focus,
     .wishlist-content .wishlist-add-to-cart-button:hover,
     .wishlist-content .wishlist-add-to-cart-button:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
   .wishlist-content .email-a-friend-wishlist-button {
@@ -3563,12 +3576,12 @@ label, label + * {
 
   .wishlist-page .share-info a {
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .wishlist-page .share-info a:hover,
     .wishlist-page .share-info a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
 .wishlist-page .no-data {
@@ -3589,7 +3602,7 @@ label, label + * {
     width: auto;
     min-width: 64px;
     min-height: 36px;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     border: none;
     padding: 7px 23px 9px 25px;
     text-align: center;
@@ -3600,7 +3613,7 @@ label, label + * {
 
     .add-wishlist-content .wishlist-add-custom-button:hover,
     .add-wishlist-content .wishlist-add-custom-button:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 .button-row {
@@ -3657,7 +3670,7 @@ label, label + * {
   .compare-products-page .clear-list {
     display: inline-block;
     margin: 0 0 20px;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 15px;
     font-size: 12px;
     color: #fff;
@@ -3666,7 +3679,7 @@ label, label + * {
 
     .compare-products-page .clear-list:hover,
     .compare-products-page .clear-list:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
   .compare-products-page .table-wrapper {
@@ -3681,7 +3694,7 @@ label, label + * {
   padding: 20px;
   text-align: right;
   vertical-align: top;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .compare-products-table td:first-child {
@@ -3690,7 +3703,7 @@ label, label + * {
 
   .compare-products-table td label {
     font-weight: normal;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 .compare-products-table .specification-group td {
@@ -3700,7 +3713,7 @@ label, label + * {
 
   .compare-products-table .specification-group td label {
     font-size: 16px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .compare-products-table .remove-button {
@@ -3709,12 +3722,12 @@ label, label + * {
   background: url('../images/remove.png') right center no-repeat;
   padding: 0 18px 0 0;
   font-size: 12px;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
   .compare-products-table .remove-button:hover,
   .compare-products-table .remove-button:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .compare-products-table .picture {
@@ -3742,7 +3755,7 @@ label, label + * {
 
   .compare-products-table .product-name td a:hover,
   .compare-products-table .product-name td a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .compare-products-table .short-description td {
@@ -3795,7 +3808,7 @@ label, label + * {
 
 .topic-block strong,
 .topic-page strong {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .home-page .topic-block {
@@ -3816,7 +3829,7 @@ label, label + * {
 
 .enter-password-title {
   margin: 0 0 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   display: block;
 }
 
@@ -3838,7 +3851,7 @@ label, label + * {
     min-width: 86px;
     height: 40px;
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 0 15px;
     color: #fff;
     text-transform: uppercase;
@@ -3846,7 +3859,7 @@ label, label + * {
 
     .enter-password-form button[type="submit"]:hover,
     .enter-password-form button[type="submit"]:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 
@@ -3874,7 +3887,7 @@ label, label + * {
 .apply-vendor-page .button-1 {
   min-width: 140px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 30px;
   text-align: center;
   font-size: 15px;
@@ -3888,7 +3901,7 @@ label, label + * {
   .email-a-friend-page .button-1:focus,
   .apply-vendor-page .button-1:hover,
   .apply-vendor-page .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .contact-page .topic-block,
@@ -3899,7 +3912,7 @@ label, label + * {
 
   .email-a-friend-page .title h2 {
     font-weight: normal;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 .apply-vendor-page .terms-of-service {
@@ -3913,7 +3926,7 @@ label, label + * {
 
   .apply-vendor-page .terms-of-service span,
   .apply-vendor-page .terms-of-service a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
     cursor: pointer;
   }
 
@@ -3979,7 +3992,7 @@ label, label + * {
 
   .inputs.accept-consent span,
   .inputs.accept-consent a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
     cursor: pointer;
     font-size: 14px;
   }
@@ -3998,7 +4011,7 @@ label, label + * {
 .return-request-page .button-1 {
   min-width: 140px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 30px;
   text-align: center;
   font-size: 15px;
@@ -4018,11 +4031,11 @@ label, label + * {
   .account-page .button-1:focus,
   .return-request-page .button-1:hover,
   .return-request-page .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .return-request-page h1 a {
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
 .return-request-page .return-request-file {
@@ -4042,7 +4055,7 @@ label, label + * {
   padding: 30px 0;
   text-align: center;
   font-size: 16px;
-  color: var(--success-green-color);
+  color: var(--sucess-color-100);
 }
 
 .customer-info-page .email-to-revalidate,
@@ -4072,7 +4085,7 @@ label, label + * {
 .login-page .title {
   margin: 0 0 15px;
   font-size: 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .login-page .new-wrapper {
@@ -4092,7 +4105,7 @@ label, label + * {
   }
 
   .login-page .new-wrapper .topic-block-body strong {
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .login-page .new-wrapper .button-1 {
@@ -4117,12 +4130,12 @@ label, label + * {
       width: auto;
       margin: 5px;
       font-size: 14px; /*reset zeroing*/
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
     .login-page .returning-wrapper .inputs.reversed a:hover,
     .login-page .returning-wrapper .inputs.reversed a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
 .login-page .captcha-box {
@@ -4170,7 +4183,7 @@ label, label + * {
   .external-authentication .title {
     margin: 0 0 15px;
     font-size: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .external-authentication .buttons {
@@ -4180,15 +4193,15 @@ label, label + * {
   }
 
 .external-auth-errors {
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 .external-auth-association {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .external-auth-association a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .external-auth-association a:hover,
@@ -4199,7 +4212,7 @@ label, label + * {
 .password-recovery-page .result {
   margin: 0 0 5px;
   font-weight: bold;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .password-recovery-page .tooltip {
@@ -4211,7 +4224,7 @@ label, label + * {
 }
 
   .add-more-external-records a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .add-more-external-records a:hover,
@@ -4235,7 +4248,7 @@ label, label + * {
 .gdpr-tools-page .result {
   margin: 20px 0;
   font-size: 13px;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 .gdpr-tools-page .buttons {
@@ -4249,7 +4262,7 @@ label, label + * {
   background-color: #f9f9f9;
   padding: 20px;
   line-height: 26px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .address-list-page .info .name,
@@ -4265,7 +4278,7 @@ label, label + * {
   border: none;
   padding: 0 18px 0 0;
   font-size: 12px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .edit-address-button {
@@ -4293,7 +4306,7 @@ label, label + * {
 .address-list-page .button-2:focus,
 .order-list-page .button-2:hover,
 .order-list-page .button-2:focus {
-  color: var(--accent-blue-active-color);
+  color: var(--accent-color-100);
 }
 
 .order-filters {
@@ -4313,7 +4326,7 @@ label, label + * {
 
 .order-filters__label {
   line-height: 26px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   margin-inline-end: 10px;
   min-width: 50px;
 }
@@ -4364,7 +4377,7 @@ label, label + * {
   background-color: #f9f9f9;
   padding: 20px;
   line-height: 22px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .return-request-list-page label {
@@ -4372,7 +4385,7 @@ label, label + * {
 }
 
 .return-request-list-page a {
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .return-request-list-page a:hover,
@@ -4384,11 +4397,11 @@ label, label + * {
   margin: 10px 0 0;
   font-size: 15px;
   font-style: italic;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .downloadable-products-page table td {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .reward-points-overview {
@@ -4396,7 +4409,7 @@ label, label + * {
 }
 
 .reward-points-history table td {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .reward-points-history table td:first-child {
@@ -4468,7 +4481,7 @@ label, label + * {
   }
 
 .avatar-page .info {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .vendorinfo-page .button-2 {
@@ -4533,7 +4546,7 @@ label, label + * {
     display: block;
     min-width: 70px;
     font-size: 14px; /*reset zeroing*/
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .order-progress a:before {
@@ -4604,7 +4617,7 @@ label, label + * {
     min-width: 180px;
     margin: 5px;
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 20px;
     font-size: 15px;
     color: #fff;
@@ -4612,21 +4625,21 @@ label, label + * {
 
     .shopping-cart-page .common-buttons button:hover,
     .shopping-cart-page .common-buttons button:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
     .shopping-cart-page .common-buttons button:first-child {
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
     }
 
       .shopping-cart-page .common-buttons button:first-child:hover,
       .shopping-cart-page .common-buttons button:first-child:focus {
-        background-color: var(--accent-blue-active-color);
+        background-color: var(--accent-color-100);
       }
 
 .checkout-attributes {
   margin: -30px 0 30px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .checkout-attributes dt {
@@ -4669,7 +4682,7 @@ label, label + * {
 
 .selected-checkout-attributes {
   margin: 30px 0;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .selected-checkout-attributes br {
@@ -4695,7 +4708,7 @@ label, label + * {
     margin: 0 auto 50px;
     background-color: #f9f9f9;
     padding: 10px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .cart-footer .total-info {
@@ -4725,7 +4738,7 @@ label, label + * {
 
 .cart-total .order-total {
   font-size: 20px;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .cart-total .order-total strong {
@@ -4739,7 +4752,7 @@ label, label + * {
 .min-amount-warning {
   margin: 0 0 20px;
   padding: 0 30px;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 .terms-of-service {
@@ -4754,7 +4767,7 @@ label, label + * {
   .terms-of-service a {
     display: inline-block;
     margin: 0 3px 0 0;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 .cart-footer .checkout-buttons {
@@ -4774,7 +4787,7 @@ label, label + * {
   display: inline-block;
   min-width: 160px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
@@ -4783,7 +4796,7 @@ label, label + * {
 
   .cart-footer .checkout-button:hover,
   .cart-footer .checkout-button:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .cart-footer .addon-buttons {
@@ -4806,7 +4819,7 @@ label, label + * {
   .cart-collaterals .button-2 {
     display: inline-block;
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 15px;
     color: #fff;
     text-transform: uppercase;
@@ -4814,13 +4827,13 @@ label, label + * {
 
     .cart-collaterals .button-2:hover,
     .cart-collaterals .button-2:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
   .cart-collaterals .title {
     margin: 0 0 5px;
     font-size: 18px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .cart-collaterals .title strong {
@@ -4856,18 +4869,18 @@ label, label + * {
   .cart-collaterals .message-failure {
     margin: 5px 0 0;
     font-size: 12px;
-    color: var(--error-red-color);
+    color: var(--danger-color-100);
   }
 
   .cart-collaterals .message-success {
     margin: 5px 0 0;
     font-size: 12px;
-    color: var(--success-green-color);
+    color: var(--sucess-color-100);
   }
 
   .cart-collaterals .current-code {
     margin: 5px 0 0;
-    color: var(--success-green-color);
+    color: var(--sucess-color-100);
   }
 
 .remove-discount-button,
@@ -4894,7 +4907,7 @@ label, label + * {
     .cart-collaterals .shipping-results li strong {
       display: block;
       margin: 0 0 5px;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
 .shopping-cart-page .no-data {
@@ -5042,16 +5055,16 @@ label, label + * {
   }
 
   .estimate-shipping-radio:checked + label {
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     color: #99a1a7;
     border: 1px solid #adb8c0;
-    border-color: var(--accent-blue-color);
+    border-color: var(--accent-color-50);
   }
 
 .apply-shipping-button {
   border: none;
   padding: 8px 25px;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   color: #fff;
 }
 
@@ -5109,7 +5122,7 @@ label, label + * {
 .estimate-shipping-popup .message-failure {
   margin: 5px 0 -5px;
   font-size: 12px;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 
@@ -5121,7 +5134,7 @@ label, label + * {
   min-width: 180px;
   margin: 5px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 20px;
   font-size: 15px;
   text-align: center;
@@ -5130,7 +5143,7 @@ label, label + * {
 
   .shopping-cart-page .common-buttons .estimate-shipping-button:hover,
   .shopping-cart-page .common-buttons .estimate-shipping-button:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 
@@ -5148,7 +5161,7 @@ label, label + * {
   .product-estimate-shipping .shipping-title {
     font-size: 16px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     margin-bottom: 5px;
     justify-content: center;
   }
@@ -5209,7 +5222,7 @@ label, label + * {
   display: inline-block;
   min-width: 140px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 30px;
   text-align: center;
   font-size: 15px;
@@ -5219,7 +5232,7 @@ label, label + * {
 
   .checkout-page .button-1:hover,
   .checkout-page .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .checkout-page .address-item {
@@ -5232,7 +5245,7 @@ label, label + * {
     margin: 0 0 15px;
     background-color: #f9f9f9;
     padding: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .checkout-page .address-item li {
@@ -5263,13 +5276,13 @@ label, label + * {
   .checkout-page .ship-to-same-address .selector {
     margin: 0 0 5px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .vat-number-warning {
   text-align: center;
   font-size: 13px;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
   margin-top: 5px;
 }
 
@@ -5284,7 +5297,7 @@ label, label + * {
   .checkout-page .pickup-in-store .selector {
     margin: 0 0 5px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .select-pickup-point {
@@ -5317,7 +5330,7 @@ label, label + * {
     .payment-method .method-list li label {
       font-size: 13px;
       font-weight: bold;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
 .shipping-method .method-description {
@@ -5327,7 +5340,7 @@ label, label + * {
 .payment-method .use-reward-points {
   margin: 0 0 30px;
   text-align: center;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .payment-method .payment-logo {
@@ -5350,7 +5363,7 @@ label, label + * {
 
 .payment-info .info {
   padding: 30px 15px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .payment-info .info tr {
@@ -5407,7 +5420,7 @@ label, label + * {
   margin: 0 auto 40px;
   background-color: #f9f9f9;
   padding: 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .order-review-data li,
@@ -5437,7 +5450,7 @@ label, label + * {
   margin: 0 0 30px;
   padding: 30px 15px;
   text-align: center;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .order-completed .details div {
@@ -5450,7 +5463,7 @@ label, label + * {
   }
 
   .order-completed .details a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .order-completed .details a:hover,
@@ -5465,7 +5478,7 @@ label, label + * {
 }
 
 .opc .allow .step-title {
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   cursor: pointer;
 }
 
@@ -5492,7 +5505,7 @@ label, label + * {
 }
 
 .opc .allow .step-title .number {
-  background-color: var(--accent-blue-active-color);
+  background-color: var(--accent-color-100);
 }
 
 .opc .step {
@@ -5532,12 +5545,12 @@ label, label + * {
     margin: 0 -15px 0 0;
     background: url('../images/back-button.png') right center no-repeat;
     padding: 0 18px 0 0;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .opc .back-link a:hover,
     .opc .back-link a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
 .opc .buttons .please-wait {
@@ -5608,12 +5621,12 @@ label, label + * {
     }
 
     .order-details-page .page-title a.print-order-button {
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
     }
 
       .order-details-page .page-title a.print-order-button:hover,
       .order-details-page .page-title a.print-order-button:focus {
-        background-color: var(--accent-blue-active-color);
+        background-color: var(--accent-color-100);
       }
 
     .order-details-page .page-title a.cancel-order-button {
@@ -5630,7 +5643,7 @@ label, label + * {
   line-height: 26px;
   text-align: center;
   font-size: 16px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .order-details-page .order-overview .order-number {
@@ -5640,14 +5653,14 @@ label, label + * {
 
   .order-details-page .order-overview .order-total strong {
     font-weight: normal;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 .order-details-page .repost .button-2 {
   display: inline-block;
   margin: 10px 0;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 15px;
   font-size: 12px;
   color: #fff;
@@ -5656,12 +5669,12 @@ label, label + * {
 
   .order-details-page .repost .button-2:hover,
   .order-details-page .repost .button-2:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .order-details-page .download a {
   font-weight: normal;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
   .order-details-page .download a:hover,
@@ -5678,7 +5691,7 @@ label, label + * {
 .user-agreement-page .button-1 {
   min-width: 140px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 30px;
   text-align: center;
   font-size: 15px;
@@ -5688,7 +5701,7 @@ label, label + * {
 
   .user-agreement-page .button-1:hover,
   .user-agreement-page .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .order-details-page .tax-shipping-info {
@@ -5696,7 +5709,7 @@ label, label + * {
 }
 
   .order-details-page .tax-shipping-info a {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .order-details-page .tax-shipping-info a:hover,
@@ -5727,12 +5740,12 @@ label, label + * {
     }
 
     .order-details-page .actions button:first-child {
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
     }
 
       .order-details-page .actions button:first-child:hover,
       .order-details-page .actions button:first-child:focus {
-        background-color: var(--accent-blue-active-color);
+        background-color: var(--accent-color-100);
       }
 
 .order-details-page .totals.section {
@@ -5745,7 +5758,7 @@ label, label + * {
 .order-details-page .total-info {
   background-color: #f9f9f9;
   padding: 15px 20px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 
@@ -5790,7 +5803,7 @@ label, label + * {
 .search-input .button-1 {
   min-width: 140px;
   border: none;
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
   padding: 10px 30px;
   text-align: center;
   font-size: 15px;
@@ -5800,7 +5813,7 @@ label, label + * {
 
   .search-input .button-1:hover,
   .search-input .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .search-results {
@@ -5809,7 +5822,7 @@ label, label + * {
 
   .search-results .warning {
     margin: 10px 0;
-    color: var(--error-red-color);
+    color: var(--danger-color-100);
   }
 
 .sitemap-page .description {
@@ -5830,7 +5843,7 @@ label, label + * {
   .sitemap-page .entity-title h2 {
     font-size: 20px;
     font-weight: normal;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .sitemap-page .entity-body {
@@ -5864,12 +5877,12 @@ label, label + * {
   }
 
 .sitemap-page .entity a {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .sitemap-page .entity a:hover,
   .sitemap-page .entity a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
   .sitemap-page .entity a:empty {
@@ -5883,7 +5896,7 @@ label, label + * {
 
 .block-blog-archive .number {
   display: block;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   cursor: auto;
 }
 
@@ -5917,14 +5930,14 @@ label, label + * {
   padding: 20px 10px;
   line-height: 20px;
   font-size: 16px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .post-title:hover,
   .post-title:focus,
   .news-title:hover,
   .news-title:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .post-date,
@@ -5934,7 +5947,7 @@ label, label + * {
   background-color: #f6f6f6;
   padding: 10px;
   font-style: italic;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .post-body,
@@ -5957,7 +5970,7 @@ label, label + * {
     margin: 0 0 3px 3px;
     font-weight: bold;
     font-size: 14px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .blog-page .tags ul,
@@ -5981,7 +5994,7 @@ label, label + * {
   .blog-page .tags a,
   .blogpost-page .tags a {
     display: block;
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
     .blog-page .tags a:hover,
@@ -6001,19 +6014,19 @@ label, label + * {
     display: block;
     margin: 0 0 15px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .blog-posts .buttons .read-comments:hover,
     .blog-posts .buttons .read-comments:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
   .blog-posts .buttons .read-more,
   .news-items .buttons .read-more {
     display: inline-block;
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 20px;
     font-size: 12px;
     color: #fff;
@@ -6024,7 +6037,7 @@ label, label + * {
     .blog-posts .buttons .read-more:focus,
     .news-items .buttons .read-more:hover,
     .news-items .buttons .read-more:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 .new-comment {
@@ -6045,7 +6058,7 @@ label, label + * {
 
   .new-comment .button-1 {
     border: none;
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 30px;
     text-align: center;
     font-size: 15px;
@@ -6055,7 +6068,7 @@ label, label + * {
 
     .new-comment .button-1:hover,
     .new-comment .button-1:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 .comment-list {
@@ -6066,7 +6079,7 @@ label, label + * {
     margin: 0 0 15px;
     padding: 0 10px;
     font-size: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .comment-list .title strong {
@@ -6096,12 +6109,12 @@ label, label + * {
     background-color: #f6f6f6;
     padding: 11px 0;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .comment-info a.username:hover,
   .comment-info a.username:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
   .comment-info .avatar {
@@ -6132,13 +6145,13 @@ label, label + * {
 
   .comment-time span {
     display: inline-block;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .comment-title {
   margin: 0 0 15px;
   font-size: 16px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
 .comment-body {
@@ -6155,7 +6168,7 @@ label, label + * {
     padding: 0 0 15px;
     font-size: 30px;
     font-weight: normal;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .news-list-homepage .title strong {
@@ -6167,13 +6180,13 @@ label, label + * {
   }
 
     .news-list-homepage .view-all a {
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
       text-decoration: underline;
     }
 
       .news-list-homepage .view-all a:hover,
       .news-list-homepage .view-all a:focus {
-        color: var(--accent-blue-active-color);
+        color: var(--accent-color-100);
       }
 
 
@@ -6211,7 +6224,7 @@ label, label + * {
 
   .forums-header .current-time {
     margin: 0 0 15px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .forum-search-box .basic {
@@ -6221,13 +6234,13 @@ label, label + * {
 
 .forum-search-box .advanced a {
   line-height: 22px;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   text-decoration: underline;
 }
 
   .forum-search-box .advanced a:hover,
   .forum-search-box .advanced a:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
 .forum-search-page .page-title {
@@ -6238,7 +6251,7 @@ label, label + * {
 .forum-search-page .no-result {
   margin: 0 0 15px;
   text-align: center;
-  color: var(--error-red-color);
+  color: var(--danger-color-100);
 }
 
 /* forum group */
@@ -6260,12 +6273,12 @@ label, label + * {
   .forums-table-section-title strong {
     font-size: 22px;
     font-weight: normal;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .forums-table-section-title a:hover,
     .forums-table-section-title a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
     }
 
 .forums-table-section .image div {
@@ -6292,20 +6305,20 @@ label, label + * {
   .forums-table-section .topic-title a {
     font-size: 16px;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
     .forums-table-section .forum-title a:hover,
     .forums-table-section .forum-title a:focus,
     .forums-table-section .topic-title a:hover,
     .forums-table-section .topic-title a:focus {
-      color: var(--accent-blue-active-color);
+      color: var(--accent-color-100);
       text-decoration: none;
     }
 
   .forums-table-section .topic-title span {
     display: block;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 .forums-table-section .forum-description,
@@ -6328,7 +6341,7 @@ label, label + * {
 
   .forums-table-section .latest-post label {
     display: inline-block;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 .forums-table-section .view-all {
@@ -6337,7 +6350,7 @@ label, label + * {
 }
 
   .forums-table-section .view-all a {
-    background-color: var(--accent-blue-color);
+    background-color: var(--accent-color-50);
     padding: 10px 15px;
     font-size: 12px;
     color: #fff;
@@ -6346,7 +6359,7 @@ label, label + * {
 
     .forums-table-section .view-all a:hover,
     .forums-table-section .view-all a:focus {
-      background-color: var(--accent-blue-active-color);
+      background-color: var(--accent-color-100);
     }
 
 /* forum-page, topic page */
@@ -6476,12 +6489,12 @@ label, label + * {
     background-color: #f6f6f6;
     padding: 11px 0;
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .topic-post a.username:hover,
   .topic-post a.username:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
   }
 
   .topic-post .avatar,
@@ -6523,7 +6536,7 @@ label, label + * {
       display: inline-block;
       margin: 0 3px 0 0;
       font-weight: bold;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
   .topic-post .pm-button,
@@ -6554,7 +6567,7 @@ label, label + * {
 
     .topic-post .post-time span {
       display: inline-block;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
   .topic-post .post-actions {
@@ -6589,13 +6602,13 @@ label, label + * {
       .topic-post .post-actions .edit-post-button:focus,
       .topic-post .post-actions .delete-post-button:hover,
       .topic-post .post-actions .delete-post-button:focus {
-        color: var(--accent-blue-active-color);
+        color: var(--accent-color-100);
       }
 
     .topic-post .post-actions .post-link-button {
       padding: 10px;
       font-weight: bold;
-      color: var(--accent-blue-color);
+      color: var(--accent-color-50);
     }
 
       .topic-post .post-actions .post-link-button:hover,
@@ -6619,7 +6632,7 @@ label, label + * {
     /*topic post-text also gets style from blog post-body*/
     padding: 0 10px 20px;
     line-height: 22px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     margin-bottom: 0;
   }
 
@@ -6641,7 +6654,7 @@ label, label + * {
     border: 1px dashed #ccc;
     background-color: #f9f9f9;
     padding: 10px;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
   .topic-post .signature {
@@ -6701,7 +6714,7 @@ label, label + * {
   max-width: 400px;
   font-size: 22px; /*reset zeroing*/
   font-weight: normal;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
   white-space: normal;
 }
 
@@ -6773,7 +6786,7 @@ label, label + * {
 .forum-edit-page .buttons .button-1,
 .move-topic-page .buttons .button-1,
 .private-messages .buttons .button-1 {
-  background-color: var(--accent-blue-color);
+  background-color: var(--accent-color-50);
 }
 
   .forum-edit-page .buttons .button-1:hover,
@@ -6782,12 +6795,12 @@ label, label + * {
   .move-topic-page .buttons .button-1:focus,
   .private-messages .buttons .button-1:hover,
   .private-messages .buttons .button-1:focus {
-    background-color: var(--accent-blue-active-color);
+    background-color: var(--accent-color-100);
   }
 
 .private-message-send-page a {
   font-size: 14px;
-  color: var(--accent-blue-color);
+  color: var(--accent-color-50);
 }
 
 .private-message-send-page span {
@@ -6803,7 +6816,7 @@ label, label + * {
   background: none;
   padding: 0;
   font: normal 14px Arial, Helvetica, sans-serif;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
 .ui-widget.ui-widget-content.ui-tabs {
@@ -6823,7 +6836,7 @@ label, label + * {
   padding: 0 !important;
   line-height: normal;
   font-weight: normal;
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .ui-tabs-nav li {
@@ -6843,7 +6856,7 @@ label, label + * {
       padding: 12px 24px;
       text-align: center;
       font-size: 18px;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
       /*override jQuery UI styles, do not delete doubled properties*/
       float: none !important;
       padding: 12px 24px !important;
@@ -6851,7 +6864,7 @@ label, label + * {
 
     .ui-tabs-nav li.ui-state-active a {
       background-color: #eee;
-      color: var(--accent-blue-color);
+      color: var(--accent-color-50);
     }
 
 .ui-tabs-panel {
@@ -6881,11 +6894,11 @@ label, label + * {
 }
 
 .private-messages-page td.subject a {
-  color: var(--dark-gray-color);
+  color: var(--text-secondary-100);
 }
 
   .private-messages-page td.subject a.pm-unread {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 .private-messages-page .pager {
@@ -6918,7 +6931,7 @@ label, label + * {
 
   .private-message-view-page .message-head span {
     font-weight: bold;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 .private-message-view-page .message-body {
@@ -6941,7 +6954,7 @@ label, label + * {
   line-height: normal;
   font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
   .profile-info-box .user-details {
@@ -6955,7 +6968,7 @@ label, label + * {
   .profile-info-box .title {
     margin: 0 0 10px;
     font-size: 18px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
   .profile-info-box .stats {
@@ -6967,7 +6980,7 @@ label, label + * {
   line-height: normal;
   font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--gray-color);
+  color: var(--text-muted-100);
 }
 
   .latest-posts .topic {
@@ -6984,12 +6997,12 @@ label, label + * {
 
     .latest-posts .topic-title a {
       font-weight: bold;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
       .latest-posts .topic-title a:hover,
       .latest-posts .topic-title a:focus {
-        color: var(--accent-blue-active-color);
+        color: var(--accent-color-100);
       }
 
   .latest-posts .topic-body {
@@ -6998,7 +7011,7 @@ label, label + * {
   }
 
   .latest-posts .topic-data {
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
   }
 
 /* BB codes */
@@ -7053,7 +7066,7 @@ label, label + * {
   }
 
   .csharpcode .lnum {
-    color: var(--gray-color);
+    color: var(--text-muted-100);
   }
 
 
@@ -7541,7 +7554,7 @@ label, label + * {
       margin: 0 0 15px;
       background: none;
       padding: 0;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
       cursor: auto;
     }
 
@@ -7874,7 +7887,7 @@ label, label + * {
   }
 
   .shipment-details-page .tracking-number .tracking-url {
-    color: var(--accent-blue-color);
+    color: var(--accent-color-50);
   }
 
 
@@ -8170,7 +8183,7 @@ label, label + * {
   .post-text blockquote {
     border-left: 4px solid #ccc;
     padding: 0.5em 10px;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
     margin: 0 0 1em 0;
   }
 
@@ -8343,16 +8356,29 @@ label, label + * {
 
   .flyout-cart {
     position: absolute;
-    top: 45px;
+    top: calc(100% + 6px);
     left: 0;
     z-index: 100;
     width: 300px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.25);
+    box-shadow: var(--shadow-normal);
     background-color: #fff;
+    transform-origin: top left;
   }
 
+    .flyout-cart::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 0;
+      width: 100%;
+      height: 12px;
+    }
+
     .flyout-cart.active {
-      display: block;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) translateX(-24px);
     }
 
   .mini-shopping-cart {
@@ -8363,13 +8389,13 @@ label, label + * {
 
     .mini-shopping-cart .count {
       padding: 5px 0 15px;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
       .mini-shopping-cart .count a {
         margin: 0 2px;
         font-weight: bold;
-        color: var(--dark-gray-color);
+        color: var(--text-secondary-100);
       }
 
     .mini-shopping-cart .items {
@@ -8421,17 +8447,17 @@ label, label + * {
     }
 
       .mini-shopping-cart .name a {
-        color: var(--accent-blue-color);
+        color: var(--accent-color-50);
       }
 
         .mini-shopping-cart .name a:hover,
         .mini-shopping-cart .name a:focus {
-          color: var(--accent-blue-active-color);
+          color: var(--accent-color-100);
         }
 
     .mini-shopping-cart .attributes {
       margin: 5px 0;
-      color: var(--dark-gray-color);
+      color: var(--text-secondary-100);
     }
 
     .mini-shopping-cart .totals {
@@ -8441,7 +8467,7 @@ label, label + * {
 
       .mini-shopping-cart .totals strong {
         font-size: 16px;
-        color: var(--dark-gray-color);
+        color: var(--text-secondary-100);
       }
 
     .mini-shopping-cart .buttons {
@@ -8451,7 +8477,7 @@ label, label + * {
     .mini-shopping-cart button[type="button"] {
       display: inline-block;
       border: none;
-      background-color: var(--accent-blue-color);
+      background-color: var(--accent-color-50);
       padding: 10px 20px;
       font-size: 12px;
       color: #fff;
@@ -8460,7 +8486,7 @@ label, label + * {
 
       .mini-shopping-cart button[type="button"]:hover,
       .mini-shopping-cart button[type="button"]:focus {
-        background-color: var(--accent-blue-active-color);
+        background-color: var(--accent-color-100);
       }
 
   .header-lower {
@@ -8555,7 +8581,7 @@ label, label + * {
     background-color: transparent;
     padding: 0;
     line-height: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     cursor: pointer;
     -webkit-appearance: none;
   }
@@ -8661,7 +8687,7 @@ label, label + * {
     gap: 10px;
     padding: 5px 10px;
     line-height: 20px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     cursor: pointer;
     text-align: right;
     position: relative;
@@ -8726,7 +8752,7 @@ label, label + * {
     display: block;
     font-size: 20px;
     font-weight: normal;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     cursor: auto;
     margin-block-end: 15px;
     background: none;
@@ -8738,14 +8764,14 @@ label, label + * {
     align-items: center;
     gap: 10px;
     line-height: 20px;
-    color: var(--gray-color);
+    color: var(--text-muted-100);
     cursor: pointer;
     text-align: right;
     position: relative;
   }
 
     .footer-menu__link:hover {
-      color: var(--accent-blue-active-color)
+      color: var(--accent-color-100)
     }
   /** Footer menu END **/
 
@@ -9433,7 +9459,7 @@ a.skip {
     margin: 3px 0;
     overflow: visible;
     padding: 2px;
-    color: var(--dark-gray-color);
+    color: var(--text-secondary-100);
     background: #ffffff;
     text-decoration: underline;
     text-align: center;
@@ -9552,6 +9578,7 @@ a.skip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 36px;
   height: 36px;
   color: var(--text-secondary-100);
@@ -9569,13 +9596,34 @@ a.skip {
   display: none;
 }
 
+.ico-wishlist .wishlist-qty,
+#topcartlink .cart-qty {
+  position: absolute;
+  left: -4px;
+  bottom: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background-color: var(--accent-color-50);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 0 2px #fff;
+  z-index: 2;
+}
+
 .header-search-toggle:hover,
 .header-search-toggle:focus,
 .ico-wishlist:hover,
 .ico-wishlist:focus,
 #topcartlink a:hover,
 #topcartlink a:focus {
-  color: var(--accent-blue-active-color);
+  color: var(--accent-color-100);
 }
 
 .header-search-box {
@@ -9638,7 +9686,7 @@ a.skip {
     top: 50%;
     left: 50%;
     right: auto;
-    width: min(340px, 88vw);
+    width: min(340px, 80vw);
     padding: 48px 14px 14px;
     transform: translate(-50%, calc(-50% + 12px));
     z-index: 1005;
@@ -9664,6 +9712,7 @@ a.skip {
 
   .header-search-wrapper--open .header-search-box {
     transform: translate(-50%, -50%);
+    box-shadow: var(--shadow-top-minor);
   }
 
   .header-search-close {
@@ -9684,7 +9733,7 @@ a.skip {
 
   .header-search-close:hover,
   .header-search-close:focus {
-    color: var(--accent-blue-active-color);
+    color: var(--accent-color-100);
     background: #e5e7eb;
   }
 
@@ -9697,6 +9746,7 @@ a.skip {
   .header-search-box .search-box-category,
   .header-search-box .search-box-button {
     width: 100%;
+    border-radius: var(--radius-minor);
   }
 
   .header-search-box .search-box-button {
@@ -9753,12 +9803,14 @@ a.skip {
     position: fixed;
     top: 106px;
     right: 0;
-    width: min(340px, 88vw);
+    width: min(340px, 80vw);
     bottom: 126px;
     display: block;
     margin: 0;
     padding: 8px 0 24px;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     background-color: #fff;
     box-shadow: -12px 0 32px rgba(0, 0, 0, 0.18);
     transform: translateX(100%);
@@ -9770,7 +9822,9 @@ a.skip {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.18);
+    background: rgba(15, 23, 42, 0.32);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 1001;
     opacity: 0;
     visibility: hidden;
@@ -9781,6 +9835,7 @@ a.skip {
   .header-upper:has(.menu-container.menu-dropdown--active)::before {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   .header-menu .menu-container.menu-dropdown--active > .menu {
@@ -9790,7 +9845,8 @@ a.skip {
   .header-menu .menu-container.menu-dropdown--active > .menu__toggle {
     position: fixed;
     top: 18px;
-    right: 18px;
+    right: auto;
+    left: 18px;
     z-index: 1006;
     width: 40px;
     height: 40px;
@@ -9817,7 +9873,7 @@ a.skip {
   .header-links-wrapper {
     position: fixed;
     right: 0;
-    width: min(340px, 88vw);
+    width: min(340px, 80vw);
     background-color: #fff;
     transform: translateX(100%);
     transition: transform .28s ease;
@@ -9847,11 +9903,16 @@ a.skip {
     border-top: 1px solid #e5e7eb;
   }
 
+  .header-links-wrapper .flyout-cart {
+    display: none !important;
+  }
+
   .header-upper:has(.menu-container.menu-dropdown--active) .header-selectors-wrapper,
   .header-upper:has(.menu-container.menu-dropdown--active) .header-links-wrapper {
     transform: translateX(0);
     pointer-events: auto;
     padding:16px;
+    box-shadow:var(--shadow-minor);
   }
 
   .header-links ul {

@@ -27,4 +27,30 @@
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
 </header>
 
+<script asp-location="Footer">
+    $(function () {
+        var selector = '.header-selectors-wrapper select';
+
+        $(document).on('pointerdown', selector, function () {
+            var currentSelect = $(this);
+            var isOpen = currentSelect.hasClass('selector-open');
+
+            $(selector).removeClass('selector-open');
+
+            if (!isOpen) {
+                currentSelect.addClass('selector-open');
+            }
+        });
+
+        $(document).on('change blur', selector, function () {
+            $(this).removeClass('selector-open');
+        });
+
+        $(document).on('pointerdown', function (event) {
+            if (!$(event.target).closest(selector).length) {
+                $(selector).removeClass('selector-open');
+            }
+        });
+    });
+</script>
 

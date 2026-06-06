@@ -5,13 +5,55 @@
         <h2 class="title">
             @T("Homepage.Products")
         </h2>
-        <div class="item-grid">
-            @foreach (var item in Model)
-            {
-                <div class="item-box">
-                    @await Html.PartialAsync("_ProductBox", item)
-                </div>
-            }
+        <div class="swiper item-grid home-page-products-swiper">
+            <div class="swiper-wrapper">
+                @foreach (var item in Model)
+                {
+                    <div class="swiper-slide item-box">
+                        @await Html.PartialAsync("_ProductBox", item)
+                    </div>
+                }
+            </div>
         </div>
     </section>
+
+    <script asp-location="Footer">
+        $(function () {
+            $('.home-page-products-swiper').each(function () {
+                if (typeof Swiper === 'undefined') {
+                    return;
+                }
+
+                if (this.swiper) {
+                    this.swiper.destroy(true, true);
+                }
+
+                new Swiper(this, {
+                    slidesPerView: 1.15,
+                    spaceBetween: 14,
+                    freeMode: {
+                        enabled: true,
+                        sticky: true
+                    },
+                    grabCursor: true,
+                    roundLengths: true,
+                    watchOverflow: true,
+                    breakpoints: {
+                        481: {
+                            slidesPerView: 2.15,
+                            spaceBetween: 16
+                        },
+                        769: {
+                            slidesPerView: 3.15,
+                            spaceBetween: 18
+                        },
+                        1001: {
+                            slidesPerView: 4,
+                            spaceBetween: 32
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 }

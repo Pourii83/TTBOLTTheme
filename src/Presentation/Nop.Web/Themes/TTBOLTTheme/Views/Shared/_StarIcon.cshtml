@@ -1,0 +1,64 @@
+﻿@model bool
+
+@{
+    var color = Model ? "#FBBF24" : "var(--surface-color-25, #FFFFFF)";
+    var filterId = "filter_" + Guid.NewGuid().ToString("N");
+}
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="25"
+     height="25"
+     viewBox="0 0 25 25"
+     fill="none">
+
+    <g filter="url(#@filterId)">
+        <path d="M15.59 8.76L12.5 2.5L9.41 8.76M15.59 8.76L22.5 9.77L17.5 14.64M15.59 8.76L12 10L9.41 8.76M15.59 8.76L14 11.5L17.5 14.64M7.5 14.64L6.32 21.52L12.5 18.27L18.68 21.52L17.5 14.64M18.68 21.52L12.5 12L6.32 21.52M7.5 14.64L2.5 9.77L9.41 8.76M7.5 14.64L9 11.5L9.41 8.76"
+              stroke="@color"
+              stroke-width="5"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+    </g>
+
+    <defs>
+        <filter id="@filterId"
+                x="-4"
+                y="-4"
+                width="33"
+                height="36.02"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+
+            <feFlood flood-opacity="0"
+                     result="BackgroundImageFix" />
+
+            <feBlend in="SourceGraphic"
+                     in2="BackgroundImageFix"
+                     result="shape" />
+
+            <feColorMatrix in="SourceAlpha"
+                           type="matrix"
+                           values="0 0 0 0 0
+            0 0 0 0 0
+            0 0 0 0 0
+            0 0 0 127 0"
+                           result="hardAlpha" />
+
+            <feOffset dy="4" />
+
+            <feGaussianBlur stdDeviation="2" />
+
+            <feComposite in2="hardAlpha"
+                         operator="arithmetic"
+                         k2="-1"
+                         k3="1" />
+
+            <feColorMatrix type="matrix"
+                           values="0 0 0 0 0
+            0 0 0 0 0
+            0 0 0 0 0
+            0 0 0 .25 0" />
+
+            <feBlend in2="shape" />
+        </filter>
+    </defs>
+</svg>

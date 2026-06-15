@@ -6,17 +6,56 @@
 
 @inject IWorkContext workContext
 
+@{
+    var primaryPhone = T("Footer.ContactUs.PrimaryPhone").Text;
+    var secondaryPhone = T("Footer.ContactUs.SecondaryPhone").Text;
+    var email = T("Footer.ContactUs.Email").Text;
+}
+<a href="@Url.RouteUrl()" class="ico-login">@T("Account.Login")</a>
+
 <footer class="footer">
     <section class="footer-upper">
-        @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
         <div class="footer-block follow-us">
+            <div class="footer-logo-section">
+                <div class="footer-logo-container">
+                    @await Component.InvokeAsync(typeof(LogoViewComponent))
+                </div>
+                <div class="footer-company-name">
+                    <h4 class="company-name">@T("company.name.global")</h4>
+                    <h4 class="company-name">@T("company.name.local")</h4>
+                </div>
+            </div>
+            <div class="footer-company-description">
+                <p>
+                    @T("company.description")
+                </p>
+            </div>
             <div class="social">
-                <h2 class="title">
-                    @T("Footer.FollowUs")
-                </h2>
                 @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
             </div>
-            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </div>
+        @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
+        <div class="footer-block contact-us">
+            <h2 class="title">
+                @T("Footer.ContactUs")
+            </h2>
+            <ul class="footer-contact-list">
+                <li class="footer-contact-item footer-contact-phones">
+                    <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                    <div class="footer-contact-values">
+                        <a href="tel:@primaryPhone" dir="ltr">@primaryPhone</a>
+                        <a href="tel:@secondaryPhone" dir="ltr">@secondaryPhone</a>
+                    </div>
+                </li>
+                <li class="footer-contact-item">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    <a href="mailto:@email" dir="ltr">@email</a>
+                </li>
+                <li class="footer-contact-item footer-contact-address">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>@T("Footer.ContactUs.Address")</span>
+                </li>
+            </ul>
         </div>
     </section>
     <section class="footer-lower">

@@ -1311,6 +1311,10 @@ label, label + * {
     margin-top: 4px;
   }
 
+.footer .contact-us .newsletter {
+  margin-top: 24px;
+}
+
 .follow-us {
   text-align: right;
   flex: 2 1 0;
@@ -1419,14 +1423,41 @@ label, label + * {
 .footer-lower {
   width: 95%;
   margin: auto;
-  overflow: hidden;
   padding: 25px 0;
   font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
 }
 
   .footer-lower span {
     display: inline-block;
   }
+
+.footer-info {
+  line-height: 1.8;
+}
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+  .footer-legal a {
+    color: var(--text-secondary-100);
+    font-size: var(--fs-5);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .3s ease;
+  }
+
+    .footer-legal a:hover,
+    .footer-legal a:focus {
+      color: var(--accent-color-100);
+    }
 
 .footer-tax-shipping a {
   display: inline-block;
@@ -1442,6 +1473,8 @@ label, label + * {
 .footer-powered-by {
   margin: 10px 0 0;
   font-size: 16px;
+  direction:ltr;
+  margin-inline:auto !important;
 }
 
   .footer-powered-by a {
@@ -9475,12 +9508,12 @@ label, label + * {
     }
 
   .footer-info {
-    float: left;
+    float: none;
     line-height: 32px;
   }
 
   .footer-powered-by {
-    float: right;
+    float: none;
     margin: 0;
     line-height: 32px;
   }

@@ -11,7 +11,6 @@
     var secondaryPhone = T("Footer.ContactUs.SecondaryPhone").Text;
     var email = T("Footer.ContactUs.Email").Text;
 }
-<a href="@Url.RouteUrl()" class="ico-login">@T("Account.Login")</a>
 
 <footer class="footer">
     <section class="footer-upper">
@@ -56,6 +55,7 @@
                     <span>@T("Footer.ContactUs.Address")</span>
                 </li>
             </ul>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
         </div>
     </section>
     <section class="footer-lower">
@@ -77,6 +77,15 @@
                 Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
             </div>
         }
+        <nav class="footer-legal">
+            <a href="@(await NopUrl.RouteTopicUrlAsync("privacyinfo"))">
+                @T("Gdpr.Consent.PrivacyPolicy")
+            </a>
+            <a href="@(await NopUrl.RouteTopicUrlAsync("conditionsofuse"))">
+                @T("Checkout.TermsOfService")
+            </a>
+        </nav>
+
         @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
     </section>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })

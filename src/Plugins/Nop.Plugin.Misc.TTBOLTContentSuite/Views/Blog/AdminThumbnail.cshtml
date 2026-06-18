@@ -1,0 +1,20 @@
+@model BlogPostThumbnailModel
+
+<nop-card asp-name="ttbolt-content-suite-blog-thumbnail"
+          asp-icon="far fa-image"
+          asp-title="@T("Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail")"
+          asp-hide-block-attribute-name="BlogPostPage.HideTTBOLTContentSuiteThumbnailBlock"
+          asp-hide="false"
+          asp-advanced="false">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="PictureId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="PictureId" />
+                <span asp-validation-for="PictureId"></span>
+            </div>
+        </div>
+    </div>
+</nop-card>

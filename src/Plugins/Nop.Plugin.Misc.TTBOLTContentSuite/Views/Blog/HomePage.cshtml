@@ -1,0 +1,38 @@
+@model IList<HomePageBlogPostModel>
+@inject INopUrlHelper NopUrl
+
+<section class="ttbolt-homepage-blog-posts">
+    <div class="ttbolt-homepage-blog-posts__header">
+        <h2>@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title")</h2>
+    </div>
+
+    <div class="ttbolt-homepage-blog-posts__grid">
+        @foreach (var blogPost in Model)
+        {
+            <article class="ttbolt-homepage-blog-card">
+                <a class="ttbolt-homepage-blog-card__picture"
+                   href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))"
+                   title="@blogPost.Title">
+                    <img src="@blogPost.PictureUrl" alt="@blogPost.Title" loading="lazy" />
+                </a>
+                <div class="ttbolt-homepage-blog-card__body">
+                    <h3 class="ttbolt-homepage-blog-card__title">
+                        <a href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))">
+                            @blogPost.Title
+                        </a>
+                    </h3>
+                    @if (!string.IsNullOrWhiteSpace(blogPost.BodyOverview))
+                    {
+                        <div class="ttbolt-homepage-blog-card__overview">
+                            @Html.Raw(blogPost.BodyOverview)
+                        </div>
+                    }
+                    <a class="ttbolt-homepage-blog-card__link"
+                       href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))">
+                        @T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore")
+                    </a>
+                </div>
+            </article>
+        }
+    </div>
+</section>

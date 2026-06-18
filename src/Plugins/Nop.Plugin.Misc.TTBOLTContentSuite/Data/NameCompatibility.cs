@@ -5,7 +5,6 @@ namespace Nop.Plugin.Misc.TTBOLTContentSuite.Data;
 public class NameCompatibility : INameCompatibility
 {
     public Dictionary<Type, string> TableNames => new() {
-        { typeof(TTNewsItem), "News" },
         { typeof(TTBlogPost), "BlogPost" }
     };
 

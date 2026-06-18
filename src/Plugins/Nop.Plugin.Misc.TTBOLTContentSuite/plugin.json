@@ -7,5 +7,5 @@
   "Author": "ttbolt team",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Misc.TTBOLTContentSuite.dll",
-  "Description": "Adds thumbnails, featured content blocks, enhanced blog/news presentation, homepage widgets and content management features."
+  "Description": "Adds blog thumbnails and a latest blog posts homepage widget."
 }

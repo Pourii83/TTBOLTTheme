@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Core.Domain.Media;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Factories;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Models;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Services;
@@ -65,25 +64,12 @@ public class TTBOLTCarouselController : BasePluginController
             return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Create.cshtml", model);
         }
 
-        Picture picture = null;
-        Picture mobilePicture = null;
-
-        if (model.PictureFile != null)
-          picture = await _pictureService.InsertPictureAsync(model.PictureFile);
-        else
-            model.PictureId = null;
-
-        if (model.MobilePictureFile != null)
-            mobilePicture = await _pictureService.InsertPictureAsync(model.MobilePictureFile);
-        else
-            model.MobilePictureId = null;
-
         var sliderItem = new SliderItem
         {
             LanguageId = model.LanguageId,
             Order = model.Order,
-            PictureId = model.PictureFile != null ? picture.Id : null,
-            MobilePictureId = model.MobilePictureFile != null ? mobilePicture.Id : null,
+            PictureId = model.PictureId > 0 ? model.PictureId : null,
+            MobilePictureId = model.MobilePictureId > 0 ? model.MobilePictureId : null,
             ImageAlt = model.ImageAlt,
             RouteLink = model.RouteLink,
         };
@@ -109,8 +95,8 @@ public class TTBOLTCarouselController : BasePluginController
             Id = sliderItem.Id,
             LanguageId = sliderItem.LanguageId,
             Order = sliderItem.Order,
-            PictureId = sliderItem.PictureId,
-            MobilePictureId = sliderItem.MobilePictureId,
+            PictureId = sliderItem.PictureId ?? 0,
+            MobilePictureId = sliderItem.MobilePictureId ?? 0,
             ImageAlt = sliderItem.ImageAlt,
             RouteLink = sliderItem.RouteLink,
         };
@@ -130,22 +116,13 @@ public class TTBOLTCarouselController : BasePluginController
             return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Edit.cshtml", model);
         }
 
-        Picture picture = null;
-        Picture mobilePicture = null;
-
-        if (model.PictureFile != null)
-            picture = await _pictureService.InsertPictureAsync(model.PictureFile);
-        if (model.MobilePictureFile != null)
-            mobilePicture = await _pictureService.InsertPictureAsync(model.MobilePictureFile);
-
         var sliderItem = new SliderItem
         {
             Id = model.Id,
             LanguageId = model.LanguageId,
             Order = model.Order,
-            PictureId = model.PictureFile != null ? picture.Id : model.PictureId,
-            MobilePictureId = model.MobilePictureFile != null ? mobilePicture.Id :
-                                model.MobilePictureId ?? model.PictureId,
+            PictureId = model.PictureId > 0 ? model.PictureId : null,
+            MobilePictureId = model.MobilePictureId > 0 ? model.MobilePictureId : null,
             ImageAlt = model.ImageAlt,
             RouteLink = model.RouteLink
         };

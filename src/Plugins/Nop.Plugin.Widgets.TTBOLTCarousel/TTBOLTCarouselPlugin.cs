@@ -58,7 +58,7 @@ public class TTBOLTCarouselPlugin : BasePlugin, IWidgetPlugin
         await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
         {
             ["Plugins.Widgets.TTBOLTCarousel.Fields.Picture"] = "Picture",
-            ["Plugins.Widgets.TTBOLTCarousel.MobilePicture"] = "Mobile picture",
+            ["Plugins.Widgets.TTBOLTCarousel.Fields.MobilePicture"] = "Mobile picture",
             ["Plugins.Widgets.TTBOLTCarousel.Fields.ImageAlt"] = "Image alternate text",
             ["Plugins.Widgets.TTBOLTCarousel.Fields.Language"] = "Language",
             ["Plugins.Widgets.TTBOLTCarousel.Fields.RouteLink"] = "Route link",

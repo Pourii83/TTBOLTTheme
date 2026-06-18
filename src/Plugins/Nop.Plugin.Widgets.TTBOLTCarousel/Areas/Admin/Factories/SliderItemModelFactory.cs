@@ -37,8 +37,8 @@ public class SliderItemModelFactory : ISliderItemModelFactory
                     Id = slide.Id,
                     LanguageName = languages.FirstOrDefault(lang => lang.Id == slide.LanguageId)?.Name,
                     Order = slide.Order,
-                    PictureId = slide.PictureId,
-                    MobilePictureId = slide.MobilePictureId,
+                    PictureId = slide.PictureId ?? 0,
+                    MobilePictureId = slide.MobilePictureId ?? 0,
                     ImageAlt = slide.ImageAlt,
                     RouteLink = slide.RouteLink,
                     PictureUrl = slide.PictureId.HasValue

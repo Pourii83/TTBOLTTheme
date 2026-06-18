@@ -5,12 +5,11 @@
 @inject INopHtmlHelper NopHtml
 
 @{
-    var slides = (Model ?? new List<SliderItem>()).Where(s => s.PictureId.HasValue).ToList();
+    var slides = (Model ?? new List<SliderItem>()).Where(slide => slide.PictureId.HasValue).ToList();
     var first = slides.FirstOrDefault();
 
     if (first?.PictureId != null)
     {
-        // URL اصلی برای preload (1280)
         var preloadUrl = await PictureService.GetPictureUrlAsync(first.PictureId.Value, targetSize: 1280);
         NopHtml.AddHeadCustomParts($"<link rel=\"preload\" as=\"image\" href=\"{preloadUrl}\">");
     }
@@ -19,29 +18,52 @@
 <link href="~/Plugins/Widgets.TTBOLTCarousel/Content/css/swiper-bundle.min.css" rel="stylesheet">
 <script src="~/Plugins/Widgets.TTBOLTCarousel/Content/js/swiper-bundle.min.js" asp-location="Footer"></script>
 
+<style>
+    .home-slider {
+        height: auto;
+    }
+
+    .home-slider .swiper-wrapper,
+    .home-slider .swiper-slide {
+        height: auto;
+    }
+
+    .home-slider .swiper-slide {
+        background: transparent;
+        display: block;
+        font-size: inherit;
+        text-align: initial;
+    }
+
+    .home-slider .swiper-slide a,
+    .home-slider .swiper-slide img {
+        display: block;
+        width: 100%;
+    }
+
+    .home-slider .swiper-slide img {
+        height: auto;
+        object-fit: contain;
+    }
+</style>
+
 <div class="swiper home-slider">
     <div class="swiper-wrapper">
-        @for (int i = 0; i < slides.Count; i++)
+        @for (var i = 0; i < slides.Count; i++)
         {
-            var s = slides[i];
-            // 1280w (دسکتاپ)
-            var url1280 = await PictureService.GetPictureUrlAsync(s.PictureId.Value);
-            // 1920w (بزرگ)
-            var url1920 = await PictureService.GetPictureUrlAsync(s.PictureId.Value, targetSize: 1920);
-            // 640w (موبایل؛ اگر MobilePictureId داشت از آن استفاده می‌کنیم، وگرنه از اصلی thumbnail 640)
-            var url640 = s.MobilePictureId.HasValue
-            ? await PictureService.GetPictureUrlAsync(s.MobilePictureId.Value, targetSize: 640)
-            : await PictureService.GetPictureUrlAsync(s.PictureId.Value, targetSize: 640);
-
-            // اگر می‌خواهی width/height دقیق بدهی:
-            var pic = await PictureService.GetPictureByIdAsync(s.PictureId.Value);
+            var slide = slides[i];
+            var url1280 = await PictureService.GetPictureUrlAsync(slide.PictureId.Value);
+            var url1920 = await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 1920);
+            var url640 = slide.MobilePictureId.HasValue
+                ? await PictureService.GetPictureUrlAsync(slide.MobilePictureId.Value, targetSize: 640)
+                : await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 640);
 
             <div class="swiper-slide">
-                <a href="@s.RouteLink">
+                <a href="@slide.RouteLink">
                     <img src="@url1280"
                          srcset="@url640 640w, @url1280 1280w, @url1920 1920w"
                          sizes="(max-width:910px) 100vw, 1200px"
-                         alt="@(s.ImageAlt ?? "")"
+                         alt="@(slide.ImageAlt ?? "")"
                          decoding="async"
                          @(i == 0 ? "fetchpriority=\"high\"" : "loading=\"lazy\"") />
                 </a>
@@ -57,6 +79,7 @@
 <script asp-location="Footer">
     document.addEventListener('DOMContentLoaded', function () {
       new Swiper('.home-slider', {
+        autoHeight: true,
         loop: true,
         effect: 'fade',
         pagination: { el: '.home-slider .swiper-pagination', dynamicBullets: true },

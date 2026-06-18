@@ -1,5 +1,7 @@
-﻿using Nop.Services.Cms;
+﻿using Nop.Plugin.Misc.TTBOLTContentSuite.Components;
+using Nop.Services.Cms;
 using Nop.Services.Plugins;
+using Nop.Web.Framework.Infrastructure;
 
 namespace Nop.Plugin.Misc.TTBOLTContentSuite;
 
@@ -9,11 +11,11 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
 
     public Type GetWidgetViewComponent(string widgetZone)
     {
-        throw new NotImplementedException();
+        return typeof(TTBOLTContentSuiteViewComponent);
     }
 
     public Task<IList<string>> GetWidgetZonesAsync()
     {
-        throw new NotImplementedException();
+        return Task.FromResult<IList<string>>(new List<string> { PublicWidgetZones.HomepageBeforeNews });
     }
 }

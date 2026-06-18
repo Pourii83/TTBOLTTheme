@@ -50,10 +50,10 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
 
         await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
         {
-            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail"] = "Blog post thumbnail",
-            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Picture"] = "Thumbnail picture",
-            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "Latest articles",
-            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "Read more"
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail"] = "تصویر شاخص مقاله",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Picture"] = "تصویر شاخص",
+            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "مقالات جدید",
+            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "بیشتر بدانید"
         });
 
         await base.InstallAsync();

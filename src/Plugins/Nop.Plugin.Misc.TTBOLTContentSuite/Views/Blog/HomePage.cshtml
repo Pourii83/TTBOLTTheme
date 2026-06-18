@@ -1,12 +1,10 @@
 @model IList<HomePageBlogPostModel>
 @inject INopUrlHelper NopUrl
 
-<section class="ttbolt-homepage-blog-posts">
-    <div class="ttbolt-homepage-blog-posts__header">
-        <h2>@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title")</h2>
-    </div>
+<section class="ttbolt-homepage-blog-posts home-page-product-grid">
+    <h2 class="title">@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title")</h2>
 
-    <div class="ttbolt-homepage-blog-posts__grid">
+    <div class="ttbolt-homepage-blog-posts__grid item-grid">
         @foreach (var blogPost in Model)
         {
             <article class="ttbolt-homepage-blog-card">
@@ -29,7 +27,7 @@
                     }
                     <a class="ttbolt-homepage-blog-card__link"
                        href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))">
-                        @T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore")
+                        <span class="button-1">@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore")</span>
                     </a>
                 </div>
             </article>

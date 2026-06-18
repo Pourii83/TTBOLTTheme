@@ -1,0 +1,101 @@
+﻿@model SliderItemSearchModel
+@using Microsoft.AspNetCore.Routing
+@using Nop.Web.Framework
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<h3>اسلایدر خانه</h3>
+
+<form asp-controller="SliderItem" asp-action="Configure" method="post" id="slider-item-form">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                @await Html.PartialAsync("Table", new DataTablesModel
+                {
+                    Name = "slider-item-grid",
+                                UrlRead = new DataUrl("List", "TTBOLTCarousel", null),
+                                UrlDelete = new DataUrl("Delete", "TTBOLTCarousel", null),
+                                Length = 10,
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                new ColumnProperty(nameof(SliderItemModel.PictureUrl))
+                                {
+                                Render = new RenderPicture(){Width = 280} ,
+                                Title = T("Plugins.Widgets.TTBOLTCarousel.Fields.Picture").Text,
+                                Width = "250"
+                                },
+                                new ColumnProperty(nameof(SliderItemModel.MobilePictureUrl))
+                                {
+                                Render = new RenderPicture(){Width = 280} ,
+                                Title = T("Plugins.Widgets.TTBOLTCarousel.MobilePicture").Text,
+                                Width = "250"
+                                },
+                                new ColumnProperty(nameof(SliderItemModel.ImageAlt))
+                                {
+                                Title =T("Plugins.Widgets.TTBOLTCarousel.Fields.ImageAlt").Text,
+                                Width = "25"
+                                },
+                                new ColumnProperty(nameof(SliderItemModel.LanguageName))
+                                {
+                                Title =T("Plugins.Widgets.TTBOLTCarousel.Fields.Language").Text,
+                                Width = "100"
+                                },
+                                new ColumnProperty(nameof(SliderItemModel.RouteLink))
+                                {
+                                Title = T("Plugins.Widgets.TTBOLTCarousel.Fields.RouteLink").Text,
+                                Width = "100"
+                                },
+
+                                new ColumnProperty(nameof(SliderItemModel.Order))
+                                {
+                                Title = T("Plugins.Widgets.TTBOLTCarousel.Fields.Order").Text,
+                                Width = "10"
+                                },
+
+
+                                new ColumnProperty(nameof(SliderItemModel.Id))
+                                {
+                                Title = T("Admin.Common.Edit").Text,
+                                ClassName = NopColumnClassDefaults.Button,
+                                Width = "100",
+                                Render = new RenderCustom("renderColumnEdit")
+                                },
+                                new ColumnProperty(nameof(SliderItemModel.Id))
+                                {
+                                Title = T("Admin.Common.Delete").Text,
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                                Width = "100"
+                                }
+                                }
+                                })
+            </div>
+
+            <script>
+                function renderColumnEdit(data, type, row, meta) {
+
+                    return '<button onclick=\"javascript:OpenWindow(\'@Url.Content("~/Admin/TTBOLTCarousel/Edit/")' + data + '?btnId=btnRefresh&formId=slider-item-form\', 800, 800, true); return false;\" class="btn btn-default"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit").Text</button>';
+                }
+            </script>
+
+            <div class="card-footer">
+
+                <button type="submit" id="btnAddNewOption" name="save" class="btn btn-primary" onclick="javascript:OpenWindow('@(Url.Action("Create", "TTBOLTCarousel", new { btnId = "btnRefresh", formId = "slider-item-form" }))', 800, 800, true); return false;">@T("admin.common.addnew")</button>
+
+                <button id="btnRefresh" type="submit" name="save" class="btn btn-default" style="display: none"></button>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefresh').click(function () {
+                        //refresh grid
+                        updateTable('#slider-item-grid');
+
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</form>

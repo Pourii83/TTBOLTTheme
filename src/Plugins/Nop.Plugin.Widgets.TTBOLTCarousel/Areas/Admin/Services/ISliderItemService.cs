@@ -10,6 +10,4 @@ public interface ISliderItemService
     Task InsertSlideAsync(SliderItem sliderItem);
     Task UpdateSlideAsync(SliderItem slidesliderItemItem);
     Task DeleteSlideAsync(SliderItem sliderItem);
-
-    void Log(SliderItem sliderItem);
 }

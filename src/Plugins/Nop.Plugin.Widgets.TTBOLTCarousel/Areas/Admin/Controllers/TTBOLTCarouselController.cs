@@ -6,7 +6,6 @@ using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Models;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Services;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Domain;
 using Nop.Services.Media;
-using Nop.Services.Security;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc;
@@ -19,17 +18,14 @@ namespace Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Controllers;
 [AutoValidateAntiforgeryToken]
 public class TTBOLTCarouselController : BasePluginController
 {
-    private readonly IPermissionService _permissionService;
     private readonly ISliderItemModelFactory _sliderItemModelFactory;
     private readonly IPictureService _pictureService;
     private readonly ISliderItemService _sliderItemService;
 
-    public TTBOLTCarouselController(IPermissionService permissionService,
-        ISliderItemModelFactory sliderItemModelFactory,
+    public TTBOLTCarouselController(ISliderItemModelFactory sliderItemModelFactory,
         IPictureService pictureService,
         ISliderItemService sliderItemService)
     {
-        _permissionService = permissionService;
         _sliderItemModelFactory = sliderItemModelFactory;
         _pictureService = pictureService;
         _sliderItemService = sliderItemService;
@@ -62,7 +58,12 @@ public class TTBOLTCarouselController : BasePluginController
     public async Task<IActionResult> Create(SliderItemModel model)
     {
         if (!ModelState.IsValid)
-            return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Create.cshtml");
+        {
+            model.AvailableLanguages = new List<SelectListItem>();
+            await _sliderItemModelFactory.PrepareAvailableLanguagesAsync(model.AvailableLanguages);
+
+            return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Create.cshtml", model);
+        }
 
         Picture picture = null;
         Picture mobilePicture = null;
@@ -122,10 +123,15 @@ public class TTBOLTCarouselController : BasePluginController
     public async Task<IActionResult> Edit(SliderItemModel model)
     {
         if (!ModelState.IsValid)
-            return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Edit.cshtml");
+        {
+            model.AvailableLanguages = new List<SelectListItem>();
+            await _sliderItemModelFactory.PrepareAvailableLanguagesAsync(model.AvailableLanguages);
 
-        Picture picture = new();
-        Picture mobilePicture = new();
+            return View("~/Plugins/Widgets.TTBOLTCarousel/Areas/Admin/Views/Edit.cshtml", model);
+        }
+
+        Picture picture = null;
+        Picture mobilePicture = null;
 
         if (model.PictureFile != null)
             picture = await _pictureService.InsertPictureAsync(model.PictureFile);
@@ -137,9 +143,9 @@ public class TTBOLTCarouselController : BasePluginController
             Id = model.Id,
             LanguageId = model.LanguageId,
             Order = model.Order,
-            PictureId = model.PictureFile != null ? picture.Id : (int)model.PictureId,
+            PictureId = model.PictureFile != null ? picture.Id : model.PictureId,
             MobilePictureId = model.MobilePictureFile != null ? mobilePicture.Id :
-                                model.MobilePictureId != null ? (int)model.MobilePictureId : (int)model.PictureId,
+                                model.MobilePictureId ?? model.PictureId,
             ImageAlt = model.ImageAlt,
             RouteLink = model.RouteLink
         };
@@ -158,10 +164,18 @@ public class TTBOLTCarouselController : BasePluginController
             return RedirectToAction("Configure");
 
         if (sliderItem.PictureId != null)
-            await _pictureService.DeletePictureAsync(await _pictureService.GetPictureByIdAsync((int)sliderItem.PictureId));
+        {
+            var picture = await _pictureService.GetPictureByIdAsync((int)sliderItem.PictureId);
+            if (picture != null)
+                await _pictureService.DeletePictureAsync(picture);
+        }
 
-        if (sliderItem.MobilePictureId != null)
-            await _pictureService.DeletePictureAsync(await _pictureService.GetPictureByIdAsync((int)sliderItem.MobilePictureId));
+        if (sliderItem.MobilePictureId != null && sliderItem.MobilePictureId != sliderItem.PictureId)
+        {
+            var mobilePicture = await _pictureService.GetPictureByIdAsync((int)sliderItem.MobilePictureId);
+            if (mobilePicture != null)
+                await _pictureService.DeletePictureAsync(mobilePicture);
+        }
 
         await _sliderItemService.DeleteSlideAsync(sliderItem);
 

@@ -7,24 +7,24 @@ namespace Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Models;
 
 public record SliderItemModel : BaseNopEntityModel
 {
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.Language")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.Fields.Language")]
     public int LanguageId { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.Language")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.Language")]
     public string LanguageName { get; set; }
 
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.RouteLink")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.RouteLink")]
     public string RouteLink { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.Order")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.Order")]
     public int Order { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.ImageAlt")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.ImageAlt")]
     public string ImageAlt { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.Picture")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.Picture")]
     public IFormFile PictureFile { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.MobilePicture")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.MobilePicture")]
     public IFormFile MobilePictureFile { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.PictureUrl")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.PictureUrl")]
     public string PictureUrl { get; set; }
-    [NopResourceDisplayName("Plugins.PW.HomeSlider.Fields.MobilePicture")]
+    [NopResourceDisplayName("Plugins.Widgets.TTBOLTCarousel.MobilePicture")]
     public string MobilePictureUrl { get; set; }
 
     public int? MobilePictureId { get; set; }

@@ -1,40 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Services;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Model;
 using Nop.Services.Media;
 using Nop.Web.Framework.Controllers;
 
-namespace Nop.Plugin.PW.HomeSlider.Controllers;
+namespace Nop.Plugin.Widgets.TTBOLTCarousel.Controllers;
+
 public class TTBOLTCarouselController : BasePluginController
 {
     private readonly IPictureService _pictureService;
     private readonly ISliderItemService _sliderItemService;
 
     public TTBOLTCarouselController(IPictureService pictureService,
-       ISliderItemService sliderItemService)
+        ISliderItemService sliderItemService)
     {
         _pictureService = pictureService;
         _sliderItemService = sliderItemService;
     }
+
     public async Task<IActionResult> GetClientPictures([FromBody] WindowModel window)
     {
-        bool isMobile = window.Width < 910 ? true : false;
-        List<SliderItemModel> sliderItems = new List<SliderItemModel>();
+        var isMobile = window.Width < 910;
+        var sliderItems = new List<SliderItemModel>();
 
-        _sliderItemService.GetSlideList().Result.ForEach(async x =>
+        foreach (var slide in await _sliderItemService.GetSlideList())
         {
+            if (!slide.PictureId.HasValue)
+                continue;
+
             sliderItems.Add(new SliderItemModel
             {
-                RouteLink = x.RouteLink,
-                ImageAlt = x.ImageAlt,
-                PictureUrl = isMobile ? 
-                await _pictureService.GetPictureUrlAsync(x.MobilePictureId != null ? (int)x.MobilePictureId: (int)x.PictureId) :
-                await _pictureService.GetPictureUrlAsync((int)x.PictureId),
-                Order = x.Order
+                RouteLink = slide.RouteLink,
+                ImageAlt = slide.ImageAlt,
+                PictureUrl = isMobile
+                    ? await _pictureService.GetPictureUrlAsync(slide.MobilePictureId ?? slide.PictureId.Value)
+                    : await _pictureService.GetPictureUrlAsync(slide.PictureId.Value),
+                Order = slide.Order
             });
-        });
+        }
 
-        return Json(JsonConvert.SerializeObject(sliderItems));
+        return Json(sliderItems);
     }
 }

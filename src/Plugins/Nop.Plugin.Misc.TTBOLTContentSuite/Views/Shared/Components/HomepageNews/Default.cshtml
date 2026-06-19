@@ -1,0 +1,45 @@
+@model Nop.Web.Models.News.HomepageNewsItemsModel
+@inject INopUrlHelper NopUrl
+@inject Nop.Plugin.Misc.TTBOLTContentSuite.Factories.IContentSuiteModelFactory ContentSuiteModelFactory
+
+@using Nop.Core.Domain.News
+@using Nop.Web.Framework.Mvc.Routing
+
+@if (Model.NewsItems.Count > 0)
+{
+    var newsItems = await ContentSuiteModelFactory.PrepareHomePageNewsItemModelsAsync(Model);
+
+    <section class="news-list-homepage ttbolt-homepage-blog-posts ttbolt-homepage-news home-page-product-grid">
+        <h2 class="title">@T("News")</h2>
+
+        <div class="news-items ttbolt-homepage-blog-posts__grid item-grid">
+            @foreach (var item in newsItems)
+            {
+                <article class="news-item ttbolt-homepage-blog-card">
+                    <a class="ttbolt-homepage-blog-card__picture"
+                       href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = item.SeName }))"
+                       title="@item.Title">
+                        <img src="@item.PictureUrl" alt="@item.Title" loading="lazy" />
+                    </a>
+                    <div class="ttbolt-homepage-blog-card__body">
+                        <h3 class="ttbolt-homepage-blog-card__title">
+                            <a href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = item.SeName }))">
+                                @item.Title
+                            </a>
+                        </h3>
+                        @if (!string.IsNullOrWhiteSpace(item.Short))
+                        {
+                            <div class="ttbolt-homepage-blog-card__overview">
+                                @Html.Raw(item.Short)
+                            </div>
+                        }
+                        <a class="ttbolt-homepage-blog-card__link"
+                           href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = item.SeName }))">
+                            <span class="button-1">@T("News.MoreInfo")</span>
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}

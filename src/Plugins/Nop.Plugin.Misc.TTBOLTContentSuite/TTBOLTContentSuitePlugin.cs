@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Cms;
+﻿using Nop.Core.Domain.Cms;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Components;
 using Nop.Services.Cms;
 using Nop.Services.Configuration;
@@ -36,7 +36,8 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
         return Task.FromResult<IList<string>>(new List<string>
         {
             PublicWidgetZones.HomepageBeforeNews,
-            AdminWidgetZones.BlogPostDetailsBlock
+            AdminWidgetZones.BlogPostDetailsBlock,
+            AdminWidgetZones.NewsItemsDetailsBlock
         });
     }
 
@@ -52,6 +53,8 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
         {
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail"] = "تصویر شاخص مقاله",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Picture"] = "تصویر شاخص",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Thumbnail"] = "تصویر شاخص خبر",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture"] = "تصویر شاخص",
             ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "مقالات جدید",
             ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "بیشتر بدانید"
         });

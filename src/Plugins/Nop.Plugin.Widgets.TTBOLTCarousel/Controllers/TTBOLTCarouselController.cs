@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Areas.Admin.Services;
 using Nop.Plugin.Widgets.TTBOLTCarousel.Model;
+using Nop.Plugin.Widgets.TTBOLTCarousel.Utilities;
 using Nop.Services.Media;
 using Nop.Web.Framework.Controllers;
 
@@ -32,9 +33,9 @@ public class TTBOLTCarouselController : BasePluginController
             {
                 RouteLink = slide.RouteLink,
                 ImageAlt = slide.ImageAlt,
-                PictureUrl = isMobile
+                PictureUrl = PictureUrlFormatter.EncodePath(isMobile
                     ? await _pictureService.GetPictureUrlAsync(slide.MobilePictureId ?? slide.PictureId.Value)
-                    : await _pictureService.GetPictureUrlAsync(slide.PictureId.Value),
+                    : await _pictureService.GetPictureUrlAsync(slide.PictureId.Value)),
                 Order = slide.Order
             });
         }

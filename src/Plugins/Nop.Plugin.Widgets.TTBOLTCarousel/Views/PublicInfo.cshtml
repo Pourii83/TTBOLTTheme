@@ -1,4 +1,5 @@
 @using Nop.Plugin.Widgets.TTBOLTCarousel.Domain
+@using Nop.Plugin.Widgets.TTBOLTCarousel.Utilities
 @using Nop.Services.Media
 @model List<SliderItem>
 @inject IPictureService PictureService
@@ -10,8 +11,8 @@
 
     if (first?.PictureId != null)
     {
-        var preloadUrl = await PictureService.GetPictureUrlAsync(first.PictureId.Value, targetSize: 1280);
-        NopHtml.AddHeadCustomParts($"<link rel=\"preload\" as=\"image\" href=\"{preloadUrl}\">");
+        var preloadUrl = PictureUrlFormatter.EncodePath(await PictureService.GetPictureUrlAsync(first.PictureId.Value, targetSize: 1280));
+        NopHtml.AddHeadCustomParts($"<link rel=\"preload\" as=\"image\" href=\"{HtmlEncoder.Default.Encode(preloadUrl)}\">");
     }
 }
 
@@ -52,11 +53,11 @@
         @for (var i = 0; i < slides.Count; i++)
         {
             var slide = slides[i];
-            var url1280 = await PictureService.GetPictureUrlAsync(slide.PictureId.Value);
-            var url1920 = await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 1920);
-            var url640 = slide.MobilePictureId.HasValue
+            var url1280 = PictureUrlFormatter.EncodePath(await PictureService.GetPictureUrlAsync(slide.PictureId.Value));
+            var url1920 = PictureUrlFormatter.EncodePath(await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 1920));
+            var url640 = PictureUrlFormatter.EncodePath(slide.MobilePictureId.HasValue
                 ? await PictureService.GetPictureUrlAsync(slide.MobilePictureId.Value, targetSize: 640)
-                : await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 640);
+                : await PictureService.GetPictureUrlAsync(slide.PictureId.Value, targetSize: 640));
 
             <div class="swiper-slide">
                 <a href="@slide.RouteLink">

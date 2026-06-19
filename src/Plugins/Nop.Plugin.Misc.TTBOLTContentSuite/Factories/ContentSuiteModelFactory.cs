@@ -15,6 +15,7 @@ namespace Nop.Plugin.Misc.TTBOLTContentSuite.Factories;
 
 public class ContentSuiteModelFactory : IContentSuiteModelFactory
 {
+    private const int HomepageItemsCount = 2;
     private const int HomepagePictureSize = 520;
     private const string PictureIdFormKey = "PictureId";
 
@@ -59,7 +60,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             query = await _storeMappingService.ApplyStoreMapping(query, store.Id);
 
             return query.OrderByDescending(blogPost => blogPost.StartDateUtc ?? blogPost.CreatedOnUtc);
-        }, pageSize: 4);
+        }, pageSize: HomepageItemsCount);
 
         var model = new List<HomePageBlogPostModel>();
         foreach (var blogPost in blogPosts)
@@ -79,7 +80,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
     public async Task<IList<HomePageNewsItemModel>> PrepareHomePageNewsItemModelsAsync(HomepageNewsItemsModel newsItemsModel)
     {
         var model = new List<HomePageNewsItemModel>();
-        foreach (var item in newsItemsModel.NewsItems)
+        foreach (var item in newsItemsModel.NewsItems.Take(HomepageItemsCount))
         {
             var newsItem = await _newsItemRepository.GetByIdAsync(item.Id);
             model.Add(new HomePageNewsItemModel

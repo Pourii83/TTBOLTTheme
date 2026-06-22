@@ -15,7 +15,7 @@ namespace Nop.Plugin.Misc.TTBOLTContentSuite.Factories;
 
 public class ContentSuiteModelFactory : IContentSuiteModelFactory
 {
-    private const int HomepageItemsCount = 2;
+    private const int HomepageItemsCount = 4;
     private const int HomepagePictureSize = 520;
     private const string PictureIdFormKey = "PictureId";
 

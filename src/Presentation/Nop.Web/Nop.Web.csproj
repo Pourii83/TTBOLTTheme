@@ -64,18 +64,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Themes\TTBOLTTheme\Views\Blog\BlogPost.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="Themes\TTBOLTTheme\Views\Blog\Components\BlogMonths\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="Themes\TTBOLTTheme\Views\Blog\Components\BlogTags\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="Themes\TTBOLTTheme\Views\Blog\List.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
     <Content Update="Themes\TTBOLTTheme\Views\Home\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

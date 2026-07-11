@@ -5527,6 +5527,78 @@ label, label + * {
   color: var(--text-secondary-100);
 }
 
+/* TTBOLT USER SUITE */
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-1,
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-2 {
+  display: inline-flex;
+  min-width: 144px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-minor);
+  padding: 10px 24px;
+  font-size: var(--fs-5);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: none;
+  box-shadow: var(--shadow-minor);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions__save {
+  background-color: var(--primary-color-50);
+  color: var(--text-inverse-100);
+}
+
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions__save:hover,
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions__save:focus {
+    background-color: var(--primary-color-75);
+    color: var(--text-inverse-100);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-normal);
+  }
+
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions__remove {
+  border-color: var(--danger-color-50);
+  background-color: var(--danger-color-10);
+  color: var(--danger-color-100);
+}
+
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions__remove:hover,
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions__remove:focus {
+    border-color: var(--danger-color-100);
+    background-color: var(--danger-color-100);
+    color: var(--text-inverse-100);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-normal);
+  }
+
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-1:active,
+.ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-2:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-minor);
+}
+
+@media all and (max-width: 600px) {
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions {
+    flex-direction: column;
+  }
+
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-1,
+  .ttbolt-profile-picture-page .ttbolt-profile-picture-actions .button-2 {
+    width: 100%;
+  }
+}
+
 .vendorinfo-page .button-2 {
   border: medium none;
   background-color: #888;

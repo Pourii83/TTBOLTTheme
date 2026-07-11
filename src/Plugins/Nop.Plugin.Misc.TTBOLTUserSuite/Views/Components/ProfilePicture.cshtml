@@ -1,0 +1,21 @@
+@model ProfilePictureModel
+
+<section class="ttbolt-profile-picture">
+    <div class="ttbolt-profile-picture__preview" aria-hidden="true">
+        @if (Model.HasPicture)
+        {
+            <img src="@Model.PictureUrl" alt="" />
+        }
+        else
+        {
+            <i class="fa-solid fa-user"></i>
+        }
+    </div>
+    <div class="ttbolt-profile-picture__content">
+        <h2>@Model.Title</h2>
+        <p>@Model.Description</p>
+    </div>
+    <a class="button-2 ttbolt-profile-picture__action" href="@Model.ActionUrl">
+        @Model.ActionText
+    </a>
+</section>

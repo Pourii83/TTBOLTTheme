@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Plugin.Widgets.TTBOLTCa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Plugin.Misc.TTBOLTContentSuite", "Plugins\Nop.Plugin.Misc.TTBOLTContentSuite\Nop.Plugin.Misc.TTBOLTContentSuite.csproj", "{69DF0101-ACEE-4177-B9FE-F685A86E283C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Plugin.Misc.TTBOLTUserSuite", "Plugins\Nop.Plugin.Misc.TTBOLTUserSuite\Nop.Plugin.Misc.TTBOLTUserSuite.csproj", "{1675787E-01DA-4936-8DAC-EA13C104ED03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -503,6 +505,18 @@ Global
 		{69DF0101-ACEE-4177-B9FE-F685A86E283C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{69DF0101-ACEE-4177-B9FE-F685A86E283C}.Release|x86.ActiveCfg = Release|Any CPU
 		{69DF0101-ACEE-4177-B9FE-F685A86E283C}.Release|x86.Build.0 = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Debug|x86.Build.0 = Debug|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|x86.ActiveCfg = Release|Any CPU
+		{1675787E-01DA-4936-8DAC-EA13C104ED03}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -544,6 +558,7 @@ Global
 		{7CFA7C2C-54B6-4EB9-9F98-32437281FAE5} = {7881B112-7843-4542-B1F7-F99553FB9BB7}
 		{AF41E65D-F46E-42B6-910C-A08E822E5F94} = {7881B112-7843-4542-B1F7-F99553FB9BB7}
 		{69DF0101-ACEE-4177-B9FE-F685A86E283C} = {7881B112-7843-4542-B1F7-F99553FB9BB7}
+		{1675787E-01DA-4936-8DAC-EA13C104ED03} = {7881B112-7843-4542-B1F7-F99553FB9BB7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE72A8B2-332A-4175-9319-6726D36E9D25}

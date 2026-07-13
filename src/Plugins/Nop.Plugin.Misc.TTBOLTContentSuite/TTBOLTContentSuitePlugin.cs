@@ -49,6 +49,7 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
         return Task.FromResult<IList<string>>(new List<string>
         {
             PublicWidgetZones.HomepageBeforeNews,
+            PublicWidgetZones.LeftSideColumnBefore,
             PublicWidgetZones.BlogListPageBeforePost,
             PublicWidgetZones.LeftSideColumnBlogBefore,
             PublicWidgetZones.BlogPostPageBeforeBody,
@@ -118,6 +119,14 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Thumbnail"] = "تصاویر خبر",
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture"] = "تصویر اصلی",
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.ThumbnailPicture"] = "تصویر بندانگشتی",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.RandomItems"] = "اخبار تصادفی",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Author"] = "نویسنده",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.PublishedOn"] = "تاریخ انتشار",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.UpdatedOn"] = "آخرین ویرایش",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.TableOfContents"] = "فهرست محتوا",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.NewsTableOfContents"] = "تنظیمات فهرست محتوای اخبار",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.NewsTableOfContentsHeadingTags"] = "تگ‌های عنوان اخبار",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.NewsTableOfContentsHeadingTags.Hint"] = "تگ‌هایی را انتخاب کنید که عنوان‌های آن‌ها در فهرست محتوای صفحه خبر نمایش داده شوند. با خالی گذاشتن این گزینه، فهرست محتوا غیرفعال می‌شود.",
             ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "مقالات جدید",
             ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "بیشتر بدانید"
         };

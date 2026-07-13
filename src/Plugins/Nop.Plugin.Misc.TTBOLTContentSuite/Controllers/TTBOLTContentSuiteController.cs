@@ -38,7 +38,9 @@ public class TTBOLTContentSuiteController : BasePluginController
     {
         return View(
             "~/Plugins/Misc.TTBOLTContentSuite/Views/Configure.cshtml",
-            PrepareConfigurationModel(_settings.TableOfContentsHeadingTags));
+            PrepareConfigurationModel(
+                _settings.TableOfContentsHeadingTags,
+                _settings.NewsTableOfContentsHeadingTags));
     }
 
     [HttpPost]
@@ -46,6 +48,7 @@ public class TTBOLTContentSuiteController : BasePluginController
     public async Task<IActionResult> Configure(ConfigurationModel model)
     {
         _settings.TableOfContentsHeadingTags = NormalizeHeadingTags(model.SelectedHeadingTags);
+        _settings.NewsTableOfContentsHeadingTags = NormalizeHeadingTags(model.SelectedNewsHeadingTags);
         await _settingService.SaveSettingAsync(_settings);
 
         _notificationService.SuccessNotification(
@@ -54,12 +57,16 @@ public class TTBOLTContentSuiteController : BasePluginController
         return Configure();
     }
 
-    private static ConfigurationModel PrepareConfigurationModel(IEnumerable<string> selectedHeadingTags)
+    private static ConfigurationModel PrepareConfigurationModel(
+        IEnumerable<string> selectedHeadingTags,
+        IEnumerable<string> selectedNewsHeadingTags)
     {
         var selectedTags = NormalizeHeadingTags(selectedHeadingTags);
+        var selectedNewsTags = NormalizeHeadingTags(selectedNewsHeadingTags);
         var model = new ConfigurationModel
         {
-            SelectedHeadingTags = selectedTags
+            SelectedHeadingTags = selectedTags,
+            SelectedNewsHeadingTags = selectedNewsTags
         };
 
         foreach (var headingTag in TTBOLTContentSuiteSettings.SupportedHeadingTags)
@@ -69,6 +76,13 @@ public class TTBOLTContentSuiteController : BasePluginController
                 Text = headingTag.ToUpperInvariant(),
                 Value = headingTag,
                 Selected = selectedTags.Contains(headingTag)
+            });
+
+            model.AvailableNewsHeadingTags.Add(new SelectListItem
+            {
+                Text = headingTag.ToUpperInvariant(),
+                Value = headingTag,
+                Selected = selectedNewsTags.Contains(headingTag)
             });
         }
 

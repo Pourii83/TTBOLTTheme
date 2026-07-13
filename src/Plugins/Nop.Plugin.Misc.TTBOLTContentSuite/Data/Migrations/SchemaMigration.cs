@@ -47,6 +47,14 @@ public class SchemaMigration : MigrationBase
             Alter.Table(newsItemTableName)
                 .AddColumn(nameof(TTNewsItem.ThumbnailPictureId)).AsInt32().Nullable();
 
+        if (!Schema.Table(newsItemTableName).Column(nameof(TTNewsItem.CustomerId)).Exists())
+            Alter.Table(newsItemTableName)
+                .AddColumn(nameof(TTNewsItem.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None).Nullable();
+
+        if (!Schema.Table(newsItemTableName).Column(nameof(TTNewsItem.UpdatedOnUtc)).Exists())
+            Alter.Table(newsItemTableName)
+                .AddColumn(nameof(TTNewsItem.UpdatedOnUtc)).AsDateTime2().Nullable();
+
         var relatedBlogPostTableName = NameCompatibilityManager.GetTableName(typeof(RelatedBlogPost));
         if (!Schema.Table(relatedBlogPostTableName).Exists())
             Create.TableFor<RelatedBlogPost>();
@@ -88,6 +96,29 @@ public class BlogPostUpdatedDateSchemaMigration : MigrationBase
         if (!Schema.Table(blogPostTableName).Column(nameof(TTBlogPost.UpdatedOnUtc)).Exists())
             Alter.Table(blogPostTableName)
                 .AddColumn(nameof(TTBlogPost.UpdatedOnUtc)).AsDateTime2().Nullable();
+    }
+
+    public override void Down()
+    {
+    }
+}
+
+[NopMigration("2026-07-14 10:00:00", "Misc.TTBOLTContentSuite 4.90.16 news metadata", MigrationProcessType.Update)]
+public class NewsMetadataSchemaMigration : MigrationBase
+{
+    public override void Up()
+    {
+        if (!DataSettingsManager.IsDatabaseInstalled())
+            return;
+
+        var newsItemTableName = NameCompatibilityManager.GetTableName(typeof(NewsItem));
+        if (!Schema.Table(newsItemTableName).Column(nameof(TTNewsItem.CustomerId)).Exists())
+            Alter.Table(newsItemTableName)
+                .AddColumn(nameof(TTNewsItem.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None).Nullable();
+
+        if (!Schema.Table(newsItemTableName).Column(nameof(TTNewsItem.UpdatedOnUtc)).Exists())
+            Alter.Table(newsItemTableName)
+                .AddColumn(nameof(TTNewsItem.UpdatedOnUtc)).AsDateTime2().Nullable();
     }
 
     public override void Down()

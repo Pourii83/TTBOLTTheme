@@ -4,6 +4,7 @@ using Nop.Core;
 using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
+using Nop.Core.Domain.News;
 using Nop.Data;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Domain;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Models;
@@ -32,6 +33,8 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
     private const int ContentPictureSize = 1200;
     private const int SidebarBlogPostItemsCount = 4;
     private const int SidebarBlogPostPictureSize = 240;
+    private const int SidebarNewsItemsCount = 4;
+    private const int SidebarNewsPictureSize = 240;
     private const string PictureIdFormKey = "PictureId";
     private const string ThumbnailPictureIdFormKey = "ThumbnailPictureId";
     private const string RelatedBlogPostIdsFormKey = "SelectedRelatedBlogPostIds";
@@ -292,28 +295,93 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         };
     }
 
-    public async Task<ContentPictureModel> PrepareNewsItemContentPictureModelAsync(PublicNewsItemModel newsItemModel)
+    public async Task<NewsItemContentModel> PrepareNewsItemContentModelAsync(PublicNewsItemModel newsItemModel)
     {
         var newsItem = await _newsItemRepository.GetByIdAsync(newsItemModel.Id);
+        var customer = newsItem?.CustomerId is > 0
+            ? await _customerService.GetCustomerByIdAsync(newsItem.CustomerId.Value)
+            : null;
+        var selectedHeadingTags = (_contentSuiteSettings.NewsTableOfContentsHeadingTags ?? new List<string>())
+            .Select(headingTag => headingTag?.Trim().ToLowerInvariant())
+            .Where(headingTag => TTBOLTContentSuiteSettings.SupportedHeadingTags.Contains(headingTag))
+            .Distinct()
+            .ToHashSet();
 
-        return new ContentPictureModel
+        return new NewsItemContentModel
         {
+            Id = newsItemModel.Id,
             PictureUrl = await GetOptionalPictureUrlAsync(newsItem?.PictureId, ContentPictureSize),
             Title = newsItemModel.Title,
-            SeName = newsItemModel.SeName
+            CustomerName = await GetCustomerNameAsync(customer),
+            CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
+            CreatedOn = newsItemModel.CreatedOn,
+            UpdatedOn = newsItem?.UpdatedOnUtc is DateTime updatedOnUtc
+                ? await _dateTimeHelper.ConvertToUserTimeAsync(updatedOnUtc, DateTimeKind.Utc)
+                : null,
+            HeadingTags = TTBOLTContentSuiteSettings.SupportedHeadingTags
+                .Where(selectedHeadingTags.Contains)
+                .ToList()
         };
     }
 
-    public async Task<ContentPictureModel> PrepareNewsListThumbnailModelAsync(PublicNewsItemModel newsItemModel)
+    public async Task<NewsItemCardHeaderModel> PrepareNewsItemCardHeaderModelAsync(PublicNewsItemModel newsItemModel)
     {
         var newsItem = await _newsItemRepository.GetByIdAsync(newsItemModel.Id);
+        var customer = newsItem?.CustomerId is > 0
+            ? await _customerService.GetCustomerByIdAsync(newsItem.CustomerId.Value)
+            : null;
 
-        return new ContentPictureModel
+        return new NewsItemCardHeaderModel
         {
+            Id = newsItemModel.Id,
             PictureUrl = await GetPictureUrlAsync(newsItem?.ThumbnailPictureId ?? newsItem?.PictureId, BlogCardPictureSize),
             Title = newsItemModel.Title,
-            SeName = newsItemModel.SeName
+            SeName = newsItemModel.SeName,
+            CustomerName = await GetCustomerNameAsync(customer),
+            CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
+            CreatedOn = newsItemModel.CreatedOn,
+            UpdatedOn = newsItem?.UpdatedOnUtc is DateTime updatedOnUtc
+                ? await _dateTimeHelper.ConvertToUserTimeAsync(updatedOnUtc, DateTimeKind.Utc)
+                : null
         };
+    }
+
+    public async Task<IList<NewsItemSidebarItemModel>> PrepareRandomNewsItemModelsAsync(int currentNewsItemId)
+    {
+        var store = await _storeContext.GetCurrentStoreAsync();
+        var language = await _workContext.GetWorkingLanguageAsync();
+        var newsItems = await _newsItemRepository.GetAllAsync(async query =>
+        {
+            query = query.Where(newsItem => newsItem.Id != currentNewsItemId);
+            query = query.Where(newsItem => newsItem.Published);
+            query = query.Where(newsItem => newsItem.LanguageId == language.Id);
+            query = query.Where(newsItem => !newsItem.StartDateUtc.HasValue || newsItem.StartDateUtc <= DateTime.UtcNow);
+            query = query.Where(newsItem => !newsItem.EndDateUtc.HasValue || newsItem.EndDateUtc >= DateTime.UtcNow);
+
+            return await _storeMappingService.ApplyStoreMapping(query, store.Id);
+        });
+
+        var model = new List<NewsItemSidebarItemModel>();
+        foreach (var newsItem in newsItems.OrderBy(_ => Random.Shared.Next()).Take(SidebarNewsItemsCount))
+        {
+            model.Add(new NewsItemSidebarItemModel
+            {
+                Title = newsItem.Title,
+                SeName = await _urlRecordService.GetSeNameAsync(
+                    newsItem.Id,
+                    nameof(NewsItem),
+                    newsItem.LanguageId,
+                    ensureTwoPublishedLanguages: false),
+                PictureUrl = await GetPictureUrlAsync(
+                    newsItem.ThumbnailPictureId ?? newsItem.PictureId,
+                    SidebarNewsPictureSize),
+                CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(
+                    newsItem.CreatedOnUtc,
+                    DateTimeKind.Utc)
+            });
+        }
+
+        return model;
     }
 
     private async Task<BlogPostSidebarItemModel> PrepareBlogPostSidebarItemModelAsync(TTBlogPost blogPost)

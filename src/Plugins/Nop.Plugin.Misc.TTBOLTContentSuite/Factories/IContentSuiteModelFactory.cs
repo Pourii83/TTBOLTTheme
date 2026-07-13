@@ -25,7 +25,9 @@ public interface IContentSuiteModelFactory
 
     Task<NewsItemThumbnailModel> PrepareNewsItemThumbnailModelAsync(AdminNewsItemModel newsItemModel);
 
-    Task<ContentPictureModel> PrepareNewsItemContentPictureModelAsync(PublicNewsItemModel newsItemModel);
+    Task<NewsItemContentModel> PrepareNewsItemContentModelAsync(PublicNewsItemModel newsItemModel);
 
-    Task<ContentPictureModel> PrepareNewsListThumbnailModelAsync(PublicNewsItemModel newsItemModel);
+    Task<NewsItemCardHeaderModel> PrepareNewsItemCardHeaderModelAsync(PublicNewsItemModel newsItemModel);
+
+    Task<IList<NewsItemSidebarItemModel>> PrepareRandomNewsItemModelsAsync(int currentNewsItemId);
 }

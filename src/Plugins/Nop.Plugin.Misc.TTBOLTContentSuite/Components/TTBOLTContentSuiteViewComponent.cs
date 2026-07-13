@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Factories;
 using Nop.Web.Framework.Components;
 using Nop.Web.Framework.Infrastructure;
+using Nop.Web.Framework.Mvc.Routing;
 using PublicBlogPostModel = Nop.Web.Models.Blogs.BlogPostModel;
 using PublicNewsItemModel = Nop.Web.Models.News.NewsItemModel;
 using AdminBlogPostModel = Nop.Web.Areas.Admin.Models.Blogs.BlogPostModel;
@@ -29,6 +30,16 @@ public class TTBOLTContentSuiteViewComponent : NopViewComponent
             return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/HomePage.cshtml", model);
         }
 
+        if (widgetZone == PublicWidgetZones.LeftSideColumnBefore &&
+            HttpContext.Request.RouteValues.TryGetValue(NopRoutingDefaults.RouteValue.NewsItemId, out var rawNewsItemId) &&
+            int.TryParse(rawNewsItemId?.ToString(), out var newsItemId))
+        {
+            var model = await _contentSuiteModelFactory.PrepareRandomNewsItemModelsAsync(newsItemId);
+            return model.Count == 0
+                ? Content("")
+                : View("~/Plugins/Misc.TTBOLTContentSuite/Views/News/RandomItems.cshtml", model);
+        }
+
         if (widgetZone == PublicWidgetZones.BlogListPageBeforePost && additionalData is PublicBlogPostModel publicBlogPostModel)
             return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/CardHeader.cshtml",
                 await _contentSuiteModelFactory.PrepareBlogPostCardHeaderModelAsync(publicBlogPostModel));
@@ -49,15 +60,13 @@ public class TTBOLTContentSuiteViewComponent : NopViewComponent
 
         if (widgetZone == PublicWidgetZones.NewsItemPageBeforeBody && additionalData is PublicNewsItemModel newsItemDetailsModel)
         {
-            var model = await _contentSuiteModelFactory.PrepareNewsItemContentPictureModelAsync(newsItemDetailsModel);
-            return string.IsNullOrEmpty(model.PictureUrl)
-                ? Content("")
-                : View("~/Plugins/Misc.TTBOLTContentSuite/Views/Shared/ContentPicture.cshtml", model);
+            var model = await _contentSuiteModelFactory.PrepareNewsItemContentModelAsync(newsItemDetailsModel);
+            return View("~/Plugins/Misc.TTBOLTContentSuite/Views/News/PostContentHeader.cshtml", model);
         }
 
         if (widgetZone == PublicWidgetZones.NewsListPageInsideItem && additionalData is PublicNewsItemModel publicNewsItemModel)
-            return View("~/Plugins/Misc.TTBOLTContentSuite/Views/News/ListThumbnail.cshtml",
-                await _contentSuiteModelFactory.PrepareNewsListThumbnailModelAsync(publicNewsItemModel));
+            return View("~/Plugins/Misc.TTBOLTContentSuite/Views/News/CardHeader.cshtml",
+                await _contentSuiteModelFactory.PrepareNewsItemCardHeaderModelAsync(publicNewsItemModel));
 
         if (widgetZone == AdminWidgetZones.BlogPostDetailsBlock && additionalData is AdminBlogPostModel blogPostModel)
             return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/AdminThumbnail.cshtml",

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Nop.Core;
 using Nop.Core.Domain.News;
 using Nop.Core.Events;
 using Nop.Data;
@@ -16,26 +17,29 @@ public class NewsItemThumbnailEventConsumer :
 
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRepository<TTNewsItem> _newsItemRepository;
+    private readonly IWorkContext _workContext;
 
     public NewsItemThumbnailEventConsumer(
         IHttpContextAccessor httpContextAccessor,
-        IRepository<TTNewsItem> newsItemRepository)
+        IRepository<TTNewsItem> newsItemRepository,
+        IWorkContext workContext)
     {
         _httpContextAccessor = httpContextAccessor;
         _newsItemRepository = newsItemRepository;
+        _workContext = workContext;
     }
 
     public async Task HandleEventAsync(EntityInsertedEvent<NewsItem> eventMessage)
     {
-        await SavePictureIdAsync(eventMessage.Entity.Id);
+        await SaveNewsItemMetadataAsync(eventMessage.Entity.Id, assignAuthor: true);
     }
 
     public async Task HandleEventAsync(EntityUpdatedEvent<NewsItem> eventMessage)
     {
-        await SavePictureIdAsync(eventMessage.Entity.Id);
+        await SaveNewsItemMetadataAsync(eventMessage.Entity.Id, assignAuthor: false);
     }
 
-    private async Task SavePictureIdAsync(int newsItemId)
+    private async Task SaveNewsItemMetadataAsync(int newsItemId, bool assignAuthor)
     {
         var request = _httpContextAccessor.HttpContext?.Request;
         if (request == null || !request.HasFormContentType)
@@ -49,7 +53,14 @@ public class NewsItemThumbnailEventConsumer :
         var thumbnailPictureId = GetPostedPictureId(request, ThumbnailPictureIdFormKey);
         newsItem.PictureId = pictureId > 0 ? pictureId : null;
         newsItem.ThumbnailPictureId = thumbnailPictureId > 0 ? thumbnailPictureId : null;
-        await _newsItemRepository.UpdateAsync(newsItem);
+
+        if (assignAuthor || !newsItem.CustomerId.HasValue)
+            newsItem.CustomerId = (await _workContext.GetCurrentCustomerAsync()).Id;
+
+        if (!assignAuthor)
+            newsItem.UpdatedOnUtc = DateTime.UtcNow;
+
+        await _newsItemRepository.UpdateAsync(newsItem, publishEvent: false);
     }
 
     private static int GetPostedPictureId(HttpRequest request, string formKey)

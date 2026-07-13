@@ -37,5 +37,36 @@
                 </div>
             </div>
         </nop-card>
+        <nop-card asp-name="ttbolt-content-suite-news-table-of-contents"
+                  asp-icon="fas fa-newspaper"
+                  asp-title="@T("Plugins.Misc.TTBOLTContentSuite.Configuration.NewsTableOfContents")"
+                  asp-hide-block-attribute-name="TTBOLTContentSuite.HideNewsTableOfContentsSettingsBlock"
+                  asp-hide="false"
+                  asp-advanced="false">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="SelectedNewsHeadingTags" />
+                    </div>
+                    <div class="col-md-9">
+                        <input type="hidden" name="SelectedNewsHeadingTags" value="" />
+                        <nop-select asp-for="SelectedNewsHeadingTags"
+                                    asp-items="Model.AvailableNewsHeadingTags"
+                                    asp-multiple="true" />
+                        <span asp-validation-for="SelectedNewsHeadingTags"></span>
+                        <span class="form-text text-muted">
+                            @T("Plugins.Misc.TTBOLTContentSuite.Configuration.NewsTableOfContentsHeadingTags.Hint")
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="offset-md-3 col-md-9">
+                        <button type="submit" name="save" class="btn btn-primary">
+                            @T("Admin.Common.Save")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nop-card>
     </nop-cards>
 </form>

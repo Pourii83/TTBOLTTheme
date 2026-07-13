@@ -1,0 +1,27 @@
+@model IList<NewsItemSidebarItemModel>
+@inject INopUrlHelper NopUrl
+
+@using Nop.Core.Domain.News
+
+<div class="ttbolt-news-sidebar ttbolt-blog-sidebar">
+    <section class="block ttbolt-blog-sidebar__block ttbolt-blog-suggestions ttbolt-news-suggestions">
+        <h2 class="title">@T("Plugins.Misc.TTBOLTContentSuite.NewsItem.RandomItems")</h2>
+        <div class="listbox">
+            <ul class="ttbolt-blog-suggestions__list">
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <a class="ttbolt-blog-suggestions__link"
+                           href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = item.SeName }))">
+                            <img src="@item.PictureUrl" alt="@item.Title" loading="lazy" />
+                            <span class="ttbolt-blog-suggestions__content">
+                                <strong>@item.Title</strong>
+                                <time datetime="@item.CreatedOn.ToString("yyyy-MM-dd")">@item.CreatedOn.ToString("D")</time>
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </section>
+</div>

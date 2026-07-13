@@ -2,7 +2,7 @@
   "Group": "Misc",
   "FriendlyName": "TTBOLT Content Suite",
   "SystemName": "Misc.TTBOLTContentSuite",
-  "Version": "4.90.15",
+  "Version": "4.90.16",
   "SupportedVersions": [ "4.90" ],
   "Author": "ttbolt team",
   "DisplayOrder": 1,

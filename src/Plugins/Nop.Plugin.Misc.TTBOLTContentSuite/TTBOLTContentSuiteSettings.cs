@@ -19,4 +19,10 @@ public class TTBOLTContentSuiteSettings : ISettings
         "h2",
         "h3"
     };
+
+    public List<string> NewsTableOfContentsHeadingTags { get; set; } = new()
+    {
+        "h2",
+        "h3"
+    };
 }

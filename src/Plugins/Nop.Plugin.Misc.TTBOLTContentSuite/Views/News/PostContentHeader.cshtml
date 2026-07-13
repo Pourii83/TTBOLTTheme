@@ -1,0 +1,108 @@
+@model NewsItemContentModel
+
+<div class="ttbolt-news-post-header" id="ttbolt-news-post-header-@Model.Id">
+    @if (!string.IsNullOrEmpty(Model.PictureUrl))
+    {
+        <figure class="ttbolt-content-picture">
+            <img src="@Model.PictureUrl" alt="@Model.Title" loading="eager" />
+        </figure>
+    }
+
+    <div class="ttbolt-blog-post-meta ttbolt-news-post-meta">
+        @if (!string.IsNullOrEmpty(Model.CustomerName))
+        {
+            <span class="ttbolt-blog-post-meta__author">
+                @if (!string.IsNullOrEmpty(Model.CustomerAvatarUrl))
+                {
+                    <img src="@Model.CustomerAvatarUrl" alt="@Model.CustomerName" loading="lazy" />
+                }
+                else
+                {
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                }
+                <span>@T("Plugins.Misc.TTBOLTContentSuite.NewsItem.Author"): @Model.CustomerName</span>
+            </span>
+        }
+        <time datetime="@Model.CreatedOn.ToString("yyyy-MM-dd")">
+            <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+            <span>@T("Plugins.Misc.TTBOLTContentSuite.NewsItem.PublishedOn"): @Model.CreatedOn.ToString("D")</span>
+        </time>
+        @if (Model.UpdatedOn.HasValue)
+        {
+            <time datetime="@Model.UpdatedOn.Value.ToString("yyyy-MM-dd")">
+                <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                <span>@T("Plugins.Misc.TTBOLTContentSuite.NewsItem.UpdatedOn"): @Model.UpdatedOn.Value.ToString("D")</span>
+            </time>
+        }
+    </div>
+
+    @if (Model.HeadingTags.Count > 0)
+    {
+        <nav class="ttbolt-blog-toc ttbolt-news-toc"
+             id="ttbolt-news-toc-@Model.Id"
+             data-heading-tags="@string.Join(",", Model.HeadingTags)"
+             aria-labelledby="ttbolt-news-toc-title-@Model.Id"
+             hidden>
+            <h2 id="ttbolt-news-toc-title-@Model.Id">
+                @T("Plugins.Misc.TTBOLTContentSuite.NewsItem.TableOfContents")
+            </h2>
+            <ol class="ttbolt-blog-toc__list"></ol>
+        </nav>
+    }
+</div>
+
+<script asp-location="Footer">
+    (() => {
+        const initializeNewsTableOfContents = () => {
+            const header = document.getElementById('ttbolt-news-post-header-@Model.Id');
+            if (!header)
+                return;
+
+            const pageBody = header.closest('.page-body');
+            pageBody?.classList.add('ttbolt-news-details-enhanced');
+
+            const tableOfContents = document.getElementById('ttbolt-news-toc-@Model.Id');
+            const article = pageBody?.querySelector(':scope > .news-body');
+            if (!tableOfContents || !article)
+                return;
+
+            const headingTags = tableOfContents.dataset.headingTags
+                .split(',')
+                .map(tag => tag.trim().toLowerCase())
+                .filter(Boolean);
+            const headings = Array.from(article.querySelectorAll(headingTags.join(',')))
+                .filter(heading => heading.textContent.trim().length > 0);
+            const list = tableOfContents.querySelector('.ttbolt-blog-toc__list');
+
+            if (!list || headings.length === 0)
+                return;
+
+            const minimumLevel = Math.min(...headingTags.map(tag => Number(tag.substring(1))));
+
+            headings.forEach((heading, index) => {
+                if (!heading.id)
+                    heading.id = `ttbolt-news-@Model.Id-section-${index + 1}`;
+
+                heading.classList.add('ttbolt-news-section-heading');
+
+                const item = document.createElement('li');
+                const link = document.createElement('a');
+                const headingLevel = Number(heading.tagName.substring(1));
+
+                item.className = 'ttbolt-blog-toc__item';
+                item.style.setProperty('--toc-level', Math.max(headingLevel - minimumLevel, 0));
+                link.href = `#${heading.id}`;
+                link.textContent = heading.textContent.trim();
+                item.appendChild(link);
+                list.appendChild(item);
+            });
+
+            tableOfContents.hidden = false;
+        };
+
+        if (document.readyState === 'loading')
+            document.addEventListener('DOMContentLoaded', initializeNewsTableOfContents, { once: true });
+        else
+            initializeNewsTableOfContents();
+    })();
+</script>

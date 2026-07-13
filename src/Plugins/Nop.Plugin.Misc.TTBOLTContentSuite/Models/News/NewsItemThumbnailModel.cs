@@ -9,4 +9,8 @@ public record NewsItemThumbnailModel : BaseNopEntityModel
     [UIHint("Picture")]
     [NopResourceDisplayName("Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture")]
     public int PictureId { get; set; }
+
+    [UIHint("Picture")]
+    [NopResourceDisplayName("Plugins.Misc.TTBOLTContentSuite.NewsItem.ThumbnailPicture")]
+    public int ThumbnailPictureId { get; set; }
 }

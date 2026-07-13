@@ -1,19 +1,25 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Data;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Domain;
+using Nop.Plugin.Misc.TTBOLTContentSuite.Models;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Models.Blogs;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Models.News;
+using Nop.Plugin.Misc.TTBOLTContentSuite.Services;
 using Nop.Services.Common;
 using Nop.Services.Customers;
+using Nop.Services.Helpers;
 using Nop.Services.Media;
 using Nop.Services.Seo;
 using Nop.Services.Stores;
 using Nop.Web.Models.News;
 using AdminBlogPostModel = Nop.Web.Areas.Admin.Models.Blogs.BlogPostModel;
 using AdminNewsItemModel = Nop.Web.Areas.Admin.Models.News.NewsItemModel;
+using PublicBlogPostModel = Nop.Web.Models.Blogs.BlogPostModel;
+using PublicNewsItemModel = Nop.Web.Models.News.NewsItemModel;
 
 namespace Nop.Plugin.Misc.TTBOLTContentSuite.Factories;
 
@@ -22,16 +28,23 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
     private const int HomepageItemsCount = 4;
     private const int HomepagePictureSize = 520;
     private const int BlogCardPictureSize = 640;
+    private const int ContentPictureSize = 1200;
+    private const int SidebarBlogPostItemsCount = 4;
+    private const int SidebarBlogPostPictureSize = 240;
     private const string PictureIdFormKey = "PictureId";
+    private const string ThumbnailPictureIdFormKey = "ThumbnailPictureId";
+    private const string RelatedBlogPostIdsFormKey = "SelectedRelatedBlogPostIds";
 
     private readonly IRepository<TTBlogPost> _blogPostRepository;
     private readonly CustomerSettings _customerSettings;
     private readonly ICustomerService _customerService;
+    private readonly IDateTimeHelper _dateTimeHelper;
     private readonly IGenericAttributeService _genericAttributeService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRepository<TTNewsItem> _newsItemRepository;
     private readonly MediaSettings _mediaSettings;
     private readonly IPictureService _pictureService;
+    private readonly IRelatedBlogPostService _relatedBlogPostService;
     private readonly IStoreContext _storeContext;
     private readonly IStoreMappingService _storeMappingService;
     private readonly IUrlRecordService _urlRecordService;
@@ -41,11 +54,13 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         IRepository<TTBlogPost> blogPostRepository,
         CustomerSettings customerSettings,
         ICustomerService customerService,
+        IDateTimeHelper dateTimeHelper,
         IGenericAttributeService genericAttributeService,
         IHttpContextAccessor httpContextAccessor,
         IRepository<TTNewsItem> newsItemRepository,
         MediaSettings mediaSettings,
         IPictureService pictureService,
+        IRelatedBlogPostService relatedBlogPostService,
         IStoreContext storeContext,
         IStoreMappingService storeMappingService,
         IUrlRecordService urlRecordService,
@@ -54,11 +69,13 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         _blogPostRepository = blogPostRepository;
         _customerSettings = customerSettings;
         _customerService = customerService;
+        _dateTimeHelper = dateTimeHelper;
         _genericAttributeService = genericAttributeService;
         _httpContextAccessor = httpContextAccessor;
         _newsItemRepository = newsItemRepository;
         _mediaSettings = mediaSettings;
         _pictureService = pictureService;
+        _relatedBlogPostService = relatedBlogPostService;
         _storeContext = storeContext;
         _storeMappingService = storeMappingService;
         _urlRecordService = urlRecordService;
@@ -87,7 +104,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
                 Title = blogPost.Title,
                 BodyOverview = blogPost.BodyOverview,
                 SeName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false),
-                PictureUrl = await GetPictureUrlAsync(blogPost.PictureId)
+                PictureUrl = await GetPictureUrlAsync(blogPost.ThumbnailPictureId ?? blogPost.PictureId)
             });
         }
 
@@ -105,7 +122,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
                 Title = item.Title,
                 Short = item.Short,
                 SeName = item.SeName,
-                PictureUrl = await GetPictureUrlAsync(newsItem?.PictureId)
+                PictureUrl = await GetPictureUrlAsync(newsItem?.ThumbnailPictureId ?? newsItem?.PictureId)
             });
         }
 
@@ -115,18 +132,49 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
     public async Task<BlogPostThumbnailModel> PrepareBlogPostThumbnailModelAsync(AdminBlogPostModel blogPostModel)
     {
         var pictureId = GetPostedPictureId();
+        var thumbnailPictureId = GetPostedInt(ThumbnailPictureIdFormKey);
+        var hasPostedForm = _httpContextAccessor.HttpContext?.Request.HasFormContentType == true;
+        var selectedRelatedBlogPostIds = hasPostedForm
+            ? GetPostedIntList(RelatedBlogPostIdsFormKey)
+            : new List<int>();
 
         if (blogPostModel.Id > 0)
         {
             var blogPost = await _blogPostRepository.GetByIdAsync(blogPostModel.Id);
             pictureId = pictureId > 0 ? pictureId : blogPost?.PictureId ?? 0;
+            thumbnailPictureId = thumbnailPictureId > 0 ? thumbnailPictureId : blogPost?.ThumbnailPictureId ?? 0;
+
+            if (!hasPostedForm)
+            {
+                selectedRelatedBlogPostIds = (await _relatedBlogPostService
+                    .GetRelatedBlogPostsAsync(blogPostModel.Id))
+                    .Select(mapping => mapping.RelatedBlogPostId)
+                    .ToList();
+            }
         }
 
-        return new BlogPostThumbnailModel
+        var model = new BlogPostThumbnailModel
         {
             Id = blogPostModel.Id,
-            PictureId = pictureId
+            PictureId = pictureId,
+            ThumbnailPictureId = thumbnailPictureId,
+            SelectedRelatedBlogPostIds = selectedRelatedBlogPostIds
         };
+
+        var blogPosts = await _blogPostRepository.GetAllAsync(query => query
+            .Where(blogPost => blogPost.Id != blogPostModel.Id)
+            .OrderByDescending(blogPost => blogPost.StartDateUtc ?? blogPost.CreatedOnUtc));
+
+        foreach (var blogPost in blogPosts)
+        {
+            model.AvailableRelatedBlogPosts.Add(new SelectListItem
+            {
+                Text = blogPost.Title,
+                Value = blogPost.Id.ToString()
+            });
+        }
+
+        return model;
     }
 
     public async Task<BlogPostCardHeaderModel> PrepareBlogPostCardHeaderModelAsync(Nop.Web.Models.Blogs.BlogPostModel blogPostModel)
@@ -146,27 +194,120 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         {
             Id = blogPostModel.Id,
             Title = blogPostModel.Title,
-            PictureUrl = await GetPictureUrlAsync(blogPost?.PictureId, BlogCardPictureSize),
+            PictureUrl = await GetPictureUrlAsync(blogPost?.ThumbnailPictureId ?? blogPost?.PictureId, BlogCardPictureSize),
             CustomerName = customerName,
             CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
             CreatedOn = blogPostModel.CreatedOn
         };
     }
 
+    public async Task<ContentPictureModel> PrepareBlogPostContentPictureModelAsync(PublicBlogPostModel blogPostModel)
+    {
+        var blogPost = await _blogPostRepository.GetByIdAsync(blogPostModel.Id);
+
+        return new ContentPictureModel
+        {
+            PictureUrl = await GetOptionalPictureUrlAsync(blogPost?.PictureId, ContentPictureSize),
+            Title = blogPostModel.Title,
+            SeName = blogPostModel.SeName
+        };
+    }
+
+    public async Task<BlogPostSidebarModel> PrepareBlogPostSidebarModelAsync(PublicBlogPostModel blogPostModel)
+    {
+        var mappings = await _relatedBlogPostService.GetRelatedBlogPostsAsync(blogPostModel.Id);
+        var relatedBlogPostIds = mappings.Select(mapping => mapping.RelatedBlogPostId).ToList();
+        var store = await _storeContext.GetCurrentStoreAsync();
+        var language = await _workContext.GetWorkingLanguageAsync();
+        var blogPosts = await _blogPostRepository.GetAllAsync(async query =>
+        {
+            query = query.Where(blogPost => blogPost.Id != blogPostModel.Id);
+            query = query.Where(blogPost => blogPost.LanguageId == language.Id);
+            query = query.Where(blogPost => !blogPost.StartDateUtc.HasValue || blogPost.StartDateUtc <= DateTime.UtcNow);
+            query = query.Where(blogPost => !blogPost.EndDateUtc.HasValue || blogPost.EndDateUtc >= DateTime.UtcNow);
+
+            return await _storeMappingService.ApplyStoreMapping(query, store.Id);
+        });
+
+        var blogPostsById = blogPosts.ToDictionary(blogPost => blogPost.Id);
+        var model = new BlogPostSidebarModel();
+
+        foreach (var mapping in mappings)
+        {
+            if (!blogPostsById.TryGetValue(mapping.RelatedBlogPostId, out var blogPost))
+                continue;
+
+            model.RelatedPosts.Add(await PrepareBlogPostSidebarItemModelAsync(blogPost));
+
+            if (model.RelatedPosts.Count == SidebarBlogPostItemsCount)
+                break;
+        }
+
+        var randomBlogPosts = blogPosts
+            .Where(blogPost => !relatedBlogPostIds.Contains(blogPost.Id))
+            .OrderBy(_ => Random.Shared.Next())
+            .Take(SidebarBlogPostItemsCount);
+
+        foreach (var blogPost in randomBlogPosts)
+            model.RandomPosts.Add(await PrepareBlogPostSidebarItemModelAsync(blogPost));
+
+        return model;
+    }
+
     public async Task<NewsItemThumbnailModel> PrepareNewsItemThumbnailModelAsync(AdminNewsItemModel newsItemModel)
     {
         var pictureId = GetPostedPictureId();
+        var thumbnailPictureId = GetPostedInt(ThumbnailPictureIdFormKey);
 
         if (newsItemModel.Id > 0)
         {
             var newsItem = await _newsItemRepository.GetByIdAsync(newsItemModel.Id);
             pictureId = pictureId > 0 ? pictureId : newsItem?.PictureId ?? 0;
+            thumbnailPictureId = thumbnailPictureId > 0 ? thumbnailPictureId : newsItem?.ThumbnailPictureId ?? 0;
         }
 
         return new NewsItemThumbnailModel
         {
             Id = newsItemModel.Id,
-            PictureId = pictureId
+            PictureId = pictureId,
+            ThumbnailPictureId = thumbnailPictureId
+        };
+    }
+
+    public async Task<ContentPictureModel> PrepareNewsItemContentPictureModelAsync(PublicNewsItemModel newsItemModel)
+    {
+        var newsItem = await _newsItemRepository.GetByIdAsync(newsItemModel.Id);
+
+        return new ContentPictureModel
+        {
+            PictureUrl = await GetOptionalPictureUrlAsync(newsItem?.PictureId, ContentPictureSize),
+            Title = newsItemModel.Title,
+            SeName = newsItemModel.SeName
+        };
+    }
+
+    public async Task<ContentPictureModel> PrepareNewsListThumbnailModelAsync(PublicNewsItemModel newsItemModel)
+    {
+        var newsItem = await _newsItemRepository.GetByIdAsync(newsItemModel.Id);
+
+        return new ContentPictureModel
+        {
+            PictureUrl = await GetPictureUrlAsync(newsItem?.ThumbnailPictureId ?? newsItem?.PictureId, BlogCardPictureSize),
+            Title = newsItemModel.Title,
+            SeName = newsItemModel.SeName
+        };
+    }
+
+    private async Task<BlogPostSidebarItemModel> PrepareBlogPostSidebarItemModelAsync(TTBlogPost blogPost)
+    {
+        return new BlogPostSidebarItemModel
+        {
+            Title = blogPost.Title,
+            SeName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false),
+            PictureUrl = await GetPictureUrlAsync(
+                blogPost.ThumbnailPictureId ?? blogPost.PictureId,
+                SidebarBlogPostPictureSize),
+            CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(blogPost.CreatedOnUtc, DateTimeKind.Utc)
         };
     }
 
@@ -197,6 +338,13 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             defaultPictureType: PictureType.Avatar);
     }
 
+    private async Task<string> GetOptionalPictureUrlAsync(int? pictureId, int pictureSize)
+    {
+        return pictureId is > 0
+            ? await _pictureService.GetPictureUrlAsync(pictureId.Value, pictureSize, showDefaultPicture: false)
+            : string.Empty;
+    }
+
     private int GetPostedPictureId()
     {
         return GetPostedInt(PictureIdFormKey);
@@ -209,6 +357,19 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             return 0;
 
         return int.TryParse(rawValue.FirstOrDefault(), out var postedValue) ? postedValue : 0;
+    }
+
+    private List<int> GetPostedIntList(string formKey)
+    {
+        var request = _httpContextAccessor.HttpContext?.Request;
+        if (request?.HasFormContentType != true || !request.Form.TryGetValue(formKey, out var rawValues))
+            return new List<int>();
+
+        return rawValues
+            .Select(rawValue => int.TryParse(rawValue, out var value) ? value : 0)
+            .Where(value => value > 0)
+            .Distinct()
+            .ToList();
     }
 
 }

@@ -41,6 +41,10 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
         {
             PublicWidgetZones.HomepageBeforeNews,
             PublicWidgetZones.BlogListPageBeforePost,
+            PublicWidgetZones.LeftSideColumnBlogBefore,
+            PublicWidgetZones.BlogPostPageBeforeBody,
+            PublicWidgetZones.NewsItemPageBeforeBody,
+            PublicWidgetZones.NewsListPageInsideItem,
             AdminWidgetZones.BlogPostDetailsBlock,
             AdminWidgetZones.NewsItemsDetailsBlock
         });
@@ -57,17 +61,15 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
             await _settingService.SaveSettingAsync(_widgetSettings);
         }
 
-        await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
-        {
-            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail"] = "تصویر شاخص مقاله",
-            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Picture"] = "تصویر شاخص",
-            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Thumbnail"] = "تصویر شاخص خبر",
-            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture"] = "تصویر شاخص",
-            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "مقالات جدید",
-            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "بیشتر بدانید",
-        });
+        await _localizationService.AddOrUpdateLocaleResourceAsync(GetLocaleResources());
 
         await base.InstallAsync();
+    }
+
+    public override async Task UpdateAsync(string currentVersion, string targetVersion)
+    {
+        await _localizationService.AddOrUpdateLocaleResourceAsync(GetLocaleResources());
+        await base.UpdateAsync(currentVersion, targetVersion);
     }
 
     public override async Task UninstallAsync()
@@ -81,5 +83,23 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
         await _localizationService.DeleteLocaleResourcesAsync("Plugins.Misc.TTBOLTContentSuite");
 
         await base.UninstallAsync();
+    }
+
+    private static Dictionary<string, string> GetLocaleResources()
+    {
+        return new Dictionary<string, string>
+        {
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Thumbnail"] = "تصاویر مقاله",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Picture"] = "تصویر اصلی",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.ThumbnailPicture"] = "تصویر بندانگشتی",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts"] = "مقالات مرتبط",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts.Hint"] = "مقاله‌های مرتبط را از فهرست انتخاب کنید. چهار مورد نخست در صفحه مقاله نمایش داده می‌شوند.",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RandomPosts"] = "مقالات تصادفی",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Thumbnail"] = "تصاویر خبر",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture"] = "تصویر اصلی",
+            ["Plugins.Misc.TTBOLTContentSuite.NewsItem.ThumbnailPicture"] = "تصویر بندانگشتی",
+            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title"] = "مقالات جدید",
+            ["Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore"] = "بیشتر بدانید"
+        };
     }
 }

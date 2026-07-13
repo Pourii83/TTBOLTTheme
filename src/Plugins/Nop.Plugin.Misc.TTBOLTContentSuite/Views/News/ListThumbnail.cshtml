@@ -1,0 +1,10 @@
+@model ContentPictureModel
+@inject INopUrlHelper NopUrl
+
+@using Nop.Core.Domain.News
+
+<a class="ttbolt-news-list-thumbnail"
+   href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = Model.SeName }))"
+   title="@Model.Title">
+    <img src="@Model.PictureUrl" alt="@Model.Title" loading="lazy" />
+</a>

@@ -12,6 +12,7 @@ public class NewsItemThumbnailEventConsumer :
     IConsumer<EntityUpdatedEvent<NewsItem>>
 {
     private const string PictureIdFormKey = "PictureId";
+    private const string ThumbnailPictureIdFormKey = "ThumbnailPictureId";
 
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRepository<TTNewsItem> _newsItemRepository;
@@ -40,21 +41,22 @@ public class NewsItemThumbnailEventConsumer :
         if (request == null || !request.HasFormContentType)
             return;
 
-        if (!request.Form.TryGetValue(PictureIdFormKey, out var rawPictureId))
-            return;
-
-        if (!int.TryParse(rawPictureId.FirstOrDefault(), out var pictureId))
-            return;
-
         var newsItem = await _newsItemRepository.GetByIdAsync(newsItemId);
         if (newsItem == null)
             return;
 
-        var normalizedPictureId = pictureId > 0 ? pictureId : (int?)null;
-        if (newsItem.PictureId == normalizedPictureId)
-            return;
-
-        newsItem.PictureId = normalizedPictureId;
+        var pictureId = GetPostedPictureId(request, PictureIdFormKey);
+        var thumbnailPictureId = GetPostedPictureId(request, ThumbnailPictureIdFormKey);
+        newsItem.PictureId = pictureId > 0 ? pictureId : null;
+        newsItem.ThumbnailPictureId = thumbnailPictureId > 0 ? thumbnailPictureId : null;
         await _newsItemRepository.UpdateAsync(newsItem);
+    }
+
+    private static int GetPostedPictureId(HttpRequest request, string formKey)
+    {
+        return request.Form.TryGetValue(formKey, out var rawValue) &&
+               int.TryParse(rawValue.FirstOrDefault(), out var pictureId)
+            ? pictureId
+            : 0;
     }
 }

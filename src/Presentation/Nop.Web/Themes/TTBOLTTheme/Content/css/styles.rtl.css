@@ -11180,6 +11180,48 @@ a.skip {
 
 /*********** TTBOLT BLOG ***********/
 
+.ttbolt-content-picture {
+  width: 100%;
+  margin: 0 0 24px;
+  overflow: hidden;
+  border-radius: var(--radius-minor);
+  background-color: var(--surface-color-75);
+  box-shadow: var(--shadow-minor);
+}
+
+  .ttbolt-content-picture img {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    object-fit: cover;
+  }
+
+.news-list-page .news-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-list-page .ttbolt-news-list-thumbnail {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  order: -1;
+  overflow: hidden;
+  background-color: var(--surface-color-75);
+}
+
+  .news-list-page .ttbolt-news-list-thumbnail img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+  }
+
+  .news-list-page .news-item:hover .ttbolt-news-list-thumbnail img {
+    transform: scale(1.025);
+  }
+
 .ttbolt-blog-page {
   min-width: 0;
 }
@@ -11469,12 +11511,12 @@ a.skip {
       transform: translateY(-1px);
     }
 
-.ttbolt-blog-sidebar {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) {
   display: grid;
   gap: 18px;
 }
 
-.ttbolt-blog-sidebar .ttbolt-blog-sidebar__block {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .ttbolt-blog-sidebar__block {
   width: 100%;
   max-width: none;
   min-height: 0;
@@ -11486,7 +11528,7 @@ a.skip {
   box-shadow: var(--shadow-normal);
 }
 
-  .ttbolt-blog-sidebar .ttbolt-blog-sidebar__block > .title {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .ttbolt-blog-sidebar__block > .title {
     margin: 0;
     border: 0;
     border-bottom: 1px solid var(--border-color);
@@ -11498,17 +11540,17 @@ a.skip {
     cursor: default;
   }
 
-  .ttbolt-blog-sidebar .ttbolt-blog-sidebar__block > .listbox {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .ttbolt-blog-sidebar__block > .listbox {
     display: block;
     border: 0;
     padding: 12px 14px 16px;
   }
 
-.ttbolt-blog-sidebar .block-blog-archive .list > li {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive .list > li {
   padding: 0;
 }
 
-.ttbolt-blog-sidebar .block-blog-archive details summary {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive details summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11518,36 +11560,36 @@ a.skip {
   list-style: none;
 }
 
-  .ttbolt-blog-sidebar .block-blog-archive details summary::-webkit-details-marker {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive details summary::-webkit-details-marker {
     display: none;
   }
 
-  .ttbolt-blog-sidebar .block-blog-archive details summary .number {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive details summary .number {
     color: var(--text-primary-100);
     font-size: var(--fs-5);
     font-weight: 750;
   }
 
-  .ttbolt-blog-sidebar .block-blog-archive details summary i {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive details summary i {
     color: var(--text-muted-100);
     font-size: var(--fs-6);
     transition: transform .2s ease;
   }
 
-  .ttbolt-blog-sidebar .block-blog-archive details[open] summary i {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive details[open] summary i {
     transform: rotate(180deg);
   }
 
-.ttbolt-blog-sidebar .block-blog-archive .sublist {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive .sublist {
   margin: 0;
   padding: 0 8px 6px 0;
 }
 
-.ttbolt-blog-sidebar .block-blog-archive li.month {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive li.month {
   padding: 0;
 }
 
-  .ttbolt-blog-sidebar .block-blog-archive li.month a {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive li.month a {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -11557,16 +11599,16 @@ a.skip {
     font-size: var(--fs-5);
   }
 
-    .ttbolt-blog-sidebar .block-blog-archive li.month a::before {
+    :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive li.month a::before {
       display: none;
     }
 
-    .ttbolt-blog-sidebar .block-blog-archive li.month a:hover,
-    .ttbolt-blog-sidebar .block-blog-archive li.month a:focus {
+    :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive li.month a:hover,
+    :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive li.month a:focus {
       color: var(--primary-color-50);
     }
 
-  .ttbolt-blog-sidebar .block-blog-archive .count {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-blog-archive .count {
     display: inline-grid;
     min-width: 20px;
     height: 20px;
@@ -11578,7 +11620,7 @@ a.skip {
     font-size: var(--fs-6);
   }
 
-.ttbolt-blog-sidebar .block-popular-blogtags .tags {
+:is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-popular-blogtags .tags {
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
@@ -11586,13 +11628,13 @@ a.skip {
   margin: 0;
 }
 
-  .ttbolt-blog-sidebar .block-popular-blogtags .tags li {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-popular-blogtags .tags li {
     margin: 0;
     overflow: visible;
     font-size: var(--fs-6) !important;
   }
 
-  .ttbolt-blog-sidebar .block-popular-blogtags .tags a {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-popular-blogtags .tags a {
     display: inline-flex;
     min-height: 28px;
     align-items: center;
@@ -11609,12 +11651,77 @@ a.skip {
     font-weight: 600;
   }
 
-    .ttbolt-blog-sidebar .block-popular-blogtags .tags a:hover,
-    .ttbolt-blog-sidebar .block-popular-blogtags .tags a:focus {
+    :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-popular-blogtags .tags a:hover,
+    :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) .block-popular-blogtags .tags a:focus {
       border-color: var(--primary-color-50);
       background-color: var(--primary-color-50);
       color: var(--text-inverse-100);
     }
+
+.ttbolt-blog-suggestions__list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+  .ttbolt-blog-suggestions__list > li {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+.ttbolt-blog-suggestions__link {
+  display: grid;
+  min-height: 92px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: var(--radius-minor);
+  background-color: var(--surface-color-75);
+  box-shadow: var(--shadow-minor);
+  color: var(--text-primary-100);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+
+  .ttbolt-blog-suggestions__link:hover,
+  .ttbolt-blog-suggestions__link:focus {
+    box-shadow: var(--shadow-normal);
+    color: var(--text-primary-100);
+    transform: translateY(-2px);
+  }
+
+  .ttbolt-blog-suggestions__link img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 92px;
+    object-fit: cover;
+  }
+
+.ttbolt-blog-suggestions__content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+  .ttbolt-blog-suggestions__content strong {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--text-primary-100);
+    font-size: var(--fs-4);
+    font-weight: 750;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .ttbolt-blog-suggestions__content time {
+    color: var(--text-secondary-100);
+    font-size: var(--fs-5);
+    line-height: 1.4;
+  }
 
 .ttbolt-blog-pager {
   margin-top: 28px;
@@ -11668,11 +11775,11 @@ a.skip {
 }
 
 @media all and (max-width: 1000px) {
-  .html-blog-page .side-2 {
+  :is(.html-blog-page, .html-blogpost-page) .side-2 {
     margin-top: 24px;
   }
 
-  .ttbolt-blog-sidebar {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -11686,7 +11793,7 @@ a.skip {
       font-size: var(--fs-2);
     }
 
-  .ttbolt-blog-sidebar {
+  :is(.ttbolt-blog-sidebar, .html-blogpost-page .side-2) {
     grid-template-columns: minmax(0, 1fr);
   }
 

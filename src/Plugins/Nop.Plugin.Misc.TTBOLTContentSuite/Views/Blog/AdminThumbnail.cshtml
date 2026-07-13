@@ -16,5 +16,38 @@
                 <span asp-validation-for="PictureId"></span>
             </div>
         </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ThumbnailPictureId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ThumbnailPictureId" />
+                <span asp-validation-for="ThumbnailPictureId"></span>
+            </div>
+        </div>
+    </div>
+</nop-card>
+
+<nop-card asp-name="ttbolt-content-suite-blog-related-posts"
+          asp-icon="fas fa-link"
+          asp-title="@T("Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts")"
+          asp-hide-block-attribute-name="BlogPostPage.HideTTBOLTContentSuiteRelatedPostsBlock"
+          asp-hide="false"
+          asp-advanced="false">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="SelectedRelatedBlogPostIds" />
+            </div>
+            <div class="col-md-9">
+                <input type="hidden" name="SelectedRelatedBlogPostIds" value="" />
+                <nop-select asp-for="SelectedRelatedBlogPostIds"
+                            asp-items="Model.AvailableRelatedBlogPosts"
+                            asp-multiple="true" />
+                <span class="form-text text-muted">
+                    @T("Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts.Hint")
+                </span>
+            </div>
+        </div>
     </div>
 </nop-card>

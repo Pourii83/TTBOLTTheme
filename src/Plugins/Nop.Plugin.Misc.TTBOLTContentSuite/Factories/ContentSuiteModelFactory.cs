@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
+using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Data;
@@ -47,6 +48,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
     private readonly IRelatedBlogPostService _relatedBlogPostService;
     private readonly IStoreContext _storeContext;
     private readonly IStoreMappingService _storeMappingService;
+    private readonly TTBOLTContentSuiteSettings _contentSuiteSettings;
     private readonly IUrlRecordService _urlRecordService;
     private readonly IWorkContext _workContext;
 
@@ -63,6 +65,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         IRelatedBlogPostService relatedBlogPostService,
         IStoreContext storeContext,
         IStoreMappingService storeMappingService,
+        TTBOLTContentSuiteSettings contentSuiteSettings,
         IUrlRecordService urlRecordService,
         IWorkContext workContext)
     {
@@ -78,6 +81,7 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         _relatedBlogPostService = relatedBlogPostService;
         _storeContext = storeContext;
         _storeMappingService = storeMappingService;
+        _contentSuiteSettings = contentSuiteSettings;
         _urlRecordService = urlRecordService;
         _workContext = workContext;
     }
@@ -103,7 +107,11 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             {
                 Title = blogPost.Title,
                 BodyOverview = blogPost.BodyOverview,
-                SeName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false),
+                SeName = await _urlRecordService.GetSeNameAsync(
+                    blogPost.Id,
+                    nameof(BlogPost),
+                    blogPost.LanguageId,
+                    ensureTwoPublishedLanguages: false),
                 PictureUrl = await GetPictureUrlAsync(blogPost.ThumbnailPictureId ?? blogPost.PictureId)
             });
         }
@@ -183,33 +191,40 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         var customer = blogPost?.CustomerId is > 0
             ? await _customerService.GetCustomerByIdAsync(blogPost.CustomerId.Value)
             : null;
-        var customerName = customer == null
-            ? string.Empty
-            : await _customerService.GetCustomerFullNameAsync(customer);
-
-        if (string.IsNullOrWhiteSpace(customerName))
-            customerName = await _customerService.FormatUsernameAsync(customer);
-
         return new BlogPostCardHeaderModel
         {
             Id = blogPostModel.Id,
             Title = blogPostModel.Title,
             PictureUrl = await GetPictureUrlAsync(blogPost?.ThumbnailPictureId ?? blogPost?.PictureId, BlogCardPictureSize),
-            CustomerName = customerName,
+            CustomerName = await GetCustomerNameAsync(customer),
             CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
             CreatedOn = blogPostModel.CreatedOn
         };
     }
 
-    public async Task<ContentPictureModel> PrepareBlogPostContentPictureModelAsync(PublicBlogPostModel blogPostModel)
+    public async Task<BlogPostContentModel> PrepareBlogPostContentModelAsync(PublicBlogPostModel blogPostModel)
     {
         var blogPost = await _blogPostRepository.GetByIdAsync(blogPostModel.Id);
+        var customer = blogPost?.CustomerId is > 0
+            ? await _customerService.GetCustomerByIdAsync(blogPost.CustomerId.Value)
+            : null;
+        var selectedHeadingTags = (_contentSuiteSettings.TableOfContentsHeadingTags ?? new List<string>())
+            .Select(headingTag => headingTag?.Trim().ToLowerInvariant())
+            .Where(headingTag => TTBOLTContentSuiteSettings.SupportedHeadingTags.Contains(headingTag))
+            .Distinct()
+            .ToHashSet();
 
-        return new ContentPictureModel
+        return new BlogPostContentModel
         {
+            Id = blogPostModel.Id,
             PictureUrl = await GetOptionalPictureUrlAsync(blogPost?.PictureId, ContentPictureSize),
             Title = blogPostModel.Title,
-            SeName = blogPostModel.SeName
+            CustomerName = await GetCustomerNameAsync(customer),
+            CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
+            CreatedOn = blogPostModel.CreatedOn,
+            HeadingTags = TTBOLTContentSuiteSettings.SupportedHeadingTags
+                .Where(selectedHeadingTags.Contains)
+                .ToList()
         };
     }
 
@@ -303,7 +318,11 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         return new BlogPostSidebarItemModel
         {
             Title = blogPost.Title,
-            SeName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false),
+            SeName = await _urlRecordService.GetSeNameAsync(
+                blogPost.Id,
+                nameof(BlogPost),
+                blogPost.LanguageId,
+                ensureTwoPublishedLanguages: false),
             PictureUrl = await GetPictureUrlAsync(
                 blogPost.ThumbnailPictureId ?? blogPost.PictureId,
                 SidebarBlogPostPictureSize),
@@ -336,6 +355,17 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             _mediaSettings.AvatarPictureSize,
             _customerSettings.DefaultAvatarEnabled,
             defaultPictureType: PictureType.Avatar);
+    }
+
+    private async Task<string> GetCustomerNameAsync(Customer customer)
+    {
+        if (customer == null)
+            return string.Empty;
+
+        var customerName = await _customerService.GetCustomerFullNameAsync(customer);
+        return string.IsNullOrWhiteSpace(customerName)
+            ? await _customerService.FormatUsernameAsync(customer)
+            : customerName;
     }
 
     private async Task<string> GetOptionalPictureUrlAsync(int? pictureId, int pictureSize)

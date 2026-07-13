@@ -1,4 +1,5 @@
 ﻿using Nop.Core.Domain.Cms;
+using Nop.Core;
 using Nop.Core.Domain.News;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Components;
 using Nop.Services.Cms;
@@ -14,17 +15,20 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
     private readonly ILocalizationService _localizationService;
     private readonly NewsSettings _newsSettings;
     private readonly ISettingService _settingService;
+    private readonly IWebHelper _webHelper;
     private readonly WidgetSettings _widgetSettings;
 
     public TTBOLTContentSuitePlugin(
         ILocalizationService localizationService,
         NewsSettings newsSettings,
         ISettingService settingService,
+        IWebHelper webHelper,
         WidgetSettings widgetSettings)
     {
         _localizationService = localizationService;
         _newsSettings = newsSettings;
         _settingService = settingService;
+        _webHelper = webHelper;
         _widgetSettings = widgetSettings;
     }
 
@@ -33,6 +37,11 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
     public Type GetWidgetViewComponent(string widgetZone)
     {
         return typeof(TTBOLTContentSuiteViewComponent);
+    }
+
+    public override string GetConfigurationPageUrl()
+    {
+        return $"{_webHelper.GetStoreLocation()}Admin/TTBOLTContentSuite/Configure";
     }
 
     public Task<IList<string>> GetWidgetZonesAsync()
@@ -52,6 +61,8 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
 
     public override async Task InstallAsync()
     {
+        await _settingService.SaveSettingAsync(new TTBOLTContentSuiteSettings());
+
         _newsSettings.MainPageNewsCount = 4;
         await _settingService.SaveSettingAsync(_newsSettings, settings => settings.MainPageNewsCount);
 
@@ -74,6 +85,8 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
 
     public override async Task UninstallAsync()
     {
+        await _settingService.DeleteSettingAsync<TTBOLTContentSuiteSettings>();
+
         if (_widgetSettings.ActiveWidgetSystemNames.Contains(PluginDescriptor.SystemName))
         {
             _widgetSettings.ActiveWidgetSystemNames.Remove(PluginDescriptor.SystemName);
@@ -95,6 +108,12 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts"] = "مقالات مرتبط",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts.Hint"] = "مقاله‌های مرتبط را از فهرست انتخاب کنید. چهار مورد نخست در صفحه مقاله نمایش داده می‌شوند.",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RandomPosts"] = "مقالات تصادفی",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Author"] = "نویسنده",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.PublishedOn"] = "تاریخ انتشار",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.TableOfContents"] = "فهرست محتوا",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.TableOfContents"] = "تنظیمات فهرست محتوای مقالات",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.TableOfContentsHeadingTags"] = "تگ‌های عنوان",
+            ["Plugins.Misc.TTBOLTContentSuite.Configuration.TableOfContentsHeadingTags.Hint"] = "تگ‌هایی را انتخاب کنید که عنوان‌های آن‌ها در فهرست محتوای صفحه مقاله نمایش داده شوند. با خالی گذاشتن این گزینه، فهرست محتوا غیرفعال می‌شود.",
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Thumbnail"] = "تصاویر خبر",
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.Picture"] = "تصویر اصلی",
             ["Plugins.Misc.TTBOLTContentSuite.NewsItem.ThumbnailPicture"] = "تصویر بندانگشتی",

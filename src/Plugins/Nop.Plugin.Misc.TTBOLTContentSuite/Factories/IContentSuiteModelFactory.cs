@@ -19,7 +19,7 @@ public interface IContentSuiteModelFactory
 
     Task<BlogPostCardHeaderModel> PrepareBlogPostCardHeaderModelAsync(Nop.Web.Models.Blogs.BlogPostModel blogPostModel);
 
-    Task<ContentPictureModel> PrepareBlogPostContentPictureModelAsync(PublicBlogPostModel blogPostModel);
+    Task<BlogPostContentModel> PrepareBlogPostContentModelAsync(PublicBlogPostModel blogPostModel);
 
     Task<BlogPostSidebarModel> PrepareBlogPostSidebarModelAsync(PublicBlogPostModel blogPostModel);
 

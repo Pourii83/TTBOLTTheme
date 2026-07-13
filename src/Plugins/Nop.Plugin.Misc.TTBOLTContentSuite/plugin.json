@@ -2,10 +2,10 @@
   "Group": "Misc",
   "FriendlyName": "TTBOLT Content Suite",
   "SystemName": "Misc.TTBOLTContentSuite",
-  "Version": "4.90.13",
+  "Version": "4.90.14",
   "SupportedVersions": [ "4.90" ],
   "Author": "ttbolt team",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Misc.TTBOLTContentSuite.dll",
-  "Description": "Adds blog and news thumbnails, blog presentation metadata, related blog posts, and homepage content widgets."
+  "Description": "Adds blog and news thumbnails, blog presentation metadata, table of contents, related blog posts, and homepage content widgets."
 }

@@ -43,10 +43,8 @@ public class TTBOLTContentSuiteViewComponent : NopViewComponent
 
         if (widgetZone == PublicWidgetZones.BlogPostPageBeforeBody && additionalData is PublicBlogPostModel blogPostDetailsModel)
         {
-            var model = await _contentSuiteModelFactory.PrepareBlogPostContentPictureModelAsync(blogPostDetailsModel);
-            return string.IsNullOrEmpty(model.PictureUrl)
-                ? Content("")
-                : View("~/Plugins/Misc.TTBOLTContentSuite/Views/Shared/ContentPicture.cshtml", model);
+            var model = await _contentSuiteModelFactory.PrepareBlogPostContentModelAsync(blogPostDetailsModel);
+            return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/PostContentHeader.cshtml", model);
         }
 
         if (widgetZone == PublicWidgetZones.NewsItemPageBeforeBody && additionalData is PublicNewsItemModel newsItemDetailsModel)

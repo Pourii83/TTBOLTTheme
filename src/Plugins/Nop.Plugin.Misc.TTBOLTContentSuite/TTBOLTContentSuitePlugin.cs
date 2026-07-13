@@ -110,6 +110,7 @@ public class TTBOLTContentSuitePlugin : BasePlugin, IWidgetPlugin
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.RandomPosts"] = "مقالات تصادفی",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.Author"] = "نویسنده",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.PublishedOn"] = "تاریخ انتشار",
+            ["Plugins.Misc.TTBOLTContentSuite.BlogPost.UpdatedOn"] = "آخرین ویرایش",
             ["Plugins.Misc.TTBOLTContentSuite.BlogPost.TableOfContents"] = "فهرست محتوا",
             ["Plugins.Misc.TTBOLTContentSuite.Configuration.TableOfContents"] = "تنظیمات فهرست محتوای مقالات",
             ["Plugins.Misc.TTBOLTContentSuite.Configuration.TableOfContentsHeadingTags"] = "تگ‌های عنوان",

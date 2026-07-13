@@ -67,6 +67,8 @@ public class BlogPostThumbnailEventConsumer :
 
         if (assignAuthor)
             blogPost.CustomerId = (await _workContext.GetCurrentCustomerAsync()).Id;
+        else
+            blogPost.UpdatedOnUtc = DateTime.UtcNow;
 
         await _blogPostRepository.UpdateAsync(blogPost, publishEvent: false);
 

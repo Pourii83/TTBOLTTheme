@@ -8,4 +8,6 @@ public class TTBlogPost : BlogPost
     public int? ThumbnailPictureId { get; set; }
 
     public int? CustomerId { get; set; }
+
+    public DateTime? UpdatedOnUtc { get; set; }
 }

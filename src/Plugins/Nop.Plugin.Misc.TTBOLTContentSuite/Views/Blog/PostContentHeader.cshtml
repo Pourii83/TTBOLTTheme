@@ -27,6 +27,13 @@
             <i class="fa-regular fa-calendar" aria-hidden="true"></i>
             <span>@T("Plugins.Misc.TTBOLTContentSuite.BlogPost.PublishedOn"): @Model.CreatedOn.ToString("D")</span>
         </time>
+        @if (Model.UpdatedOn.HasValue)
+        {
+            <time datetime="@Model.UpdatedOn.Value.ToString("yyyy-MM-dd")">
+                <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                <span>@T("Plugins.Misc.TTBOLTContentSuite.BlogPost.UpdatedOn"): @Model.UpdatedOn.Value.ToString("D")</span>
+            </time>
+        }
     </div>
 
     @if (Model.HeadingTags.Count > 0)

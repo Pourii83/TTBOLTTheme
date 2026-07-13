@@ -222,6 +222,9 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
             CustomerName = await GetCustomerNameAsync(customer),
             CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
             CreatedOn = blogPostModel.CreatedOn,
+            UpdatedOn = blogPost?.UpdatedOnUtc is DateTime updatedOnUtc
+                ? await _dateTimeHelper.ConvertToUserTimeAsync(updatedOnUtc, DateTimeKind.Utc)
+                : null,
             HeadingTags = TTBOLTContentSuiteSettings.SupportedHeadingTags
                 .Where(selectedHeadingTags.Contains)
                 .ToList()

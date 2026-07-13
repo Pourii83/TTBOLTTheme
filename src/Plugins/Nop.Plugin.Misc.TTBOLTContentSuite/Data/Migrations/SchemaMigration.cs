@@ -33,6 +33,10 @@ public class SchemaMigration : MigrationBase
         if (!Schema.Table(blogPostTableName).Column(nameof(TTBlogPost.CustomerId)).Exists())
             Alter.Table(blogPostTableName)
                 .AddColumn(nameof(TTBlogPost.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None).Nullable();
+
+        if (!Schema.Table(blogPostTableName).Column(nameof(TTBlogPost.UpdatedOnUtc)).Exists())
+            Alter.Table(blogPostTableName)
+                .AddColumn(nameof(TTBlogPost.UpdatedOnUtc)).AsDateTime2().Nullable();
         //NewsItem
         var newsItemTableName = NameCompatibilityManager.GetTableName(typeof(NewsItem));
         if (!Schema.Table(newsItemTableName).Column(nameof(TTNewsItem.PictureId)).Exists())
@@ -65,6 +69,25 @@ public class RelatedBlogPostSchemaMigration : MigrationBase
         var tableName = NameCompatibilityManager.GetTableName(typeof(RelatedBlogPost));
         if (!Schema.Table(tableName).Exists())
             Create.TableFor<RelatedBlogPost>();
+    }
+
+    public override void Down()
+    {
+    }
+}
+
+[NopMigration("2026-07-14 09:00:00", "Misc.TTBOLTContentSuite 4.90.15 blog post updated date", MigrationProcessType.Update)]
+public class BlogPostUpdatedDateSchemaMigration : MigrationBase
+{
+    public override void Up()
+    {
+        if (!DataSettingsManager.IsDatabaseInstalled())
+            return;
+
+        var blogPostTableName = NameCompatibilityManager.GetTableName(typeof(BlogPost));
+        if (!Schema.Table(blogPostTableName).Column(nameof(TTBlogPost.UpdatedOnUtc)).Exists())
+            Alter.Table(blogPostTableName)
+                .AddColumn(nameof(TTBlogPost.UpdatedOnUtc)).AsDateTime2().Nullable();
     }
 
     public override void Down()

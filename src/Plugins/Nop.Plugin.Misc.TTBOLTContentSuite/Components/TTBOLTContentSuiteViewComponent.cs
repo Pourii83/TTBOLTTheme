@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Factories;
 using Nop.Web.Framework.Components;
 using Nop.Web.Framework.Infrastructure;
+using PublicBlogPostModel = Nop.Web.Models.Blogs.BlogPostModel;
 using AdminBlogPostModel = Nop.Web.Areas.Admin.Models.Blogs.BlogPostModel;
 using AdminNewsItemModel = Nop.Web.Areas.Admin.Models.News.NewsItemModel;
 
@@ -26,6 +27,10 @@ public class TTBOLTContentSuiteViewComponent : NopViewComponent
 
             return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/HomePage.cshtml", model);
         }
+
+        if (widgetZone == PublicWidgetZones.BlogListPageBeforePost && additionalData is PublicBlogPostModel publicBlogPostModel)
+            return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/CardHeader.cshtml",
+                await _contentSuiteModelFactory.PrepareBlogPostCardHeaderModelAsync(publicBlogPostModel));
 
         if (widgetZone == AdminWidgetZones.BlogPostDetailsBlock && additionalData is AdminBlogPostModel blogPostModel)
             return View("~/Plugins/Misc.TTBOLTContentSuite/Views/Blog/AdminThumbnail.cshtml",

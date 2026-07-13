@@ -14,5 +14,7 @@ public interface IContentSuiteModelFactory
 
     Task<BlogPostThumbnailModel> PrepareBlogPostThumbnailModelAsync(AdminBlogPostModel blogPostModel);
 
+    Task<BlogPostCardHeaderModel> PrepareBlogPostCardHeaderModelAsync(Nop.Web.Models.Blogs.BlogPostModel blogPostModel);
+
     Task<NewsItemThumbnailModel> PrepareNewsItemThumbnailModelAsync(AdminNewsItemModel newsItemModel);
 }

@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Http;
 using Nop.Core;
+using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Media;
 using Nop.Data;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Domain;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Models.Blogs;
 using Nop.Plugin.Misc.TTBOLTContentSuite.Models.News;
+using Nop.Services.Common;
+using Nop.Services.Customers;
 using Nop.Services.Media;
 using Nop.Services.Seo;
 using Nop.Services.Stores;
@@ -17,11 +21,16 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
 {
     private const int HomepageItemsCount = 4;
     private const int HomepagePictureSize = 520;
+    private const int BlogCardPictureSize = 640;
     private const string PictureIdFormKey = "PictureId";
 
     private readonly IRepository<TTBlogPost> _blogPostRepository;
+    private readonly CustomerSettings _customerSettings;
+    private readonly ICustomerService _customerService;
+    private readonly IGenericAttributeService _genericAttributeService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRepository<TTNewsItem> _newsItemRepository;
+    private readonly MediaSettings _mediaSettings;
     private readonly IPictureService _pictureService;
     private readonly IStoreContext _storeContext;
     private readonly IStoreMappingService _storeMappingService;
@@ -30,8 +39,12 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
 
     public ContentSuiteModelFactory(
         IRepository<TTBlogPost> blogPostRepository,
+        CustomerSettings customerSettings,
+        ICustomerService customerService,
+        IGenericAttributeService genericAttributeService,
         IHttpContextAccessor httpContextAccessor,
         IRepository<TTNewsItem> newsItemRepository,
+        MediaSettings mediaSettings,
         IPictureService pictureService,
         IStoreContext storeContext,
         IStoreMappingService storeMappingService,
@@ -39,8 +52,12 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         IWorkContext workContext)
     {
         _blogPostRepository = blogPostRepository;
+        _customerSettings = customerSettings;
+        _customerService = customerService;
+        _genericAttributeService = genericAttributeService;
         _httpContextAccessor = httpContextAccessor;
         _newsItemRepository = newsItemRepository;
+        _mediaSettings = mediaSettings;
         _pictureService = pictureService;
         _storeContext = storeContext;
         _storeMappingService = storeMappingService;
@@ -112,6 +129,30 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         };
     }
 
+    public async Task<BlogPostCardHeaderModel> PrepareBlogPostCardHeaderModelAsync(Nop.Web.Models.Blogs.BlogPostModel blogPostModel)
+    {
+        var blogPost = await _blogPostRepository.GetByIdAsync(blogPostModel.Id);
+        var customer = blogPost?.CustomerId is > 0
+            ? await _customerService.GetCustomerByIdAsync(blogPost.CustomerId.Value)
+            : null;
+        var customerName = customer == null
+            ? string.Empty
+            : await _customerService.GetCustomerFullNameAsync(customer);
+
+        if (string.IsNullOrWhiteSpace(customerName))
+            customerName = await _customerService.FormatUsernameAsync(customer);
+
+        return new BlogPostCardHeaderModel
+        {
+            Id = blogPostModel.Id,
+            Title = blogPostModel.Title,
+            PictureUrl = await GetPictureUrlAsync(blogPost?.PictureId, BlogCardPictureSize),
+            CustomerName = customerName,
+            CustomerAvatarUrl = await GetCustomerAvatarUrlAsync(customer),
+            CreatedOn = blogPostModel.CreatedOn
+        };
+    }
+
     public async Task<NewsItemThumbnailModel> PrepareNewsItemThumbnailModelAsync(AdminNewsItemModel newsItemModel)
     {
         var pictureId = GetPostedPictureId();
@@ -129,28 +170,45 @@ public class ContentSuiteModelFactory : IContentSuiteModelFactory
         };
     }
 
-    private async Task<string> GetPictureUrlAsync(int? pictureId)
+    private async Task<string> GetPictureUrlAsync(int? pictureId, int pictureSize = HomepagePictureSize)
     {
         var pictureUrl = pictureId.HasValue && pictureId.Value > 0
-            ? await _pictureService.GetPictureUrlAsync(pictureId.Value, HomepagePictureSize, showDefaultPicture: false)
+            ? await _pictureService.GetPictureUrlAsync(pictureId.Value, pictureSize, showDefaultPicture: false)
             : string.Empty;
 
         return string.IsNullOrEmpty(pictureUrl)
-            ? await _pictureService.GetDefaultPictureUrlAsync(HomepagePictureSize)
+            ? await _pictureService.GetDefaultPictureUrlAsync(pictureSize)
             : pictureUrl;
+    }
+
+    private async Task<string> GetCustomerAvatarUrlAsync(Customer customer)
+    {
+        if (customer == null || !_customerSettings.AllowCustomersToUploadAvatars)
+            return string.Empty;
+
+        var avatarPictureId = await _genericAttributeService.GetAttributeAsync<int>(
+            customer,
+            NopCustomerDefaults.AvatarPictureIdAttribute);
+
+        return await _pictureService.GetPictureUrlAsync(
+            avatarPictureId,
+            _mediaSettings.AvatarPictureSize,
+            _customerSettings.DefaultAvatarEnabled,
+            defaultPictureType: PictureType.Avatar);
     }
 
     private int GetPostedPictureId()
     {
-        var request = _httpContextAccessor.HttpContext?.Request;
-        if (request?.HasFormContentType != true)
-            return 0;
-
-        if (!request.Form.TryGetValue(PictureIdFormKey, out var rawPictureId))
-            return 0;
-
-        return int.TryParse(rawPictureId.FirstOrDefault(), out var postedPictureId)
-            ? postedPictureId
-            : 0;
+        return GetPostedInt(PictureIdFormKey);
     }
+
+    private int GetPostedInt(string formKey)
+    {
+        var request = _httpContextAccessor.HttpContext?.Request;
+        if (request?.HasFormContentType != true || !request.Form.TryGetValue(formKey, out var rawValue))
+            return 0;
+
+        return int.TryParse(rawValue.FirstOrDefault(), out var postedValue) ? postedValue : 0;
+    }
+
 }

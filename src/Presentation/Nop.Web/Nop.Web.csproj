@@ -64,6 +64,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Themes\TTBOLTTheme\Views\Common\ContactUs.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     <Content Update="Themes\TTBOLTTheme\Views\Home\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

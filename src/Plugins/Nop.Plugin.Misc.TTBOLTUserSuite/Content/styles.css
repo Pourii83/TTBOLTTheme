@@ -1,0 +1,98 @@
+.ttbolt-profile-picture-card {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 28px;
+    align-items: center;
+    padding: 28px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    background: var(--surface-color-75, #eef2f7);
+    box-shadow: var(--shadow-minor, 0 4px 10px rgba(15, 23, 42, 0.12));
+    text-align: right;
+}
+
+.ttbolt-profile-picture-card__preview {
+    display: grid;
+    width: 180px;
+    height: 180px;
+    place-items: center;
+    overflow: hidden;
+    border: 4px solid var(--surface-color-25, #fff);
+    border-radius: 50%;
+    background: var(--surface-color-100, #c9d0d9);
+    color: var(--primary-color-50, #1f3a5f);
+    font-size: 72px;
+    box-shadow: var(--shadow-minor, 0 4px 10px rgba(15, 23, 42, 0.12));
+}
+
+.ttbolt-profile-picture-card__preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ttbolt-profile-picture-card__content h2 {
+    margin: 0 0 8px;
+    color: var(--text-primary-100, #0f172a);
+}
+
+.ttbolt-profile-picture-card__content > p {
+    margin: 0 0 18px;
+    color: var(--text-secondary-100, #475569);
+}
+
+.ttbolt-profile-picture-dropzone {
+    display: flex;
+    min-height: 100px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    border: 2px dashed var(--primary-color-50, #1f3a5f);
+    border-radius: 8px;
+    background: var(--surface-color-25, #fff);
+    color: var(--text-primary-100, #0f172a);
+    cursor: pointer;
+    transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.ttbolt-profile-picture-dropzone.is-dragging {
+    border-color: var(--primary-color-100, #14253d);
+    background: var(--surface-color-50, #f7f9fc);
+}
+
+.ttbolt-profile-picture-dropzone input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.ttbolt-profile-picture-dropzone i {
+    font-size: 24px;
+}
+
+.ttbolt-profile-picture-card__rules {
+    margin: 12px 0 0 !important;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .ttbolt-profile-picture-card {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        padding: 20px;
+    }
+
+    .ttbolt-profile-picture-card__preview {
+        width: 140px;
+        height: 140px;
+        font-size: 56px;
+    }
+
+    .ttbolt-profile-picture-card__content {
+        width: 100%;
+    }
+
+}

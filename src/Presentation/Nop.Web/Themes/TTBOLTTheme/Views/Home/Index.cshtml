@@ -1,0 +1,78 @@
+﻿@using Nop.Services.Localization
+@using Nop.Core
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+
+@{
+    Layout = "_ColumnsOne";
+
+    var homepageTitle = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageTitle);
+
+    //title
+    if (!string.IsNullOrEmpty(homepageTitle))
+    {
+        NopHtml.AddTitleParts(homepageTitle);
+    }
+
+    var homepageDescription = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageDescription);
+
+    //meta
+    if (!string.IsNullOrEmpty(homepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(homepageDescription);
+    }
+
+    //page class
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+<div class="page home-page">
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })   
+
+        <div class="advantage-list">
+            <div class="advantage-list__item">
+                <i class="fa-solid fa-truck" aria-hidden="true"></i>
+                <span>@T("Homepage.Advantages.FastestShipping")</span>
+            </div>
+            <div class="advantage-list__item">
+                <i class="fa-solid fa-hexagon-nodes" aria-hidden="true"></i>
+                <span>@T("Homepage.Advantages.CustomProduction")</span>
+            </div>
+            <div class="advantage-list__item">
+                <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                <span>@T("Homepage.Advantages.HighestQuality")</span>
+            </div>
+            <div class="advantage-list__item">
+                <i class="fa-solid fa-gears" aria-hidden="true"></i>
+                <span>@T("Homepage.Advantages.SpecializedBolts")</span>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+        @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+        @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+      
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+        @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+
+        <section class="homepage-text-panel">
+            <div class="homepage-text-panel__brand">
+                @await Component.InvokeAsync(typeof(LogoViewComponent))
+            </div>
+            <div class="homepage-text-panel__content">
+                @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+            </div>
+        </section>
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+        @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
+        @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
+        @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+    </div>
+</div>

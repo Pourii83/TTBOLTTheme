@@ -1,0 +1,77 @@
+/*
+=====================================================================
+ Nop.Plugin.Widgets.TTBOLTCarousel — homepage hero slider styles
+ Loaded by Views/PublicInfo.cshtml. Uses the active theme's CSS
+ custom properties with safe fallbacks.
+=====================================================================
+*/
+
+.home-slider {
+  height: auto;
+  border-radius: var(--radius-lg, 18px);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(15, 27, 45, 0.05), 0 2px 6px rgba(15, 27, 45, 0.06));
+}
+
+.home-slider .swiper-wrapper,
+.home-slider .swiper-slide {
+  height: auto;
+}
+
+.home-slider .swiper-slide {
+  background: transparent;
+  display: block;
+  font-size: inherit;
+  text-align: initial;
+}
+
+.home-slider .swiper-slide a,
+.home-slider .swiper-slide img {
+  display: block;
+  width: 100%;
+}
+
+.home-slider .swiper-slide img {
+  height: auto;
+  object-fit: contain;
+}
+
+.home-slider .swiper-pagination-bullet {
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  opacity: 0.55;
+}
+
+.home-slider .swiper-pagination-bullet-active {
+  background: var(--brand-500, #E85D04);
+  opacity: 1;
+}
+
+.home-slider .swiper-button-prev,
+.home-slider .swiper-button-next {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: rgba(19, 28, 38, 0.45);
+  color: #fff;
+  transition: background 0.18s ease;
+}
+
+.home-slider .swiper-button-prev::after,
+.home-slider .swiper-button-next::after {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.home-slider .swiper-button-prev:hover,
+.home-slider .swiper-button-next:hover {
+  background: var(--brand-600, #C24E00);
+}
+
+@media (max-width: 768px) {
+  .home-slider .swiper-button-prev,
+  .home-slider .swiper-button-next {
+    display: none;
+  }
+}

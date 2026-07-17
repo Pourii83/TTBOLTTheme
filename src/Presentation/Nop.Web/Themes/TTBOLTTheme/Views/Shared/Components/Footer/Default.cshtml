@@ -1,0 +1,108 @@
+﻿@model FooterModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Domain.Topics
+
+@inject IWorkContext workContext
+
+@{
+    var primaryPhone = T("Footer.ContactUs.PrimaryPhone").Text;
+    var secondaryPhone = T("Footer.ContactUs.SecondaryPhone").Text;
+    var email = T("Footer.ContactUs.Email").Text;
+}
+
+<footer class="footer">
+    <section class="footer-upper">
+        <div class="footer-block follow-us">
+            <div class="footer-logo-section">
+                <div class="footer-logo-container">
+                    @await Component.InvokeAsync(typeof(LogoViewComponent))
+                </div>
+                <div class="footer-company-name">
+                    <h4 class="company-name">@T("company.name.global")</h4>
+                    <h4 class="company-name">@T("company.name.local")</h4>
+                </div>
+            </div>
+            <div class="footer-company-description">
+                <p>
+                    @T("company.description")
+                </p>
+            </div>
+            <div class="social">
+                @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
+            </div>
+        </div>
+        @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
+        <div class="footer-block contact-us">
+            <h2 class="title">
+                @T("Footer.ContactUs")
+            </h2>
+            <ul class="footer-contact-list">
+                <li class="footer-contact-item footer-contact-phones">
+                    <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                    <div class="footer-contact-values">
+                        <a href="tel:@primaryPhone" dir="ltr">@primaryPhone</a>
+                        <a href="tel:@secondaryPhone" dir="ltr">@secondaryPhone</a>
+                    </div>
+                </li>
+                <li class="footer-contact-item">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    <a href="mailto:@email" dir="ltr">@email</a>
+                </li>
+                <li class="footer-contact-item footer-contact-address">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>@T("Footer.ContactUs.Address")</span>
+                </li>
+            </ul>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </div>
+    </section>
+    <section class="footer-lower">
+        <div class="footer-info">
+            <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+            @if (Model.DisplayTaxShippingInfoFooter)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <span class="footer-tax-shipping">
+                    @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))
+                </span>
+            }
+        </div>
+        @if (!Model.HidePoweredByNopCommerce)
+        {
+            <div class="footer-powered-by">
+                @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
+                    Please find more info at https://www.nopcommerce.com/nopcommerce-copyright-removal-key*@
+                Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
+            </div>
+        }
+        <nav class="footer-legal">
+            <a href="@(await NopUrl.RouteTopicUrlAsync("privacyinfo"))">
+                @T("Gdpr.Consent.PrivacyPolicy")
+            </a>
+            <a href="@(await NopUrl.RouteTopicUrlAsync("conditionsofuse"))">
+                @T("Checkout.TermsOfService")
+            </a>
+        </nav>
+
+        @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
+    </section>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
+</footer>
+
+<script asp-location="Footer">
+    $(function() {
+        $('.block .title').on('click', function () {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            var result = { width: e[a + 'Width'], height: e[a + 'Height'] };
+            if (result.width < 1001) {
+                $(this).siblings('.listbox').slideToggle('slow');
+            }
+        });
+    });
+</script>

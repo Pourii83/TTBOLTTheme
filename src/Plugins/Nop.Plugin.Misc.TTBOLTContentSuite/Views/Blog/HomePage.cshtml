@@ -1,0 +1,40 @@
+@model IList<HomePageBlogPostModel>
+@inject INopUrlHelper NopUrl
+
+@{
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+}
+
+<section class="ttbolt-homepage-blog-posts home-page-product-grid">
+    <h2 class="title">@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.Title")</h2>
+
+    <div class="ttbolt-homepage-blog-posts__grid item-grid">
+        @foreach (var blogPost in Model)
+        {
+            <article class="ttbolt-homepage-blog-card">
+                <a class="ttbolt-homepage-blog-card__picture"
+                   href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))"
+                   title="@blogPost.Title">
+                    <img src="@blogPost.PictureUrl" alt="@blogPost.Title" loading="lazy" />
+                </a>
+                <div class="ttbolt-homepage-blog-card__body">
+                    <h3 class="ttbolt-homepage-blog-card__title">
+                        <a href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))">
+                            @blogPost.Title
+                        </a>
+                    </h3>
+                    @if (!string.IsNullOrWhiteSpace(blogPost.BodyOverview))
+                    {
+                        <div class="ttbolt-homepage-blog-card__overview">
+                            @Html.Raw(blogPost.BodyOverview)
+                        </div>
+                    }
+                    <a class="ttbolt-homepage-blog-card__more"
+                       href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = blogPost.SeName }))">
+                        <span class="button-1">@T("Plugins.Misc.TTBOLTContentSuite.HomePageBlogs.ReadMore")</span>
+                    </a>
+                </div>
+            </article>
+        }
+    </div>
+</section>

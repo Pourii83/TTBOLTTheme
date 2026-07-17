@@ -1,0 +1,62 @@
+@model IList<CategoryModel>
+
+@using Nop.Core.Domain.Catalog
+
+@if (Model.Count > 0)
+{
+    <h2 class="section-title">@T("Common.HomePageCategory")</h2>
+    <section class="category-grid home-page-category-grid">
+        <div class="swiper home-page-category-swiper">
+            <div class="swiper-wrapper">
+                @foreach (var item in Model)
+                {
+                    <article class="swiper-slide item-box">
+                        <a class="category-card" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                            <span class="category-card__media">
+                                <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" />
+                            </span>
+                            <span class="category-card__overlay">
+                                <span class="category-card__name">@item.Name</span>
+                                <span class="category-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                            </span>
+                        </a>
+                    </article>
+                }
+            </div>
+        </div>
+    </section>
+
+    <script asp-location="Footer">
+        $(function () {
+            $('.home-page-category-swiper').each(function () {
+                if (typeof Swiper === 'undefined' || this.swiper) {
+                    return;
+                }
+
+                new Swiper(this, {
+                    slidesPerView: 1.15,
+                    spaceBetween: 12,
+                    freeMode: {
+                        enabled: true
+                    },
+                    grabCursor: true,
+                    watchOverflow: true,
+                    breakpoints: {
+                        481: {
+                            slidesPerView: 2.2,
+                            spaceBetween: 14
+                        },
+                        769: {
+                            slidesPerView: 3.2,
+                            spaceBetween: 16
+                        },
+                        1001: {
+                            slidesPerView: 4,
+                            spaceBetween: 18
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

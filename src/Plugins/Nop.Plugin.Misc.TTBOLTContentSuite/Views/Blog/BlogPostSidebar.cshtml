@@ -1,0 +1,49 @@
+@model BlogPostSidebarModel
+@inject INopUrlHelper NopUrl
+
+@{
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+
+    var blocks = new[]
+    {
+        new
+        {
+            CssClass = "related",
+            Title = T("Plugins.Misc.TTBOLTContentSuite.BlogPost.RelatedPosts").Text,
+            Items = Model.RelatedPosts
+        },
+        new
+        {
+            CssClass = "random",
+            Title = T("Plugins.Misc.TTBOLTContentSuite.BlogPost.RandomPosts").Text,
+            Items = Model.RandomPosts
+        }
+    };
+}
+
+@foreach (var block in blocks)
+{
+    if (block.Items.Count == 0)
+        continue;
+
+    <section class="block ttbolt-blog-sidebar__block ttbolt-blog-suggestions ttbolt-blog-suggestions--@block.CssClass">
+        <h2 class="title">@block.Title</h2>
+        <div class="listbox">
+            <ul class="ttbolt-blog-suggestions__list">
+                @foreach (var item in block.Items)
+                {
+                    <li>
+                        <a class="ttbolt-blog-suggestions__link"
+                           href="@(await NopUrl.RouteGenericUrlAsync<BlogPost>(new { SeName = item.SeName }))">
+                            <img src="@item.PictureUrl" alt="@item.Title" loading="lazy" />
+                            <span class="ttbolt-blog-suggestions__content">
+                                <strong>@item.Title</strong>
+                                <time datetime="@item.CreatedOn.ToString("yyyy-MM-dd")">@item.CreatedOn.ToString("D")</time>
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </section>
+}

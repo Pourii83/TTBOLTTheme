@@ -1,0 +1,17 @@
+@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+
+@using System.Text.Encodings.Web;
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Nop.Web.Areas.Admin.Components;
+@using Nop.Web.Framework.Extensions;
+@using Nop.Web.Framework.Models.DataTables;
+@using Nop.Web.Framework.UI;
+@using Nop.Core.Domain.Blogs
+@using Nop.Plugin.Misc.TTBOLTContentSuite.Models
+@using Nop.Plugin.Misc.TTBOLTContentSuite.Models.Blogs
+@using Nop.Plugin.Misc.TTBOLTContentSuite.Models.News
+@using Nop.Web.Framework
+@using Nop.Web.Framework.Mvc.Routing
+@inject Nop.Web.Framework.UI.INopHtmlHelper NopHtml

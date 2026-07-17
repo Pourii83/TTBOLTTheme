@@ -1,0 +1,70 @@
+@model ProfilePictureModel
+@{
+    Layout = "_ColumnsTwo";
+
+    NopHtml.AddTitleParts(T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    NopHtml.AddCssFileParts("~/Plugins/Misc.TTBOLTUserSuite/Content/styles.css");
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "~/Plugins/Misc.TTBOLTUserSuite/Content/profile-picture.js");
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-profile-picture-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = TTBOLTUserSuiteDefaults.ProfilePictureMenuTab })
+}
+
+<div class="page account-page ttbolt-profile-picture-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture")</h1>
+    </div>
+    <div class="page-body">
+        <form asp-route="@TTBOLTUserSuiteDefaults.ProfilePictureRouteName" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+
+            <section class="ttbolt-profile-picture-card">
+                <div class="ttbolt-profile-picture-card__preview" data-profile-picture-preview>
+                    @if (Model.HasPicture)
+                    {
+                        <img src="@Model.PictureUrl" alt="@T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture")" />
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    }
+                </div>
+
+                <div class="ttbolt-profile-picture-card__content">
+                    <h2>@T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture")</h2>
+                    <p>@T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture.Description")</p>
+
+                    <label class="ttbolt-profile-picture-dropzone" data-profile-picture-dropzone>
+                        <input name="uploadedFile"
+                               type="file"
+                               accept="image/jpeg,image/png,image/gif,image/webp"
+                               data-profile-picture-input />
+                        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        <span>@T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture.DropHint")</span>
+                    </label>
+
+                    <p class="ttbolt-profile-picture-card__rules">
+                        @T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture.Rules")
+                    </p>
+                </div>
+            </section>
+
+            <div class="buttons ttbolt-profile-picture-actions">
+                <button type="submit" name="upload-profile-picture" class="button-1 ttbolt-profile-picture-actions__save">
+                    @T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture.Upload")
+                </button>
+                @if (Model.HasPicture)
+                {
+                    <button type="submit" name="remove-profile-picture" class="button-2 ttbolt-profile-picture-actions__remove">
+                        @T("Plugins.Misc.TTBOLTUserSuite.ProfilePicture.Remove")
+                    </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>

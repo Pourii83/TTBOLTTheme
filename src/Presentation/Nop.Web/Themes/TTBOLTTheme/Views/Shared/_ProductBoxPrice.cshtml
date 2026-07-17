@@ -1,0 +1,22 @@
+@using System.Text.RegularExpressions
+@model string
+
+@{
+    var valueMatch = Regex.Match(Model ?? string.Empty, @"[\p{Nd}][\p{Nd}\s.,٬٫]*");
+    var currency = valueMatch.Success
+        ? Model.Remove(valueMatch.Index, valueMatch.Length).Trim()
+        : string.Empty;
+}
+
+@if (valueMatch.Success)
+{
+    <span class="price-value">@valueMatch.Value.Trim()</span>
+    @if (!string.IsNullOrEmpty(currency))
+    {
+        <span class="price-currency">@currency</span>
+    }
+}
+else
+{
+    @Model
+}

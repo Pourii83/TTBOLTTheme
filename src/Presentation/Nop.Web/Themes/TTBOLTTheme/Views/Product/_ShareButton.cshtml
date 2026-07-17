@@ -1,0 +1,102 @@
+@model ProductDetailsModel
+
+@if (!string.IsNullOrWhiteSpace(Model.PageShareCode))
+{
+    var shareOptionsId = $"product-share-options-{Model.Id}";
+
+    <div class="product-share" data-product-share>
+        <button type="button"
+                class="product-share__toggle"
+                aria-controls="@shareOptionsId"
+                aria-expanded="false"
+                aria-label="@T("Common.Share")">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+        </button>
+        <div class="product-share-button product-share__options" id="@shareOptionsId" aria-hidden="true">
+            <div class="product-share__links" aria-label="@T("Common.Share")">
+                <a href="#" class="product-share__link product-share__link--pinterest" data-share-network="pinterest" aria-label="Pinterest">
+                    <i class="fa-brands fa-pinterest-p" aria-hidden="true"></i>
+                </a>
+                <a href="#" class="product-share__link product-share__link--facebook" data-share-network="facebook" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+                </a>
+                <a href="#" class="product-share__link product-share__link--x" data-share-network="x" aria-label="X">
+                    <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+                </a>
+                <button type="button" class="product-share__link product-share__link--print" data-share-network="print" aria-label="Print">
+                    <i class="fa-solid fa-print" aria-hidden="true"></i>
+                </button>
+                <a href="#" class="product-share__link product-share__link--blogger" data-share-network="blogger" aria-label="Blogger">
+                    <i class="fa-brands fa-blogger-b" aria-hidden="true"></i>
+                </a>
+                <a href="#" class="product-share__link product-share__link--whatsapp" data-share-network="whatsapp" aria-label="WhatsApp">
+                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="product-share__provider" aria-hidden="true">
+                @Html.Raw(Model.PageShareCode)
+            </div>
+        </div>
+    </div>
+
+    <script asp-location="Footer">
+        $(function () {
+            var $share = $('[data-product-share]').filter(function () {
+                return $(this).find('#@shareOptionsId').length > 0;
+            });
+            var $toggle = $share.find('.product-share__toggle');
+            var $options = $share.find('.product-share__options');
+
+            function setShareState(isOpen) {
+                $share.toggleClass('is-open', isOpen);
+                $toggle.attr('aria-expanded', isOpen ? 'true' : 'false');
+                $options.attr('aria-hidden', isOpen ? 'false' : 'true');
+            }
+
+            $toggle.on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                setShareState(!$share.hasClass('is-open'));
+            });
+
+            $options.on('click', function (event) {
+                event.stopPropagation();
+            });
+
+            $share.find('[data-share-network]').on('click', function (event) {
+                event.preventDefault();
+
+                var network = $(this).attr('data-share-network');
+                if (network === 'print') {
+                    window.print();
+                    return;
+                }
+
+                var pageUrl = encodeURIComponent(window.location.href);
+                var pageTitle = encodeURIComponent(document.title);
+                var shareUrls = {
+                    pinterest: 'https://www.pinterest.com/pin/create/button/?url=' + pageUrl + '&description=' + pageTitle,
+                    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl,
+                    x: 'https://twitter.com/intent/tweet?url=' + pageUrl + '&text=' + pageTitle,
+                    blogger: 'https://www.blogger.com/blog-this.g?u=' + pageUrl + '&n=' + pageTitle,
+                    whatsapp: 'https://api.whatsapp.com/send?text=' + pageTitle + '%20' + pageUrl
+                };
+
+                if (shareUrls[network])
+                    window.open(shareUrls[network], 'product-share', 'noopener,noreferrer,width=720,height=600');
+            });
+
+            $(document).on('click.productShare-@Model.Id', function (event) {
+                if (!$(event.target).closest($share).length)
+                    setShareState(false);
+            });
+
+            $(document).on('keydown.productShare-@Model.Id', function (event) {
+                if (event.key === 'Escape') {
+                    setShareState(false);
+                    $toggle.trigger('focus');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,169 @@
+@model ProductDetailsModel
+
+<link rel="stylesheet" href="~/lib_npm/magnific-popup/magnific-popup.css" />
+<script asp-exclude-from-bundle="true" src="~/lib_npm/magnific-popup/jquery.magnific-popup.min.js" asp-location="Footer"></script>
+
+<div class="picture-gallery">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsBeforePictures, additionalData = Model })
+    <div class="picture">
+        @if (Model.DefaultPictureZoomEnabled && Model.PictureModels.Count == 1)
+        {
+            <a href="@Model.DefaultPictureModel.FullSizeImageUrl" title="@Model.DefaultPictureModel.Title" id="main-product-img-lightbox-anchor-@Model.Id">
+                <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" id="main-product-img-@Model.Id" data-fullsize="@Model.DefaultPictureModel.FullSizeImageUrl" />
+            </a>
+            <script asp-location="Footer">
+                $(function() {
+                    $('#main-product-img-lightbox-anchor-@Model.Id').magnificPopup({ type: 'image' });
+                });
+            </script>
+        }
+        else
+        {
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" id="main-product-img-@Model.Id" data-fullsize="@Model.DefaultPictureModel.FullSizeImageUrl" />
+        }
+        <span class="product-image-zoom__lens" aria-hidden="true"></span>
+        <span class="product-image-zoom__preview" aria-hidden="true"></span>
+    </div>
+
+    @if (Model.PictureModels.Count > 1)
+    {
+        <div class="picture-thumbs" aria-label="@Model.Name">
+            @for (var i = 0; i < Model.PictureModels.Count; i++)
+            {
+                var picture = Model.PictureModels[i];
+                if (Model.DefaultPictureZoomEnabled)
+                {
+                    <a class="thumb-item @(i == 0 ? "is-active" : null)" data-pictureid="@picture.Id" href="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                        <img src="@picture.ThumbImageUrl" alt="@picture.AlternateText" title="@picture.Title" data-defaultsize="@picture.ImageUrl" data-fullsize="@picture.FullSizeImageUrl" />
+                    </a>
+                }
+                else
+                {
+                    <div class="thumb-item @(i == 0 ? "is-active" : null)" data-pictureid="@picture.Id">
+                        <img src="@picture.ThumbImageUrl" alt="@picture.AlternateText" title="@picture.Title" data-defaultsize="@picture.ImageUrl" data-fullsize="@picture.FullSizeImageUrl" />
+                    </div>
+                }
+            }
+        </div>
+
+        @if (Model.DefaultPictureZoomEnabled)
+        {
+            <script asp-location="Footer">
+                $(function() {
+                    $('#main-product-img-@Model.Id').closest('.picture-gallery').find('.picture-thumbs').magnificPopup({
+                        type: 'image',
+                        delegate: 'a',
+                        removalDelay: 300,
+                        gallery: {
+                            enabled: true,
+                            navigateByImgClick: true,
+                            preload: [0, 1],
+                            tPrev: '@T("Media.MagnificPopup.Previous")',
+                            tNext: '@T("Media.MagnificPopup.Next")',
+                            tCounter: '@T("Media.MagnificPopup.Counter")'
+                        },
+                        tClose: '@T("Media.MagnificPopup.Close")',
+                        tLoading: '@T("Media.MagnificPopup.Loading")'
+                    });
+                });
+            </script>
+        }
+
+        <script asp-location="Footer">
+            $(function() {
+                var $mainImage = $('#main-product-img-@Model.Id');
+                var $gallery = $mainImage.closest('.picture-gallery');
+
+                $gallery.find('.thumb-item > img').on('click', function() {
+                    var $image = $(this);
+                    var $thumb = $image.closest('.thumb-item');
+
+                    $gallery.find('.thumb-item').removeClass('is-active');
+                    $thumb.addClass('is-active');
+                    $mainImage.attr({
+                        src: $image.attr('data-defaultsize'),
+                        'data-fullsize': $image.attr('data-fullsize'),
+                        title: $image.attr('title'),
+                        alt: $image.attr('alt')
+                    });
+                    $('#main-product-img-lightbox-anchor-@Model.Id').attr({
+                        href: $image.attr('data-fullsize'),
+                        title: $image.attr('title')
+                    });
+                });
+
+                $(document).on('product_attributes_changed', function(event) {
+                    var pictureUrl = event.changedData && event.changedData.pictureDefaultSizeUrl;
+                    if (!pictureUrl)
+                        return;
+
+                    var $matchingImage = $gallery.find('.thumb-item > img').filter(function() {
+                        return $(this).attr('data-defaultsize') === pictureUrl;
+                    }).first();
+
+                    if ($matchingImage.length) {
+                        $gallery.find('.thumb-item').removeClass('is-active');
+                        $matchingImage.closest('.thumb-item').addClass('is-active');
+                        $mainImage.attr('data-fullsize', $matchingImage.attr('data-fullsize'));
+                    }
+                });
+            });
+        </script>
+    }
+
+    <script asp-location="Footer">
+        $(function () {
+            var hoverZoomQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+            var $mainImage = $('#main-product-img-@Model.Id');
+            var $picture = $mainImage.closest('.picture');
+            var $lens = $picture.find('.product-image-zoom__lens');
+            var $preview = $picture.find('.product-image-zoom__preview');
+            var zoomScale = 3;
+
+            function stopZoom() {
+                $picture.removeClass('is-zooming');
+            }
+
+            function startZoom() {
+                if (!hoverZoomQuery.matches)
+                    return;
+
+                var fullSizeUrl = $mainImage.attr('data-fullsize') || $mainImage.attr('src');
+                $preview.css('background-image', 'url("' + fullSizeUrl.replace(/"/g, '\\"') + '")');
+                $picture.addClass('is-zooming');
+            }
+
+            function updateZoom(event) {
+                if (!hoverZoomQuery.matches)
+                    return;
+
+                var bounds = $picture[0].getBoundingClientRect();
+                var x = Math.max(0, Math.min(event.clientX - bounds.left, bounds.width));
+                var y = Math.max(0, Math.min(event.clientY - bounds.top, bounds.height));
+                var xPercent = bounds.width ? (x / bounds.width) * 100 : 50;
+                var yPercent = bounds.height ? (y / bounds.height) * 100 : 50;
+                var lensSize = Math.max(72, Math.min(118, Math.min(bounds.width, bounds.height) / zoomScale));
+
+                $lens.css({
+                    width: lensSize,
+                    height: lensSize,
+                    left: Math.max(0, Math.min(x - lensSize / 2, bounds.width - lensSize)),
+                    top: Math.max(0, Math.min(y - lensSize / 2, bounds.height - lensSize))
+                });
+                $preview.css({
+                    'background-position': xPercent + '% ' + yPercent + '%',
+                    'background-size': (zoomScale * 100) + '% ' + (zoomScale * 100) + '%'
+                });
+            }
+
+            $picture.on('mouseenter.productImageZoom-@Model.Id', startZoom)
+                .on('mousemove.productImageZoom-@Model.Id', updateZoom)
+                .on('mouseleave.productImageZoom-@Model.Id', stopZoom);
+
+            if (hoverZoomQuery.addEventListener)
+                hoverZoomQuery.addEventListener('change', stopZoom);
+        });
+    </script>
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsAfterPictures, additionalData = Model })
+</div>

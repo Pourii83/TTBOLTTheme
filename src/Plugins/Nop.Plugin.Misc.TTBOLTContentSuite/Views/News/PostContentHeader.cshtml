@@ -1,5 +1,9 @@
 @model NewsItemContentModel
 
+@{
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+}
+
 <div class="ttbolt-news-post-header" id="ttbolt-news-post-header-@Model.Id">
     @if (!string.IsNullOrEmpty(Model.PictureUrl))
     {

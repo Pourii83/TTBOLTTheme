@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nopweb",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Presentation/Nop.Web/Nop.Web.csproj", "--no-build", "--launch-profile", "Nop.Web"],
+      "port": 8141
+    }
+  ]
+}

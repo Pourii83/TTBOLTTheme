@@ -1,5 +1,9 @@
 @model ContentPictureModel
 
+@{
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+}
+
 <figure class="ttbolt-content-picture">
     <img src="@Model.PictureUrl" alt="@Model.Title" loading="eager" />
 </figure>

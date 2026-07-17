@@ -1,56 +1,104 @@
-﻿<header class="header">
+<header class="site-header">
     <a class="skip" href="#main">@T("Header.SkipNavigation.Text")</a>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
-    <div class="header-upper">
-        <div class="header-logo">
-            @await Component.InvokeAsync(typeof(LogoViewComponent))
-        </div>
-        <div class="header-selectors-wrapper">
-            @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
-            @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
-            @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
-            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
-        </div>
-        <div class="header-menu">
-            @await Component.InvokeAsync(typeof(MainMenuViewComponent))
-        </div>
-    
-        <div class="header-links-wrapper">
 
-            @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
-            @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+    @* row 1 (scrolls away): logo | always-visible search | phone + selectors *@
+    <div class="header-main">
+        <div class="header-main__inner">
+            <div class="header-logo">
+                @await Component.InvokeAsync(typeof(LogoViewComponent))
+            </div>
+            <div class="header-search">
+                <div role="search" class="search-box store-search-box">
+                    @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+                </div>
+            </div>
+            <div class="header-utility">
+                <div class="header-utility__phone">
+                    <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                    <a href="tel:@T("Footer.ContactUs.PrimaryPhone")" dir="ltr">@T("Footer.ContactUs.PrimaryPhone")</a>
+                </div>
+                <div class="header-selectors-wrapper">
+                    @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
+                    @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
+                    @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+                </div>
+            </div>
         </div>
     </div>
+
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-   @*  <div class="header-lower">
-    </div> *@
+
+    @* row 2 (sticky): main menu | account & cart actions *@
+    <div class="header-nav">
+        <div class="header-nav__inner">
+            <div class="header-menu">
+                @await Component.InvokeAsync(typeof(MainMenuViewComponent))
+            </div>
+            <div class="header-links-wrapper">
+                @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+                @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+            </div>
+        </div>
+    </div>
+
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
 </header>
 
 <script asp-location="Footer">
+    // sticky offset: everything above the nav row scrolls away and only
+    // the nav row stays pinned to the top of the viewport
     $(function () {
-        var selector = '.header-selectors-wrapper select';
+        var header = document.querySelector('.site-header');
+        var nav = document.querySelector('.header-nav');
+        if (!header || !nav) {
+            return;
+        }
 
-        $(document).on('pointerdown', selector, function () {
-            var currentSelect = $(this);
-            var isOpen = currentSelect.hasClass('selector-open');
+        function setStickyOffset() {
+            header.style.top = -nav.offsetTop + 'px';
+        }
 
-            $(selector).removeClass('selector-open');
+        setStickyOffset();
+        window.addEventListener('resize', setStickyOffset);
+        window.addEventListener('load', setStickyOffset);
+    });
 
-            if (!isOpen) {
-                currentSelect.addClass('selector-open');
+    // on phones the text account links would overflow the nav row and
+    // cause horizontal scrolling — move them to the drawer's bottom and
+    // restore them to the nav row on desktop widths
+    $(function () {
+        var headerLinksList = $('.header-links > ul');
+        var drawer = $('.menu-container > .menu');
+        if (!headerLinksList.length || !drawer.length) {
+            return;
+        }
+
+        var accountItems = headerLinksList
+            .find('> li')
+            .filter(function () {
+                return $(this).find('.ico-account, .ico-logout, .ico-login, .ico-register').length > 0;
+            });
+        if (!accountItems.length) {
+            return;
+        }
+
+        var drawerList = $('<ul class="menu__account-links"></ul>');
+
+        function placeAccountLinks() {
+            if (window.innerWidth <= 1000) {
+                if (!drawerList.parent().length) {
+                    drawer.append(drawerList);
+                }
+                drawerList.append(accountItems);
+            } else if (drawerList.parent().length) {
+                headerLinksList.prepend(accountItems);
+                drawerList.detach();
             }
-        });
+        }
 
-        $(document).on('change blur', selector, function () {
-            $(this).removeClass('selector-open');
-        });
-
-        $(document).on('pointerdown', function (event) {
-            if (!$(event.target).closest(selector).length) {
-                $(selector).removeClass('selector-open');
-            }
-        });
+        placeAccountLinks();
+        window.addEventListener('resize', placeAccountLinks);
     });
 </script>
-

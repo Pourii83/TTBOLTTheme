@@ -3,6 +3,10 @@
 
 @using Nop.Core.Domain.News
 
+@{
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+}
+
 <div class="ttbolt-news-sidebar ttbolt-blog-sidebar">
     <section class="block ttbolt-blog-sidebar__block ttbolt-blog-suggestions ttbolt-news-suggestions">
         <h2 class="title">@T("Plugins.Misc.TTBOLTContentSuite.NewsItem.RandomItems")</h2>

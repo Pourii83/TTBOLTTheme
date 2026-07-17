@@ -7,6 +7,8 @@
 
 @if (Model.NewsItems.Count > 0)
 {
+    NopHtml.AppendCssFileParts("~/Plugins/Misc.TTBOLTContentSuite/Content/css/ttbolt-contentsuite.css");
+
     var newsItems = await ContentSuiteModelFactory.PrepareHomePageNewsItemModelsAsync(Model);
 
     <section class="news-list-homepage ttbolt-homepage-blog-posts ttbolt-homepage-news home-page-product-grid">
@@ -33,7 +35,7 @@
                                 @Html.Raw(item.Short)
                             </div>
                         }
-                        <a class="ttbolt-homepage-blog-card__link"
+                        <a class="ttbolt-homepage-blog-card__more"
                            href="@(await NopUrl.RouteGenericUrlAsync<NewsItem>(new { SeName = item.SeName }))">
                             <span class="button-1">@T("News.MoreInfo")</span>
                         </a>

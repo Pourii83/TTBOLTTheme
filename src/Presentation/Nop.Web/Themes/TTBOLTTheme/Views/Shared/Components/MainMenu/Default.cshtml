@@ -17,7 +17,13 @@
         $(document).on('click', function (event) {
             if (!$(event.target).closest('.header-menu').length) {
                 $('body').removeClass('mobile-menu-open');
+                menuContainer.removeClass('menu-dropdown--active');
             }
+        });
+
+        $('.header-menu .menu__close').on('click', function () {
+            $('body').removeClass('mobile-menu-open');
+            menuContainer.removeClass('menu-dropdown--active');
         });
     });
 </script>
@@ -26,6 +32,12 @@
 <nav class="menu-container menu-dropdown">
     <div id="menu-@Model.Id" class="menu__toggle" role="button">@Model.Name</div>
     <div role="menu" class="menu @Model.CssClass" aria-labelledby="menu-@Model.Id">
+        <div class="menu__drawer-head">
+            <span class="menu__drawer-title">@Model.Name</span>
+            <button type="button" class="menu__close" aria-label="@T("Common.Close")">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
         @foreach (var menuItem in Model.Items)
         {
             @if (menuItem.ChildrenItems.Any())

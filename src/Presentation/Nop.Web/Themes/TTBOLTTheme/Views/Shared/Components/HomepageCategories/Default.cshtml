@@ -4,23 +4,22 @@
 
 @if (Model.Count > 0)
 {
-    <h2 style="margin-block:16px">@T("Common.HomePageCategory")</h2>
+    <h2 class="section-title">@T("Common.HomePageCategory")</h2>
     <section class="category-grid home-page-category-grid">
         <div class="swiper home-page-category-swiper">
             <div class="swiper-wrapper">
                 @foreach (var item in Model)
                 {
                     <article class="swiper-slide item-box">
-                        <h2 class="title">
-                            <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
-                                @item.Name
-                            </a>
-                        </h2>
-                        <div class="picture">
-                            <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                        <a class="category-card" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                            <span class="category-card__media">
                                 <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" />
-                            </a>
-                        </div>
+                            </span>
+                            <span class="category-card__overlay">
+                                <span class="category-card__name">@item.Name</span>
+                                <span class="category-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                            </span>
+                        </a>
                     </article>
                 }
             </div>
